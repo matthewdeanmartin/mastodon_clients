@@ -15,7 +15,7 @@
 <p class="lede">
   Every client on this site, {{ d.clients | length }} in total. The default order is alphabetical,
   which is a neutral ordering rather than a ranking. Ratings are computed from structured metadata
-  by code, never assigned by an editor &mdash; <a href="{{ SITEURL }}/methodology/scoring/">see the formula</a>.
+  by code, never assigned by an editor &mdash; <a href="/methodology/scoring/">see the formula</a>.
 </p>
 
 {# The controls are inert markup until directory.js binds them. Marked hidden so
@@ -134,5 +134,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ SITEURL }}/assets/js/directory.js" defer></script>
+<script src="/assets/js/directory.js" defer></script>
 {% endblock %}

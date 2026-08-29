@@ -69,7 +69,7 @@ addopts = "-q"
 [tool.mypy]
 python_version = "3.12"
 strict = true
-packages = ["mastodon_clients", "tests"]
+packages = ["mastodon_clients", "tests", "plugins"]
 
 # Fixtures are passed into tests as bare parameters; annotating every one adds
 # noise without catching anything, so the test package relaxes those two checks
@@ -84,6 +84,11 @@ disallow_incomplete_defs = false
 # inside the generator and never on the build path.
 [[tool.mypy.overrides]]
 module = "anthropic"
+ignore_missing_imports = true
+
+# Pelican ships no type stubs; the plugin touches its signals module directly.
+[[tool.mypy.overrides]]
+module = "pelican.*"
 ignore_missing_imports = true
 
 [tool.ruff]

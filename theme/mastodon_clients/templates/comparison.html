@@ -22,8 +22,8 @@
   Every row on this page is generated from the two clients' structured records. Nothing here is
   written prose about the pairing, and no attempt is made to declare a winner &mdash; which of these
   suits you depends on what you need, and the
-  <a href="{{ SITEURL }}{{ left.url }}">{{ left.name }}</a> and
-  <a href="{{ SITEURL }}{{ right.url }}">{{ right.name }}</a> reviews say more than a table can.
+  <a href="{{ left.url }}">{{ left.name }}</a> and
+  <a href="{{ right.url }}">{{ right.name }}</a> reviews say more than a table can.
 </p>
 
 <table class="comparison">
@@ -31,8 +31,8 @@
   <thead>
     <tr>
       <th scope="col">&nbsp;</th>
-      <th scope="col"><a href="{{ SITEURL }}{{ left.url }}">{{ left.name }}</a></th>
-      <th scope="col"><a href="{{ SITEURL }}{{ right.url }}">{{ right.name }}</a></th>
+      <th scope="col"><a href="{{ left.url }}">{{ left.name }}</a></th>
+      <th scope="col"><a href="{{ right.url }}">{{ right.name }}</a></th>
     </tr>
   </thead>
   <tbody>
@@ -91,7 +91,7 @@
 
 <h2>Component scores</h2>
 <table class="comparison">
-  <caption>Rating components. <a href="{{ SITEURL }}/methodology/scoring/">How these are computed</a>.</caption>
+  <caption>Rating components. <a href="/methodology/scoring/">How these are computed</a>.</caption>
   <thead>
     <tr>
       <th scope="col">Component</th>
@@ -136,7 +136,7 @@
 </table>
 
 <p class="see-also">
-  Full reviews: <a href="{{ SITEURL }}{{ left.url }}">{{ left.name }}</a> ·
-  <a href="{{ SITEURL }}{{ right.url }}">{{ right.name }}</a>
+  Full reviews: <a href="{{ left.url }}">{{ left.name }}</a> ·
+  <a href="{{ right.url }}">{{ right.name }}</a>
 </p>
 {% endblock %}

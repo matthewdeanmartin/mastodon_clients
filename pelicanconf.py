@@ -23,6 +23,12 @@ TIMEZONE = "UTC"
 DEFAULT_LANG = "en"
 LOCALE = "C"
 
+# Prose links are written site-root-relative (`/clients/`), which breaks when
+# the site is served from a project Pages sub-path. The plugin rewrites them at
+# render time; `check_local_links` fails the build if any slip past it.
+PLUGIN_PATHS = ["plugins"]
+PLUGINS = ["site_relative_links"]
+
 THEME = "theme/mastodon_clients"
 # The theme's static tree is copied to /assets/ rather than Pelican's default
 # /theme/, which reads as an implementation detail in a URL.

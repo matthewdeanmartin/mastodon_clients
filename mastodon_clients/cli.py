@@ -75,7 +75,7 @@ def cmd_build_content(args: argparse.Namespace) -> int:
 
 
 def cmd_sitemap(args: argparse.Namespace) -> int:
-    from mastodon_clients.sitemap import check_local_assets, write_robots, write_sitemap
+    from mastodon_clients.sitemap import check_local_assets, check_local_links, write_robots, write_sitemap
 
     output = Path(args.output).resolve()
     if not output.is_dir():
@@ -86,6 +86,19 @@ def cmd_sitemap(args: argparse.Namespace) -> int:
         print("Pages reference assets that were not built:", file=sys.stderr)
         for path in missing:
             print(f"  {path}", file=sys.stderr)
+        return 1
+
+    broken = check_local_links(output, args.site_url)
+    if broken:
+        print("Pages link to internal targets that were not built:", file=sys.stderr)
+        for reference in broken:
+            print(f"  {reference}", file=sys.stderr)
+        print(
+            "\nA link written as /clients/ resolves to the origin root, which is wrong when the "
+            "site is served from a project sub-path. Write it site-root-relative and let the "
+            "site_relative_links plugin add the prefix, or use an absolute URL.",
+            file=sys.stderr,
+        )
         return 1
 
     count = write_sitemap(output, args.site_url)

@@ -15,6 +15,13 @@ from xml.sax.saxutils import escape
 
 # Rough crawl priorities. These are a hint at best; the ordering reflects how
 # much of the site's value sits on each kind of page.
+_HREF = re.compile(r'href="([^"]*)"')
+
+# Returned for a link that resolves outside the deployed site -- a root-relative
+# href missing the project sub-path. No file can satisfy it, so it is always
+# broken, however real the file it was aiming at may be.
+_OUTSIDE_SITE = "<outside-site>"
+
 _PRIORITIES: tuple[tuple[str, str], ...] = (
     ("clients/", "0.9"),
     ("for/", "0.8"),
@@ -92,6 +99,83 @@ def check_local_assets(output: Path, site_url: str) -> list[str]:
             if not (output / relative.lstrip("/")).is_file():
                 missing.add(relative)
     return sorted(missing)
+
+
+def check_local_links(output: Path, site_url: str) -> list[str]:
+    """Verify every internal link resolves, as a browser would resolve it.
+
+    The first deploy shipped links written `/clients/` in prose and in Jinja
+    macros. Served from a project Pages sub-path they resolve to the origin root,
+    losing the prefix, and every one 404s -- on a build reporting success.
+
+    The subtle part, and the reason an earlier version of this check passed on
+    that very output: it is not enough to ask whether `output/clients/elk/`
+    exists. It does, whether or not the link pointing at it carries the prefix.
+    The question is what the *href* resolves to against the deployed base URL,
+    so that is what is computed here.
+
+    Returns the broken references, each as "page -> target".
+    """
+    base = site_url.rstrip("/")
+    prefix = urlparse(base).path.rstrip("/")
+
+    broken: set[str] = set()
+    for page in sorted(output.rglob("*.html")):
+        source = page.relative_to(output).as_posix()
+        for reference in _HREF.findall(page.read_text(encoding="utf-8")):
+            target = _internal_target(reference, base, prefix)
+            if target is not None and not _resolves(output, target):
+                broken.add(f"{source} -> {reference}")
+    return sorted(broken)
+
+
+def _internal_target(reference: str, base: str, prefix: str) -> str | None:
+    """Resolve an href to a path under the site root, or None if not ours.
+
+    Resolution mirrors a browser's: an absolute URL on our host keeps whatever
+    follows the base; a root-relative href is resolved against the *origin*, not
+    the base, which is precisely why one missing prefix breaks a link.
+    """
+    reference = reference.split("#", 1)[0]
+    if not reference:
+        return None
+
+    # Off-site first. Order matters: with an empty base -- a development build
+    # served from a directory root -- `startswith(base)` is true of every string,
+    # so testing the base first would classify the whole web as internal.
+    if reference.startswith("//") or "://" in reference or reference.startswith("mailto:"):
+        return None
+
+    if base and reference.startswith(base):
+        return reference[len(base) :] or "/"
+
+    if reference.startswith("/"):
+        # A browser resolves this against the origin root. Under a sub-path the
+        # link only reaches the site if it already carries the prefix; without
+        # one it lands outside the site, which is a broken link even though the
+        # file it was aiming at exists.
+        if prefix:
+            if reference == prefix or reference.startswith(f"{prefix}/"):
+                return reference[len(prefix) :] or "/"
+            return _OUTSIDE_SITE
+        return reference
+
+    # Document-relative; resolved against the containing page, which this crawl
+    # does not model. Left alone rather than guessed at.
+    return None
+
+
+def _resolves(output: Path, target: str) -> bool:
+    """Whether a site-relative path was actually written."""
+    if target is _OUTSIDE_SITE:
+        # Resolved outside the deployed site: no file can satisfy it.
+        return False
+    relative = target.lstrip("/")
+    if not relative:
+        return (output / "index.html").is_file()
+    candidate = output / relative
+    # A directory URL is served by its index.html.
+    return candidate.is_file() or (candidate / "index.html").is_file()
 
 
 def write_robots(output: Path, site_url: str) -> None:

@@ -39,7 +39,7 @@
     <tbody>
       {% for client in d.without %}
       <tr>
-        <th scope="row"><a href="{{ SITEURL }}{{ client.url }}">{{ client.name }}</a></th>
+        <th scope="row"><a href="{{ client.url }}">{{ client.name }}</a></th>
         <td>{{ m.feature_value(client.value) }}</td>
       </tr>
       {% endfor %}
@@ -49,6 +49,6 @@
 {% endif %}
 
 <p class="see-also">
-  <a href="{{ SITEURL }}/clients/">Back to the full directory</a>
+  <a href="/clients/">Back to the full directory</a>
 </p>
 {% endblock %}

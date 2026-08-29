@@ -26,7 +26,7 @@
   <ul class="criteria-list">
     {% for criterion in d.criteria %}
     <li>
-      {% if criterion.url %}<a href="{{ SITEURL }}{{ criterion.url }}">{{ criterion.label }}</a>
+      {% if criterion.url %}<a href="{{ criterion.url }}">{{ criterion.label }}</a>
       {% else %}{{ criterion.label }}{% endif %}
     </li>
     {% endfor %}
@@ -51,7 +51,7 @@
       {% for client in d.clients %}
       <tr>
         <th scope="row">
-          <a href="{{ SITEURL }}{{ client.url }}">{{ client.name }}</a>
+          <a href="{{ client.url }}">{{ client.name }}</a>
           <span class="row-summary">{{ client.summary }}</span>
         </th>
         <td>
@@ -74,13 +74,13 @@
   {% else %}
   <p class="empty">
     No client is currently recorded as suited to this audience. That is a gap in the data rather
-    than a judgement &mdash; <a href="{{ SITEURL }}/submit/">suggest one</a>.
+    than a judgement &mdash; <a href="/submit/">suggest one</a>.
   </p>
   {% endif %}
 </section>
 
 <p class="see-also">
-  See also <a href="{{ SITEURL }}/clients/">the full directory</a>, where you can filter on any
+  See also <a href="/clients/">the full directory</a>, where you can filter on any
   combination of these criteria.
 </p>
 {% endblock %}

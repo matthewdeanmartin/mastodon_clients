@@ -29,7 +29,7 @@
 
 {% macro client_card(client) %}
 <article class="client-card">
-  <h3><a href="{{ SITEURL }}{{ client.url }}">{{ client.name }}</a></h3>
+  <h3><a href="{{ client.url }}">{{ client.name }}</a></h3>
   <p class="summary">{{ client.summary }}</p>
   <p class="meta">
     {{ rating(client) }}
@@ -86,7 +86,7 @@
       data-features="{% for f in client.features %}{% if f.value in ('yes', 'partial') %}{{ f.id }} {% endif %}{% endfor %}"
       data-search="{{ client.name | lower }} {{ client.summary | lower }}">
       <th scope="row">
-        <a href="{{ SITEURL }}{{ client.url }}">{{ client.name }}</a>
+        <a href="{{ client.url }}">{{ client.name }}</a>
         <span class="row-summary">{{ client.summary }}</span>
       </th>
       <td>{{ rating(client) }}</td>
@@ -133,7 +133,7 @@
     {% for feature in features %}
     <tr class="{{ 'core' if feature.core else 'extra' }}">
       <th scope="row">
-        {% if feature.url %}<a href="{{ SITEURL }}{{ feature.url }}">{{ feature.label }}</a>{% else %}{{ feature.label }}{% endif %}
+        {% if feature.url %}<a href="{{ feature.url }}">{{ feature.label }}</a>{% else %}{{ feature.label }}{% endif %}
         <span class="feature-desc">{{ feature.description }}</span>
       </th>
       <td>{{ feature_value(feature.value_label) }}</td>
@@ -146,7 +146,7 @@
 
 {% macro score_breakdown(client) %}
 <table class="score-breakdown">
-  <caption>How this rating was calculated. <a href="{{ SITEURL }}/methodology/scoring/">The full formula</a>.</caption>
+  <caption>How this rating was calculated. <a href="/methodology/scoring/">The full formula</a>.</caption>
   <thead>
     <tr>
       <th scope="col">Component</th>

@@ -61,7 +61,7 @@
       core feature{{ 's' if c.rating.unknown_features != 1 }} have not been established.
       Unknown values earn no points, so an under-researched client scores lower than a fully
       researched one with the same capabilities.
-      <a href="{{ SITEURL }}/submit/">Corrections are welcome</a>.
+      <a href="/submit/">Corrections are welcome</a>.
     </p>
     {% endif %}
   </header>
@@ -90,7 +90,7 @@
     <h2>Who it is for</h2>
     <ul class="audience-links">
       {% for audience in c.audiences %}
-      <li><a href="{{ SITEURL }}{{ audience.url }}">{{ audience.label }}</a></li>
+      <li><a href="{{ audience.url }}">{{ audience.label }}</a></li>
       {% endfor %}
     </ul>
   </section>
@@ -230,7 +230,7 @@
     <p class="note">Selected by shared audiences, overlapping features, and matching source and deployment model.</p>
     <ul class="related">
       {% for other in c.related %}
-      <li><a href="{{ SITEURL }}{{ other.url }}">{{ other.name }}</a> &mdash; {{ other.summary }}</li>
+      <li><a href="{{ other.url }}">{{ other.name }}</a> &mdash; {{ other.summary }}</li>
       {% endfor %}
     </ul>
   </section>
@@ -238,7 +238,7 @@
 
   <footer class="review-footer">
     <p>
-      Something wrong here? <a href="{{ SITEURL }}/submit/">Send a correction</a>. Facts on this page
+      Something wrong here? <a href="/submit/">Send a correction</a>. Facts on this page
       come from a structured record in the site's repository, so a correction is a small, reviewable change.
     </p>
   </footer>

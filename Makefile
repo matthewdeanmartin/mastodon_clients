@@ -60,10 +60,14 @@ score: validate
 # GitHub API, no LLM, no DNS (spec 44, invariant 1). A network call here is a
 # bug, not a flake.
 
+# The development build uses relative URLs and is served from a directory root,
+# so its links carry no project sub-path. Checking it against the production
+# SITE_URL would demand a prefix this build correctly does not have, so the
+# checks run against the base this build actually used.
 build: validate
 	@$(UV) run python -m mastodon_clients.cli build-content
 	@$(UV) run pelican content -s pelicanconf.py -o $(OUTPUT)
-	@$(UV) run python -m mastodon_clients.cli sitemap --output $(OUTPUT) --site-url $(SITE_URL)
+	@$(UV) run python -m mastodon_clients.cli sitemap --output $(OUTPUT) --site-url ""
 
 build-prod: validate
 	@$(UV) run python -m mastodon_clients.cli build-content

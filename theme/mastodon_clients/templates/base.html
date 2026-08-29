@@ -17,9 +17,9 @@
   <meta property="og:url" content="{% block og_url %}{{ SITEURL }}/{% endblock %}">
   <meta name="twitter:card" content="summary">
 
-  <link rel="stylesheet" href="{{ SITEURL }}/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
   {% if FEED_ALL_ATOM %}
-  <link rel="alternate" type="application/atom+xml" title="{{ SITENAME }}" href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}">
+  <link rel="alternate" type="application/atom+xml" title="{{ SITENAME }}" href="/{{ FEED_ALL_ATOM }}">
   {% endif %}
   {% block head %}{% endblock %}
 </head>
@@ -30,15 +30,15 @@
 
   <header class="site-header">
     <div class="wrap">
-      <p class="site-title"><a href="{{ SITEURL }}/">{{ SITENAME }}</a></p>
+      <p class="site-title"><a href="/">{{ SITENAME }}</a></p>
       <p class="site-tagline">{{ SITESUBTITLE }}</p>
       <nav aria-label="Primary">
         <ul>
-          <li><a href="{{ SITEURL }}/clients/">All clients</a></li>
-          <li><a href="{{ SITEURL }}/for/new-users/">For new users</a></li>
-          <li><a href="{{ SITEURL }}/open-source/">Open source</a></li>
-          <li><a href="{{ SITEURL }}/methodology/">Methodology</a></li>
-          <li><a href="{{ SITEURL }}/about/">About</a></li>
+          <li><a href="/clients/">All clients</a></li>
+          <li><a href="/for/new-users/">For new users</a></li>
+          <li><a href="/open-source/">Open source</a></li>
+          <li><a href="/methodology/">Methodology</a></li>
+          <li><a href="/about/">About</a></li>
         </ul>
       </nav>
     </div>
@@ -54,17 +54,17 @@
          plainly, on every page, not only on the About page. #}
       <p class="disclosure">
         <strong>Disclosure.</strong> This directory is written and operated by Matthew Martin, who also
-        maintains <a href="{{ SITEURL }}/clients/mawkingbird/">Mawkingbird</a>, a freemium Mastodon web
+        maintains <a href="/clients/mawkingbird/">Mawkingbird</a>, a freemium Mastodon web
         client listed here alongside the others. This site therefore reviews a field in which its
-        author competes. <a href="{{ SITEURL }}/about/">How that is handled</a>.
+        author competes. <a href="/about/">How that is handled</a>.
       </p>
       <nav aria-label="Footer">
         <ul>
-          <li><a href="{{ SITEURL }}/about/">About</a></li>
-          <li><a href="{{ SITEURL }}/methodology/">Methodology</a></li>
-          <li><a href="{{ SITEURL }}/methodology/scoring/">How ratings work</a></li>
-          <li><a href="{{ SITEURL }}/submit/">Suggest a client or a correction</a></li>
-          <li><a href="{{ SITEURL }}/clients.json">Client data (JSON)</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/methodology/">Methodology</a></li>
+          <li><a href="/methodology/scoring/">How ratings work</a></li>
+          <li><a href="/submit/">Suggest a client or a correction</a></li>
+          <li><a href="/clients.json">Client data (JSON)</a></li>
         </ul>
       </nav>
     </div>

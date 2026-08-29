@@ -98,7 +98,7 @@
     <h2>Where its users went</h2>
     <ul class="related">
       {% for successor in c.successors %}
-      <li><a href="{{ SITEURL }}{{ successor.url }}">{{ successor.name }}</a></li>
+      <li><a href="{{ successor.url }}">{{ successor.name }}</a></li>
       {% endfor %}
     </ul>
   </section>
@@ -109,7 +109,7 @@
     <h2>Comparable clients still active</h2>
     <ul class="related">
       {% for other in c.related %}
-      <li><a href="{{ SITEURL }}{{ other.url }}">{{ other.name }}</a> &mdash; {{ other.summary }}</li>
+      <li><a href="{{ other.url }}">{{ other.name }}</a> &mdash; {{ other.summary }}</li>
       {% endfor %}
     </ul>
   </section>
@@ -118,7 +118,7 @@
   <footer class="review-footer">
     <p>
       If this client is in fact still going, that is a correction worth making &mdash;
-      <a href="{{ SITEURL }}/submit/">tell us</a>.
+      <a href="/submit/">tell us</a>.
     </p>
   </footer>
 </article>
