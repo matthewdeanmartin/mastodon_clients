@@ -9,7 +9,7 @@ Implementation plan for `spec/spec.md`. Each sprint has its own doc in `spec/`.
 | Client seed data | Real, well-known Mastodon web clients, seeded from model knowledge plus targeted web research. Facts recorded conservatively; anything uncertain uses `unknown` rather than a guess. |
 | Roadmap scope | Phases 1–3 in full, plus a thin slice of Phase 4 (JSON feeds, comparison pages, related clients). |
 | Tooling | **Minimal**: `ruff`, `mypy`, `pytest`. No pylint/bandit/vulture/crosshair/etc. Versions and Python pinned to match `../mastodon_mock` so shared GitHub Actions lint behaviour matches. |
-| Deployment | Single production deploy: Pelican `output/` pushed to the `gh-pages` branch root, served at <https://matthewdeanmartin.github.io/mastodon_clients/>. No custom domain, no canary, no test site, no mirror repo. |
+| Deployment | Single production deploy: Pelican `output/` uploaded as a Pages artifact and deployed by `actions/deploy-pages`, served at <https://matthewdeanmartin.github.io/mastodon_clients/>. No custom domain, no canary, no test site, no mirror repo. |
 
 ## Pinned versions
 

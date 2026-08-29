@@ -25,9 +25,13 @@ Plus `make lint-check` and `make typecheck`. The CI build contacts no client web
 
 ## `publish.yml` — production deploy
 
-Triggered on push to `main` and by `workflow_dispatch`. Builds with `publishconf.py` and pushes `output/` to the `gh-pages` branch root via `.github/scripts/publish-gh-pages.sh`. Served from the project Pages URL <https://matthewdeanmartin.github.io/mastodon_clients/>, so the build uses a sub-path base and writes no `CNAME`; `SITE_URL` is the single value to change if a custom domain is added later.
+Triggered on push to `main` and by `workflow_dispatch`. Builds with `publishconf.py`, uploads `output/` with `actions/upload-pages-artifact`, and deploys it with `actions/deploy-pages`.
 
-Single production site: no canary, no test deployment, no mirror repository. A `gh-pages-branch` concurrency group with `cancel-in-progress: false` prevents two deploys racing.
+The repository's Pages source is set to **GitHub Actions**, so Pages waits for that artifact and watches no branch. This is worth stating because the first version of this workflow pushed a `gh-pages` branch instead — which reported success on every run while publishing nothing, since nothing was watching the branch. A deploy that cannot fail loudly is worse than one that fails.
+
+The base URL comes from `actions/configure-pages` rather than being hard-coded, so the sub-path cannot drift from the repository name. Served from <https://matthewdeanmartin.github.io/mastodon_clients/>, with no `CNAME`; `SITE_URL` is the single value to change if a custom domain is added later.
+
+Single production site: no canary, no test deployment, no mirror repository. A `github-pages` concurrency group with `cancel-in-progress: false` lets an in-progress deploy finish rather than cancelling it.
 
 ## `refresh-metadata.yml` — manual dispatch (§25)
 

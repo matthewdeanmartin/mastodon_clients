@@ -1,10 +1,20 @@
 ---
 name: Deploy to GitHub Pages
-# Build the production site and publish it to the gh-pages branch root.
+# Build the site and hand it to GitHub Pages as an artifact.
 #
-# One production site, one branch, one URL. There is no canary and no test
-# deployment: the whole build is deterministic from committed data, so what CI
-# validated on the pull request is byte-for-byte what deploys here.
+# This repository's Pages source is "GitHub Actions", so Pages waits for a
+# workflow to upload an artifact and call deploy-pages. It does not watch any
+# branch. An earlier version of this workflow pushed a gh-pages branch instead,
+# which reported success while publishing nothing, because nothing was watching
+# that branch. If the site ever stops updating, check that
+# Settings > Pages > Source still reads "GitHub Actions" before looking anywhere
+# else.
+#
+# One production site: no canary and no test deployment. The sibling project
+# this was modelled on serves prod and canary from a single Pages site, which
+# needs a subtree layout only a branch push can express. A single site does not,
+# so the artifact route is both simpler and what this repository is already
+# configured for.
 on:
   push:
     branches: [main]
@@ -17,24 +27,18 @@ on:
         type: string
 permissions:
   contents: read
-# Serialise deploys rather than cancelling them: a half-written gh-pages branch
-# is worse than a slightly stale one.
+# Let an in-progress deploy finish rather than cancelling it: a half-published
+# site is worse than a slightly stale one.
 concurrency:
-  group: gh-pages-branch
+  group: github-pages
   cancel-in-progress: false
 jobs:
-  deploy:
-    name: Build and deploy
+  build:
+    name: Build site
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: write
-    env:
-      # The site is served from a GitHub project Pages URL, so it lives under a
-      # sub-path rather than at an origin root. Every canonical link, OpenGraph
-      # URL, and sitemap entry is built from this one value; point it at a custom
-      # domain later and add a CNAME step, and nothing else needs to change.
-      SITE_URL: https://matthewdeanmartin.github.io/mastodon_clients
+      contents: read
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
@@ -49,6 +53,13 @@ jobs:
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
           enable-cache: true
+      # Reports the site's own base URL, so the build uses the real base path
+      # rather than a value hard-coded here that could drift from the repository
+      # name. Every canonical link, OpenGraph URL, and sitemap entry derives from
+      # it, so getting it from Pages itself removes a whole class of mismatch.
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
       - name: Sync dependencies
         run: uv sync --locked
       # Validation gates the deploy as well as the pull request. A data error
@@ -56,8 +67,12 @@ jobs:
       - name: Validate data
         run: make validate
       - name: Build production site
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
         run: make build-prod SITE_URL="$SITE_URL"
       - name: Verify the build before publishing
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
         run: |
           test -f output/index.html
           test -f output/clients/index.html
@@ -68,7 +83,26 @@ jobs:
           # from a local one. Publishing root-relative links here would send every
           # canonical tag and sitemap entry to the wrong host.
           grep --fixed-strings "$SITE_URL/clients/" output/index.html
-      - name: Publish to gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bash .github/scripts/publish-gh-pages.sh output
+      - name: Upload the site artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with:
+          path: output
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # `pages: write` and `id-token: write` are what deploy-pages requires. The
+    # environment block is what puts the deployed URL on the run summary, which
+    # is the quickest way to tell a real deploy from a no-op.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128  # v5.0.0
