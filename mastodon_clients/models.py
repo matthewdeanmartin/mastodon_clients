@@ -250,6 +250,16 @@ class Client:
     links: tuple[Link, ...] = ()
     screenshots: tuple[Screenshot, ...] = ()
     prose: Prose = field(default_factory=Prose)
+    # Fork lineage. A fork names the family it belongs to, so the directory can
+    # list one row per family instead of repeating near-identical clients --
+    # Pinafore, Semaphore, and Enafore are one lineage, and listing them as three
+    # peers tells a reader to "use Pinafore, or Pinafore, or Pinafore".
+    #
+    # Deliberately one level deep: a fork of a fork records the family root. The
+    # alternative is a tree nobody wants to read, to answer a question ("which
+    # of these should I use?") that a flat list of siblings answers better.
+    fork_of: str | None = None
+    fork_note: str | None = None
     # Discontinuation record (spec 5.7). Only meaningful for DISCONTINUED clients.
     discontinued_at: date | None = None
     discontinued_evidence: str | None = None
@@ -263,8 +273,23 @@ class Client:
         return f"/clients/{self.slug}/"
 
     @property
+    def is_fork(self) -> bool:
+        """Whether this record belongs to another client's family."""
+        return self.fork_of is not None
+
+    @property
     def homepage(self) -> str | None:
         return self.link_url("homepage")
+
+    @property
+    def public_instance(self) -> str | None:
+        """A URL a reader can simply open, or None.
+
+        Distinct from `homepage`, which is where the project describes itself.
+        This is the question almost every visitor actually has, so it gets its
+        own accessor rather than being inferred from the deployment model.
+        """
+        return self.link_url("hosted")
 
     def link_url(self, link_type: str) -> str | None:
         """First URL of a given type, or None."""

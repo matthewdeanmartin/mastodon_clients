@@ -175,6 +175,38 @@ def client_payload(site: Site, client: Client) -> dict[str, Any]:
         "successors": [
             {"slug": slug, "name": _client_name(site, slug), "url": f"/clients/{slug}/"} for slug in client.successors
         ],
+        # The question almost every visitor actually has. Surfaced as its own
+        # field so a template does not have to translate a deployment model into
+        # "is there a URL I can click".
+        "public_instance": client.public_instance,
+        "is_fork": client.is_fork,
+        "fork_note": client.fork_note,
+        "fork_of": (
+            {
+                "slug": client.fork_of,
+                "name": _client_name(site, client.fork_of),
+                "url": f"/clients/{client.fork_of}/",
+            }
+            if client.fork_of
+            else None
+        ),
+        "forks": [
+            {
+                "slug": fork.slug,
+                "name": fork.name,
+                "url": fork.url,
+                "summary": fork.summary,
+                "note": fork.fork_note,
+                "status": site.status_of(fork.slug).value,
+                "status_label": site.status_of(fork.slug).label,
+                "stars": site.scores[fork.slug].stars,
+                "license": fork.licence,
+                "public_instance": fork.public_instance,
+            }
+            for fork in site.forks_of(client.slug)
+        ],
+        "family_status": site.family_status(client).value,
+        "family_status_label": site.family_status(client).label,
         "prose": prose_sections,
         "related": [
             {"slug": other.slug, "name": other.name, "url": other.url, "summary": other.summary}
@@ -306,7 +338,9 @@ def _write_directory(site: Site, target: Path) -> int:
 
 def _write_clients(site: Site, target: Path) -> int:
     written = 0
-    for client in site.listed:
+    # `with_pages`, not `listed`: a fork keeps its own page even though it does
+    # not occupy a directory row.
+    for client in site.with_pages:
         payload = client_payload(site, client)
         # A discontinued client keeps its canonical URL and gets a historical
         # page rather than disappearing (spec 5.7, invariant 9).
@@ -526,7 +560,7 @@ def _write_json(site: Site) -> int:
     extra = site.root / "content" / "extra"
     extra.mkdir(parents=True, exist_ok=True)
 
-    clients = [client_payload(site, client) for client in site.listed]
+    clients = [client_payload(site, client) for client in site.with_pages]
     _dump(extra / "clients.json", {"clients": clients, "generated_from": "data/clients/*.toml"})
 
     per_client = extra / "clients"

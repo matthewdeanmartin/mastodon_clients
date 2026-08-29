@@ -13,9 +13,15 @@
 <h1>{{ page.title }}</h1>
 
 <p class="lede">
-  Every client on this site, {{ d.clients | length }} in total. The default order is alphabetical,
-  which is a neutral ordering rather than a ranking. Ratings are computed from structured metadata
-  by code, never assigned by an editor &mdash; <a href="/methodology/scoring/">see the formula</a>.
+  {{ d.clients | length }} client families, best-rated first. Ratings are computed from structured
+  metadata by code, never assigned by an editor &mdash;
+  <a href="/methodology/scoring/">see the formula</a>. A rating is one blunt number, so the
+  filters below and the audience pages will serve you better than the ordering will.
+</p>
+<p class="note">
+  Where a client has been forked, the family occupies one row rather than several. Forks are
+  compared on the parent's page, since what usually differs between them is which is still
+  maintained.
 </p>
 
 {# The controls are inert markup until directory.js binds them. Marked hidden so

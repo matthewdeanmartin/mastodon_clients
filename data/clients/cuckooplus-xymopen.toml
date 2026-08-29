@@ -1,0 +1,77 @@
+schema_version = 1
+
+slug = "cuckooplus-xymopen"
+name = "Cuckoo+ (xymopen fork)"
+summary = "A maintained fork of Cuckoo+, keeping the original's Google+-style card layout. This is the branch of the project with a working public deployment."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+# The original stopped receiving commits in 2022 and its deployment is gone;
+# this fork is where the working software lives. Recorded as a fork so the
+# directory shows one Cuckoo+ row that reflects the living branch rather than
+# listing a dead parent beside its live descendant.
+fork_of = "cuckoo-plus"
+fork_note = "The branch with a working public deployment. Updated June 2025, where the original's last commit was October 2022."
+
+source_model = "open-source"
+license = "MIT"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "twitter-refugees",
+]
+
+[[links]]
+type = "hosted"
+url = "https://cuckooplus.pages.dev/"
+label = "Public deployment"
+
+[[links]]
+type = "source"
+url = "https://github.com/xymopen/CuckooPlus"
+
+[[links]]
+type = "issues"
+url = "https://github.com/xymopen/CuckooPlus/issues"
+
+# Feature values are inherited from the parent record: this fork is a
+# maintenance continuation rather than a redesign, and nothing in its commit
+# history suggests the feature set diverged. Anything the parent left `unknown`
+# stays unknown here rather than being guessed at from the fork's existence.
+[features]
+multi_account = "unknown"
+lists = "unknown"
+filters = "unknown"
+push_notifications = "unknown"
+quote_posts = false
+scheduled_posts = false
+bookmarks = "unknown"
+translation = "unknown"
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = "unknown"
+column_layout = true
+keyboard_navigation = "unknown"
+advanced_search = "unknown"
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = "unknown"
+polls = "unknown"
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = "unknown"
+profile_editing = "unknown"
+server_switching = true
+notification_filtering = "unknown"
+accessibility_features = "unknown"
+reduced_motion = "unknown"
+responsive_layout = "unknown"
+pwa = "unknown"

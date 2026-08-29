@@ -1,0 +1,29 @@
+# Human prose override (spec/spec.md section 20).
+#
+# Written by hand because the useful thing to say about Pinafore in 2026 is not
+# what it was, but which of its descendants a reader should use instead. That is
+# an editorial judgement about a lineage rather than a description of one record.
+
+[prose]
+
+summary = """
+Pinafore was an accessibility-focused, deliberately lightweight Mastodon web
+client, and for several years the one most often recommended to people who
+wanted an alternative to the stock interface. Its author retired it in January
+2023.
+
+It is kept here because the software did not stop mattering when its author
+stopped maintaining it: two forks carried it forward, and one of them is still
+going. If you came looking for Pinafore, [Enafore](/clients/enafore/) is the
+answer.
+"""
+
+maintenance = """
+Pinafore itself is over, by its author's own announcement rather than by
+inference from a quiet repository.
+
+The lineage is not. Semaphore picked it up and has since gone quiet; Enafore
+picked it up after that and is still receiving commits. This page reports the
+family's health rather than the parent's, which is why the directory does not
+list Pinafore as simply dead.
+"""

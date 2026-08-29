@@ -20,6 +20,7 @@ import pytest
 
 from mastodon_clients.build_content import build_content
 from mastodon_clients.generate import _hash_generated_tree, _hash_override_tree, generate_review
+from mastodon_clients.models import Health
 from mastodon_clients.overrides import GENERATED_DIR, OVERRIDE_DIR, load_prose, render_generated
 from mastodon_clients.repository import load_site
 
@@ -314,3 +315,111 @@ def test_candidate_and_excluded_records_are_not_published(repo: Path, write_clie
     assert "outofscope" not in listed
     # But the records themselves are still loaded, so the decision is recorded.
     assert site.client("outofscope") is not None
+
+
+# --- fork families ---------------------------------------------------------
+
+
+def _write_fork(write_client, slug: str, parent: str, status: str = "active") -> None:
+    write_client(
+        slug,
+        f"""
+        schema_version = 1
+        slug = "{slug}"
+        name = "{slug.title()}"
+        summary = "A fork of {parent}."
+        status = "{status}"
+        reviewed_at = 2026-08-29
+        source_model = "closed-source"
+        deployment = "hosted"
+        homepage = "https://{slug}.example.com/"
+        fork_of = "{parent}"
+        fork_note = "Continued after the original stopped."
+        """,
+    )
+
+
+def test_a_fork_leaves_the_directory_but_keeps_its_page(repo: Path, write_client) -> None:
+    """The whole point of the family model: one row, but no lost URLs."""
+    _write_fork(write_client, "alphafork", "alpha")
+    site = load_site(repo)
+    assert site.report.ok, site.report.render()
+
+    listed = {c.slug for c in site.listed}
+    assert "alphafork" not in listed
+    assert "alpha" in listed
+
+    # But it still has a page and a JSON record, so existing links resolve.
+    assert "alphafork" in {c.slug for c in site.with_pages}
+    build_content(site)
+    assert (repo / "content" / "_generated" / "clients" / "alphafork.md").is_file()
+    assert (repo / "content" / "extra" / "clients" / "alphafork.json").is_file()
+
+
+def test_forks_are_attached_to_their_parent(repo: Path, write_client) -> None:
+    _write_fork(write_client, "alphafork", "alpha")
+    site = load_site(repo)
+    assert [f.slug for f in site.forks_of("alpha")] == ["alphafork"]
+    assert site.forks_of("beta") == ()
+
+
+def test_a_family_reports_its_healthiest_member(repo: Path, write_client, write_observations) -> None:
+    """A dead parent with a living fork is not a dead family.
+
+    Reporting the parent's status would send a reader away from software that
+    works, which is the opposite of what the directory is for.
+    """
+    write_client(
+        "deadparent",
+        """
+        schema_version = 1
+        slug = "deadparent"
+        name = "Deadparent"
+        summary = "Ended, but forked."
+        status = "discontinued"
+        reviewed_at = 2026-08-29
+        discontinued_at = 2024-01-01
+        discontinued_evidence = "The maintainer announced it."
+        source_model = "closed-source"
+        deployment = "hosted"
+        homepage = "https://deadparent.example.com/"
+        """,
+    )
+    _write_fork(write_client, "livefork", "deadparent")
+    write_observations(
+        "2026-08-29T00:00:00Z",
+        [
+            {
+                "client": "livefork",
+                "signal": "repo_latest_commit",
+                "observed_at": "2026-08-29T00:00:00Z",
+                "source": "test",
+                "ok": True,
+                "value": {"committed_at": "2026-08-20T00:00:00Z"},
+                "error": None,
+            }
+        ],
+    )
+
+    site = load_site(repo)
+    parent = site.client("deadparent")
+    assert parent is not None
+    assert site.status_of("deadparent") is Health.DISCONTINUED
+    assert site.family_status(parent) is Health.ACTIVELY_MAINTAINED
+
+
+# --- directory ordering ----------------------------------------------------
+
+
+def test_the_directory_is_ordered_best_first(repo: Path) -> None:
+    """Server-rendered, so the order holds without JavaScript too."""
+    site = load_site(repo)
+    points = [site.scores[c.slug].points for c in site.listed]
+    assert points == sorted(points, reverse=True)
+
+
+def test_equal_scores_break_ties_by_name(repo: Path) -> None:
+    """Otherwise the order could vary between builds (spec 44)."""
+    site = load_site(repo)
+    rows = [(round(site.scores[c.slug].points, 4), c.name.lower()) for c in site.listed]
+    assert rows == sorted(rows, key=lambda row: (-row[0], row[1]))

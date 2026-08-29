@@ -24,6 +24,15 @@ audiences = [
 type = "homepage"
 url = "https://soapbox.pub/"
 
+# The frontend's own deployment, which works against a Mastodon-compatible
+# server. Deliberately NOT ditto.pub: that is the same team's separate
+# Nostr-first product, and sending a reader there for a Mastodon client would
+# send them to unrelated software.
+[[links]]
+type = "hosted"
+url = "https://fe.soapbox.pub/"
+label = "Soapbox frontend deployment"
+
 [[links]]
 type = "source"
 url = "https://gitlab.com/soapbox-pub/soapbox"

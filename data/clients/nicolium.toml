@@ -1,0 +1,76 @@
+schema_version = 1
+
+slug = "nicolium"
+name = "Nicolium"
+summary = "A feature-rich fediverse web client with a WYSIWYG composer, emoji reactions, chats, and per-post interaction policies. Built for Mastodon-compatible servers, with particular attention to Pleroma, Akkoma, Iceshrimp, and GoToSocial."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+# A fork of Soapbox, which it says so itself. Recorded as one so the directory
+# shows the Soapbox lineage as a family rather than as unrelated peers.
+fork_of = "soapbox"
+fork_note = "Adds a WYSIWYG composer, emoji reactions, chats, groups, and interaction policies, and targets Pleroma, Akkoma, Iceshrimp.NET, and GoToSocial alongside Mastodon."
+
+source_model = "open-source"
+license = "AGPL-3.0-or-later"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "power-users",
+    "content-creators",
+]
+
+[[links]]
+type = "homepage"
+url = "https://nicolium.app/"
+
+[[links]]
+type = "hosted"
+url = "https://web.nicolium.app/"
+label = "Public deployment"
+
+[[links]]
+type = "source"
+url = "https://git.pleroma.social/nicolium/nicolium"
+
+# Feature values are taken from the project's own documented capabilities and
+# from its Soapbox lineage. Where neither established an answer the value is
+# `unknown` rather than inferred -- the same standard applied to every record
+# here, and the reason this entry scores below a fully researched one.
+[features]
+multi_account = "unknown"
+lists = true
+filters = true
+push_notifications = "unknown"
+quote_posts = true
+scheduled_posts = true
+bookmarks = true
+translation = "unknown"
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = "unknown"
+keyboard_navigation = "unknown"
+advanced_search = "unknown"
+saved_searches = "unknown"
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = true
+polls = true
+post_editing = true
+account_notes = "unknown"
+follow_requests = true
+profile_editing = true
+server_switching = true
+notification_filtering = "unknown"
+accessibility_features = "unknown"
+reduced_motion = "unknown"
+responsive_layout = true
+pwa = "unknown"

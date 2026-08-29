@@ -86,7 +86,11 @@
 
   /* --- sorting ---------------------------------------------------------- */
 
-  var sortState = { key: null, direction: 1 };
+  /* The server renders rows best-rated first, so the script starts in that same
+   * state. Leaving it null meant the first click on "Rating" sorted ascending --
+   * worst first -- because the script did not know the order it had inherited.
+   */
+  var sortState = { key: "rating", direction: -1 };
 
   function sortValue(row, key) {
     var data = row.dataset;
@@ -223,6 +227,15 @@
       apply();
     });
   }
+
+  // Reflect the server-rendered order in the header, without re-sorting: the
+  // rows already arrive in this order, and re-sorting would only risk disagreeing
+  // with the HTML a non-JavaScript reader sees.
+  table.querySelectorAll("th[data-sort]").forEach(function (th) {
+    if (th.dataset.sort === sortState.key) {
+      th.setAttribute("aria-sort", "descending");
+    }
+  });
 
   readFragment();
   apply();

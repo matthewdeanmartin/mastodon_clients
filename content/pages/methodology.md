@@ -47,6 +47,29 @@ When a known product is deliberately judged out of scope, that decision is
 recorded in the repository rather than left implicit, so the same question does
 not get answered differently next year.
 
+## Forks and families
+
+Fediverse clients get forked a lot, and a fork is usually the same software with
+a different maintainer. Pinafore, Semaphore, and Enafore are one lineage;
+listing them as three peers would tell you to "use Pinafore, or Pinafore, or
+Pinafore", which is noise rather than choice.
+
+So the directory shows **one row per family**. A fork keeps its own page and its
+own permanent URL, and appears in the machine-readable data like any other
+record, but it does not occupy a row of its own in the table.
+
+The family's row reports the **best** maintenance status in the family, not the
+parent's. A project whose original author stopped but whose fork is thriving is
+not a dead project, and reporting it as one would push you away from working
+software.
+
+Each parent's page carries a Forks section comparing the family. What usually
+differs between forks is which one is still being maintained, so that is the
+first column.
+
+Where a discontinued client has a maintained fork, the dead client's page leads
+with a link to the living one. You arrived looking for something that works.
+
 ## How features are assessed
 
 Each client has a structured record listing every feature in the site's
@@ -89,9 +112,12 @@ The short version: five components &mdash; feature breadth, maintenance signals,
 deployment and documentation, support resources, and accessibility &mdash;
 totalling 100 points, converted to stars.
 
-A single number cannot capture what different readers need, which is why the
-directory's default ordering is alphabetical rather than by rating, and why the
-audience pages exist.
+A single number cannot capture what different readers need. The directory is
+ordered by rating because a reader opening a list of clients is usually asking
+which to use, and making them scroll alphabetically to find out serves neutrality
+at their expense. But the ordering is a starting point, not a verdict: the
+audience pages and the directory filters answer "which one for me?" far better
+than a ranking answers "which is best?"
 
 ## How maintenance is assessed
 

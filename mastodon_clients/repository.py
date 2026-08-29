@@ -20,6 +20,18 @@ from mastodon_clients.schema import load_clients
 from mastodon_clients.scoring import Score, score_all
 from mastodon_clients.taxonomy import Taxonomy, load_taxonomy, validate_taxonomy
 
+# Health statuses from best to worst, for ordering forks and picking the status
+# a family row reports.
+_HEALTH_RANK: dict[Health, int] = {
+    Health.ACTIVELY_MAINTAINED: 0,
+    Health.MAINTAINED: 1,
+    Health.LOW_ACTIVITY: 2,
+    Health.UNKNOWN: 3,
+    Health.POSSIBLY_UNMAINTAINED: 4,
+    Health.UNMAINTAINED: 5,
+    Health.DISCONTINUED: 6,
+}
+
 
 @dataclass(frozen=True, slots=True)
 class Site:
@@ -39,7 +51,7 @@ class Site:
 
     @property
     def published(self) -> tuple[Client, ...]:
-        """Clients with an ordinary review page, alphabetically."""
+        """Clients with an ordinary review page, by name."""
         return tuple(sorted((c for c in self.clients if c.lifecycle.published), key=lambda c: c.name.lower()))
 
     @property
@@ -49,12 +61,59 @@ class Site:
 
     @property
     def listed(self) -> tuple[Client, ...]:
-        """Everything the directory shows: published plus discontinued.
+        """The directory's rows: one per client family, best-rated first.
 
-        `candidate` and `excluded` records are deliberately absent -- they exist
-        so the repository can hold a decision without publishing it (spec 33).
+        Forks are excluded. They keep their own page and their entry in
+        `clients.json`, but a family of near-identical clients occupies one row
+        rather than three -- otherwise the directory tells a reader to "use
+        Pinafore, or Pinafore, or Pinafore".
+
+        `candidate` and `excluded` records are deliberately absent too: they let
+        the repository hold a decision without publishing it (spec 33).
+
+        Ordered by rating descending, name ascending as tiebreak. Alphabetical
+        was the earlier default on the grounds that it implied no ranking, but a
+        reader opening a directory of clients is asking which to use, and making
+        them scroll to find out serves the principle at their expense.
         """
-        return tuple(sorted((*self.published, *self.historical), key=lambda c: c.name.lower()))
+        rows = (c for c in (*self.published, *self.historical) if not c.is_fork)
+        return tuple(sorted(rows, key=lambda c: (-self.scores[c.slug].points, c.name.lower())))
+
+    @property
+    def with_pages(self) -> tuple[Client, ...]:
+        """Every client that gets its own page and JSON record -- forks included.
+
+        Distinct from `listed`, which is the directory's rows. A fork stays out
+        of the table but keeps a stable canonical URL, so existing links to it
+        still resolve and `clients.json` stays complete (invariant 9's reasoning
+        applied to forks rather than to dead clients).
+        """
+        rows = (c for c in self.clients if c.lifecycle.published or c.lifecycle.historical)
+        return tuple(sorted(rows, key=lambda c: c.name.lower()))
+
+    def forks_of(self, slug: str) -> tuple[Client, ...]:
+        """A client's forks, healthiest first, then best-rated.
+
+        Ordering matters here: a reader looking at a dead parent wants the living
+        fork at the top of the list, not alphabetically buried in it.
+        """
+        family = [c for c in self.clients if c.fork_of == slug]
+        return tuple(
+            sorted(
+                family,
+                key=lambda c: (_HEALTH_RANK.get(self.status_of(c.slug), 99), -self.scores[c.slug].points),
+            )
+        )
+
+    def family_status(self, client: Client) -> Health:
+        """The best maintenance status in a client's family.
+
+        A family whose parent is discontinued but whose fork is actively
+        maintained is not a dead family, and a row reporting the parent's status
+        would send a reader away from working software.
+        """
+        statuses = [self.status_of(client.slug)] + [self.status_of(f.slug) for f in self.forks_of(client.slug)]
+        return min(statuses, key=lambda status: _HEALTH_RANK.get(status, 99))
 
     def client(self, slug: str) -> Client | None:
         for client in self.clients:

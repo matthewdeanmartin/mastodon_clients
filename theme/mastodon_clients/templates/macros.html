@@ -190,3 +190,91 @@
   </dd>
 </dl>
 {% endmacro %}
+
+{% macro use_it(client) %}
+{# The first thing in the sidebar, because "where do I click" is the question
+   almost every visitor has. Everything else about deployment is secondary to it. #}
+<div class="use-it">
+  <h2>Use it</h2>
+  {% if client.public_instance %}
+  <p>
+    <a class="use-it-link" href="{{ client.public_instance }}" target="_blank" rel="noopener">
+      Open {{ client.name }}
+    </a>
+  </p>
+  <p class="use-it-note">
+    Opens {{ client.public_instance }} in a new tab. Sign in with your existing account on any
+    Mastodon-compatible server.
+  </p>
+  {% elif client.deployment == 'bundled-with-server' %}
+  <p class="use-it-none">
+    Nothing to open separately. This is what a server running it serves to its own users.
+  </p>
+  {% else %}
+  <p class="use-it-none">
+    No public deployment. Using this client means hosting it yourself.
+  </p>
+  {% endif %}
+</div>
+{% endmacro %}
+
+
+{% macro sidebar_links(client) %}
+{# Editorial links and their last observed state side by side. An observation
+   never replaces the recorded URL (spec 32). External links open in a new tab
+   so a reader does not lose the review they were part-way through. #}
+{% if client.links %}
+<div class="sidebar-links">
+  <h2>Links</h2>
+  <ul>
+    {% for link in client.links %}
+    {% if link.type != 'hosted' %}
+    <li>
+      <a href="{{ link.url }}" target="_blank" rel="noopener nofollow">{{ link.label }}</a>
+      <span class="link-url">{{ link.url }}</span>
+      {% if link.last_check %}
+      <span class="link-check {{ 'ok' if link.last_check.ok else 'bad' }}">
+        Last check: {{ link.last_check.summary }} on {{ link.last_check.at[:10] }}
+      </span>
+      {% endif %}
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endmacro %}
+
+
+{% macro fork_table(forks) %}
+{# What actually differs between members of a family is usually maintenance,
+   so that column leads. #}
+<table class="forks">
+  <caption>Forks of this client, best-maintained first.</caption>
+  <thead>
+    <tr>
+      <th scope="col">Fork</th>
+      <th scope="col">Maintenance</th>
+      <th scope="col">Rating</th>
+      <th scope="col">What differs</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for fork in forks %}
+    <tr>
+      <th scope="row">
+        <a href="{{ fork.url }}">{{ fork.name }}</a>
+        {% if fork.public_instance %}
+        <span class="row-summary">
+          <a href="{{ fork.public_instance }}" target="_blank" rel="noopener">Open it</a>
+        </span>
+        {% endif %}
+      </th>
+      <td><span class="health health-{{ fork.status }}">{{ fork.status_label }}</span></td>
+      <td><span class="stars" aria-label="{{ fork.stars }} out of 5 stars">{{ fork.stars }}</span></td>
+      <td>{{ fork.note or 'Not recorded.' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}

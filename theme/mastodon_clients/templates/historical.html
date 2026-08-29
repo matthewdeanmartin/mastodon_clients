@@ -21,6 +21,34 @@
     <p class="lede">{{ c.summary }}</p>
   </header>
 
+  <div class="review-body">
+    <aside class="review-aside" aria-label="Links and where to use this client">
+      {% if c.forks %}
+      {# The parent is over, but the family may not be. A reader who arrives here
+         wants the living branch, not a eulogy. #}
+      <div class="use-it">
+        <h2>Still maintained</h2>
+        <p class="use-it-none">
+          This client has ended, but {{ 'a fork is' if c.forks | length == 1 else 'forks are' }}
+          still going.
+        </p>
+        {% for fork in c.forks %}
+        {% if fork.public_instance %}
+        <p>
+          <a class="use-it-link" href="{{ fork.public_instance }}" target="_blank" rel="noopener">
+            Open {{ fork.name }}
+          </a>
+        </p>
+        {% else %}
+        <p class="use-it-note"><a href="{{ fork.url }}">{{ fork.name }}</a> &mdash; {{ fork.status_label }}</p>
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+      {{ m.sidebar_links(c) }}
+    </aside>
+
+    <div class="review-main">
   <section id="what-happened">
     <h2>What happened</h2>
     <dl class="facts">
@@ -58,14 +86,6 @@
       <dd>{{ c.server_dependency_label }}</dd>
     </dl>
 
-    {% if c.links %}
-    <h3>Former links</h3>
-    <p class="note">
-      Recorded as they were. Some may no longer resolve; they are kept because a working archive
-      link is often more useful than a removed one.
-    </p>
-    {{ m.links_list(c) }}
-    {% endif %}
   </section>
 
   {% if c.observations %}
@@ -115,11 +135,24 @@
   </section>
   {% endif %}
 
+  {% if c.forks %}
+  <section id="forks">
+    <h2>Forks</h2>
+    <p class="note">
+      The same software, continued by other people. Where a fork is still maintained, it is the
+      practical answer for anyone who wanted this client.
+    </p>
+    {{ m.fork_table(c.forks) }}
+  </section>
+  {% endif %}
+
   <footer class="review-footer">
     <p>
       If this client is in fact still going, that is a correction worth making &mdash;
       <a href="/submit/">tell us</a>.
     </p>
   </footer>
+    </div>
+  </div>
 </article>
 {% endblock %}

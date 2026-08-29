@@ -7,6 +7,10 @@ summary = "The currently maintained continuation of the Pinafore line, with adde
 status = "active"
 reviewed_at = 2026-08-29
 
+# The currently maintained branch of the Pinafore family.
+fork_of = "pinafore"
+fork_note = "The maintained continuation. Adds support for non-Mastodon fediverse servers including Akkoma, glitch-soc, and Iceshrimp."
+
 source_model = "open-source"
 license = "AGPL-3.0-only"
 

@@ -556,3 +556,102 @@ def test_missing_prose_file_is_detected(repo: Path, write_client) -> None:
     )
     _, report = _load(repo)
     assert any("points at missing file" in str(issue) for issue in report.issues)
+
+
+# --- fork lineage ----------------------------------------------------------
+
+
+def test_fork_of_must_name_an_existing_client(repo: Path, write_client) -> None:
+    write_client(
+        "gamma",
+        """
+        schema_version = 1
+        slug = "gamma"
+        name = "Gamma"
+        summary = "Claims to fork something that is not here."
+        status = "active"
+        reviewed_at = 2026-08-29
+        source_model = "closed-source"
+        deployment = "hosted"
+        homepage = "https://gamma.example.com/"
+        fork_of = "nonexistent"
+        """,
+    )
+    _, report = _load(repo)
+    assert any("fork_of names unknown client 'nonexistent'" in str(issue) for issue in report.issues)
+
+
+def test_a_record_cannot_fork_itself(repo: Path, write_client) -> None:
+    write_client(
+        "gamma",
+        """
+        schema_version = 1
+        slug = "gamma"
+        name = "Gamma"
+        summary = "Forks itself."
+        status = "active"
+        reviewed_at = 2026-08-29
+        source_model = "closed-source"
+        deployment = "hosted"
+        homepage = "https://gamma.example.com/"
+        fork_of = "gamma"
+        """,
+    )
+    _, report = _load(repo)
+    assert any("fork_of names the record itself" in str(issue) for issue in report.issues)
+
+
+def test_a_fork_of_a_fork_is_rejected(repo: Path, write_client) -> None:
+    """Lineage is one level deep, so the directory stays a flat list of families."""
+    write_client(
+        "child",
+        """
+        schema_version = 1
+        slug = "child"
+        name = "Child"
+        summary = "A fork of Alpha."
+        status = "active"
+        reviewed_at = 2026-08-29
+        source_model = "closed-source"
+        deployment = "hosted"
+        homepage = "https://child.example.com/"
+        fork_of = "alpha"
+        """,
+    )
+    write_client(
+        "grandchild",
+        """
+        schema_version = 1
+        slug = "grandchild"
+        name = "Grandchild"
+        summary = "A fork of a fork."
+        status = "active"
+        reviewed_at = 2026-08-29
+        source_model = "closed-source"
+        deployment = "hosted"
+        homepage = "https://grandchild.example.com/"
+        fork_of = "child"
+        """,
+    )
+    _, report = _load(repo)
+    assert any("is itself a fork" in str(issue) for issue in report.issues)
+
+
+def test_fork_note_without_fork_of_is_rejected(repo: Path, write_client) -> None:
+    write_client(
+        "gamma",
+        """
+        schema_version = 1
+        slug = "gamma"
+        name = "Gamma"
+        summary = "Describes a lineage it does not claim."
+        status = "active"
+        reviewed_at = 2026-08-29
+        source_model = "closed-source"
+        deployment = "hosted"
+        homepage = "https://gamma.example.com/"
+        fork_note = "Adds things."
+        """,
+    )
+    _, report = _load(repo)
+    assert any("fork_note is recorded but fork_of is not" in str(issue) for issue in report.issues)

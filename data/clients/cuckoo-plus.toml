@@ -21,6 +21,9 @@ audiences = [
     "twitter-refugees",
 ]
 
+# No hosted link: the original's public deployment is gone. The working
+# deployment belongs to the fork, and claiming it here would credit this record
+# with something it does not provide.
 [links]
 homepage = "https://github.com/NanaMorse/Cuckoo.Plus"
 source = "https://github.com/NanaMorse/Cuckoo.Plus"

@@ -1,0 +1,30 @@
+# Human prose override (spec/spec.md section 20).
+#
+# The deployment section is written by hand because the Soapbox / Ditto
+# relationship is genuinely confusing, and getting it wrong sends a reader to
+# software that is not the thing they were looking for. That is a judgement about
+# what would mislead someone, which is an editor's call rather than a model's.
+
+[prose]
+
+deployment = """
+Soapbox is deployed alongside a server rather than opened as an independent
+client. Using it the way it is designed to be used means running the server side
+too.
+
+The exception is [fe.soapbox.pub](https://fe.soapbox.pub/), a running deployment
+of the frontend that you can point at your own account without deploying
+anything. If you want to see what Soapbox is like, that is the URL.
+
+**A note on ditto.pub, because it is easy to end up there by mistake.** The same
+team publishes Ditto, at ditto.pub. Ditto is a Nostr client with its own
+branding and its own product identity; Mastodon support is not what it leads
+with. It is not a deployment of Soapbox, and it is not where to go if you want
+to use Soapbox with a Mastodon account.
+
+The two projects share people and some code, which is why searching for one
+tends to surface the other. This directory records fe.soapbox.pub as Soapbox's
+deployment and does not list ditto.pub, because pointing a reader looking for a
+Mastodon client at a Nostr-first product would be the wrong answer to the
+question they asked.
+"""

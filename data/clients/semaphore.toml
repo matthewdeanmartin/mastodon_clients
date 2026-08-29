@@ -11,6 +11,12 @@ summary = "A fork of Pinafore by Nick Colley that continued its accessibility-fi
 status = "inactive"
 reviewed_at = 2026-08-29
 
+# Part of the Pinafore family: Nick Colley picked the project up after Nolan
+# Lawson retired it. Recorded as a fork so the directory shows one row for the
+# lineage rather than three near-identical entries.
+fork_of = "pinafore"
+fork_note = "Continued Pinafore after its retirement, keeping the accessibility-first approach. Its repository is now archived."
+
 source_model = "open-source"
 license = "AGPL-3.0-only"
 

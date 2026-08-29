@@ -64,6 +64,8 @@ _TOP_OPTIONAL = {
     "discontinued_at",
     "discontinued_evidence",
     "successors",
+    "fork_of",
+    "fork_note",
 }
 
 
@@ -155,6 +157,10 @@ def _load_client(path: Path, taxonomy: Taxonomy, report: ValidationReport) -> Cl
     prose = _parse_prose(raw.get("review", {}), where, report)
 
     successors = _str_list(raw.get("successors", []), "successors", where, report)
+    fork_of = _str(raw.get("fork_of"), "fork_of", where, report) if "fork_of" in raw else None
+    fork_note = _str(raw.get("fork_note"), "fork_note", where, report) if "fork_note" in raw else None
+    if fork_note and not fork_of:
+        report.add(where, "fork_note is recorded but fork_of is not")
     discontinued_evidence = (
         _str(raw.get("discontinued_evidence"), "discontinued_evidence", where, report)
         if "discontinued_evidence" in raw
@@ -191,6 +197,8 @@ def _load_client(path: Path, taxonomy: Taxonomy, report: ValidationReport) -> Cl
         discontinued_at=discontinued_at,
         discontinued_evidence=discontinued_evidence,
         successors=successors,
+        fork_of=fork_of,
+        fork_note=fork_note,
         source_file=str(path),
     )
 
@@ -469,8 +477,24 @@ def _validate_cross_references(
 ) -> None:
     """Checks that need the whole set: successor targets, prose files, comparisons."""
     slugs = {client.slug for client in clients}
+    forks = {client.slug for client in clients if client.is_fork}
 
     for client in clients:
+        if client.fork_of is not None:
+            if client.fork_of == client.slug:
+                report.add(client.source_file, "fork_of names the record itself")
+            elif client.fork_of not in slugs:
+                report.add(client.source_file, f"fork_of names unknown client {client.fork_of!r}")
+            elif client.fork_of in forks:
+                # One level only. A fork of a fork records the family root
+                # instead, so the directory stays a flat list of families rather
+                # than a lineage tree nobody wants to read.
+                report.add(
+                    client.source_file,
+                    f"fork_of names {client.fork_of!r}, which is itself a fork; "
+                    "record the family root instead (fork lineage is one level deep)",
+                )
+
         for successor in client.successors:
             if successor not in slugs:
                 report.add(client.source_file, f"successors references unknown client {successor!r}")

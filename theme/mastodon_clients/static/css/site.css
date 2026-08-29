@@ -408,3 +408,145 @@ th[data-sort][aria-sort="descending"]::after { content: " \25BC"; font-size: 0.7
   body { font-size: 11pt; }
   a::after { content: " (" attr(href) ")"; font-size: 0.8em; word-break: break-all; }
 }
+
+/* --- review page layout -------------------------------------------------- */
+
+/* Sidebar left, content right, on wide screens. The sidebar comes after the
+ * heading in source order so a screen reader and a stylesheet-less browser meet
+ * the page's identity first; Grid puts it where the eye expects it. */
+.review-body {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 60rem) {
+  .review-body {
+    grid-template-columns: 17rem minmax(0, 1fr);
+  }
+  .review-aside {
+    position: sticky;
+    top: 1.5rem;
+    /* The links stay reachable while reading a long review, but never grow
+     * taller than the viewport and trap their own scroll. */
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+}
+
+.review-aside h2 {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  margin: 0 0 0.6rem;
+}
+
+.use-it {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1rem;
+  background: var(--paper-raised);
+  margin-bottom: 1.5rem;
+}
+.use-it p { margin: 0; max-width: none; }
+
+.use-it-link {
+  display: block;
+  text-align: center;
+  font-family: var(--sans);
+  font-weight: 600;
+  padding: 0.6rem 0.9rem;
+  border: 2px solid var(--link);
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--link);
+}
+.use-it-link:hover, .use-it-link:focus-visible {
+  background: var(--link);
+  color: var(--paper);
+}
+
+.use-it-note, .use-it-none {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin-top: 0.6rem !important;
+}
+
+.sidebar-links ul { list-style: none; padding: 0; margin: 0; }
+.sidebar-links li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  max-width: none;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+}
+.sidebar-links .link-url {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  word-break: break-all;
+}
+.sidebar-links .link-check { font-size: 0.72rem; }
+
+.lineage {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  margin: 0 0 0.5rem;
+}
+
+/* --- tabs ---------------------------------------------------------------- */
+
+/* Both panels render as ordinary sections; client.js reveals the tablist and
+ * hides the inactive panel. With JavaScript off nothing is hidden. */
+.tablist-shell[hidden] { display: none; }
+
+.tabs [role="tablist"] {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 2px solid var(--rule);
+  margin: 2.5rem 0 0;
+}
+
+.tabs [role="tab"] {
+  font: inherit;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  background: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.tabs [role="tab"]:hover { color: var(--ink); }
+.tabs [role="tab"][aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--link);
+}
+
+/* The panel headings duplicate the tab labels, so they are hidden once the tabs
+ * are doing that job -- but kept for the no-JavaScript rendering, where they are
+ * the only thing separating the two sections. */
+.tabs-enhanced .tab-heading {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tabpanel[hidden] { display: none; }
+.tabpanel:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+
+/* --- forks --------------------------------------------------------------- */
+
+table.forks caption { max-width: none; }
