@@ -1,0 +1,61 @@
+schema_version = 1
+
+slug = "tooty"
+name = "Tooty"
+summary = "An experimental multi-account Mastodon web client written in Elm, presented by its author as an experiment rather than as a finished product."
+
+status = "inactive"
+reviewed_at = 2026-08-29
+
+# No licence file is recorded on the repository. Source availability and
+# licensing are separate facts, so the source model is hybrid rather than
+# open-source: the code is readable, but no licence grant has been established.
+source_model = "hybrid"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "power-users",
+]
+
+[links]
+homepage = "https://n1k0.github.io/tooty/v2/"
+hosted = "https://n1k0.github.io/tooty/v2/"
+source = "https://github.com/n1k0/tooty"
+issues = "https://github.com/n1k0/tooty/issues"
+
+[features]
+multi_account = true
+lists = "unknown"
+filters = "unknown"
+push_notifications = false
+quote_posts = false
+scheduled_posts = false
+bookmarks = "unknown"
+translation = false
+local_timeline = true
+federated_timeline = true
+custom_emoji = "unknown"
+content_warnings = true
+moderation_controls = "partial"
+column_layout = true
+keyboard_navigation = "unknown"
+advanced_search = false
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = "partial"
+drafts = "unknown"
+polls = "unknown"
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = "unknown"
+profile_editing = "unknown"
+server_switching = true
+notification_filtering = "unknown"
+accessibility_features = "unknown"
+reduced_motion = "unknown"
+responsive_layout = "unknown"
+pwa = "unknown"

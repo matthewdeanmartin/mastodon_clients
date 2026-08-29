@@ -1,0 +1,76 @@
+schema_version = 1
+
+slug = "enafore"
+name = "Enafore"
+summary = "The currently maintained continuation of the Pinafore line, with added support for non-Mastodon fediverse servers including Akkoma, glitch-soc, and Iceshrimp."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "AGPL-3.0-only"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "power-users",
+    "new-users",
+]
+
+[[links]]
+type = "homepage"
+url = "https://enafore.social/"
+
+[[links]]
+type = "hosted"
+url = "https://enafore.social/"
+
+[[links]]
+type = "source"
+url = "https://github.com/enafore/enafore"
+label = "Primary repository"
+
+[[links]]
+type = "source"
+url = "https://codeberg.org/enafore/enafore"
+label = "Codeberg mirror"
+
+[[links]]
+type = "issues"
+url = "https://github.com/enafore/enafore/issues"
+
+[features]
+multi_account = true
+lists = true
+filters = true
+push_notifications = true
+quote_posts = "partial"
+scheduled_posts = false
+bookmarks = true
+translation = "unknown"
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = false
+keyboard_navigation = true
+advanced_search = "partial"
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = "unknown"
+polls = true
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = true
+profile_editing = "partial"
+server_switching = true
+notification_filtering = "partial"
+accessibility_features = true
+reduced_motion = "unknown"
+responsive_layout = true
+pwa = true

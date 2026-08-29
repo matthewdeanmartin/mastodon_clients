@@ -1,0 +1,116 @@
+# Audience landing pages (spec/spec.md section 5.4).
+#
+# Audience pages carry custom introductory prose because they are editorially
+# important enough to justify it (spec 39). `criteria` names the features that
+# matter most to that audience; they are rendered as the page's criteria and
+# used to order the matching clients.
+
+[[audience]]
+id = "new-users"
+label = "New users"
+intro = """
+If you have just joined a Mastodon server, the client you were handed is the one
+your server administrator chose. It is not necessarily the one that suits you.
+
+For a first client, the qualities that matter are usually the unglamorous ones: a
+layout that makes sense without a tour, a working mobile view, and behaviour that
+matches what the documentation describes. Multi-account support and column
+layouts are worth very little until you have a reason to want them, and a client
+that leads with them can be harder to learn.
+
+Every client listed here can be used with an ordinary account on an ordinary
+server. None of them requires you to run anything yourself.
+"""
+criteria = [
+    "responsive_layout",
+    "thread_view",
+    "content_warnings",
+    "accessibility_features",
+    "server_switching",
+]
+
+[[audience]]
+id = "power-users"
+label = "Power users"
+intro = """
+Heavy use tends to expose a client at exactly the points a casual review does
+not reach: what happens with eleven lists, three accounts, and a filtered home
+timeline running all day.
+
+The features below are the ones that separate a client that scales with use from
+one that merely works. Keyboard navigation in particular is easy to claim and
+hard to do thoroughly; where a client's support is partial rather than complete,
+this directory says so.
+"""
+criteria = [
+    "multi_account",
+    "lists",
+    "filters",
+    "column_layout",
+    "keyboard_navigation",
+    "advanced_search",
+]
+
+[[audience]]
+id = "twitter-refugees"
+label = "People arriving from Twitter"
+intro = """
+Arriving from another network, the friction is rarely the protocol. It is that
+familiar motions produce unfamiliar results: quote posts may or may not exist,
+search behaves differently by design, and the timeline is chronological unless a
+client chooses otherwise.
+
+The clients below are grouped by how closely their interface resembles what you
+are likely used to. Resemblance is a genuine convenience and this directory does
+not treat it as a flaw -- but it is worth knowing where a familiar-looking
+control does something different underneath.
+"""
+criteria = [
+    "quote_posts",
+    "advanced_search",
+    "thread_view",
+    "media_galleries",
+    "responsive_layout",
+]
+
+[[audience]]
+id = "news-junkies"
+label = "News readers"
+intro = """
+Reading heavily rather than posting heavily makes different demands on a client:
+several timelines visible at once, filters that actually suppress what you asked
+them to, hashtag following, and a way through a long backlog that does not lose
+your place.
+
+Notification handling matters here too, but in the opposite direction from most
+reviews -- the useful question is how well a client lets you turn things off.
+"""
+criteria = [
+    "lists",
+    "column_layout",
+    "filters",
+    "hashtag_following",
+    "notification_filtering",
+]
+
+[[audience]]
+id = "content-creators"
+label = "Content creators"
+intro = """
+Posting regularly makes composition features matter more than reading features.
+Scheduled posts, drafts, editing after publication, and reliable media handling
+with alt text are the practical daily concerns.
+
+Note that several of these depend on the server as well as the client: post
+editing and scheduled posts are server capabilities that a client may or may not
+expose. Where a client's support is limited by the server rather than by the
+client, the individual review says so.
+"""
+criteria = [
+    "scheduled_posts",
+    "drafts",
+    "post_editing",
+    "polls",
+    "media_galleries",
+    "accessibility_features",
+]

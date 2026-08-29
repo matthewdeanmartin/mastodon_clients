@@ -1,0 +1,63 @@
+schema_version = 1
+
+slug = "elk"
+name = "Elk"
+summary = "A general-purpose Mastodon web client with a compact, single-column reading layout, developed by contributors associated with the Vue and Nuxt ecosystems."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "MIT"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["donations", "sponsorship"]
+
+audiences = [
+    "new-users",
+    "twitter-refugees",
+    "power-users",
+]
+
+[links]
+homepage = "https://elk.zone/"
+hosted = "https://elk.zone/"
+canary = "https://main.elk.zone/"
+source = "https://github.com/elk-zone/elk"
+issues = "https://github.com/elk-zone/elk/issues"
+funding = "https://github.com/sponsors/elk-zone"
+
+[features]
+multi_account = true
+lists = true
+filters = true
+push_notifications = true
+quote_posts = false
+scheduled_posts = false
+bookmarks = true
+translation = true
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = false
+keyboard_navigation = "partial"
+advanced_search = "partial"
+saved_searches = false
+hashtag_following = true
+thread_view = true
+media_galleries = true
+drafts = true
+polls = true
+post_editing = true
+account_notes = "unknown"
+follow_requests = true
+profile_editing = true
+server_switching = true
+notification_filtering = "partial"
+accessibility_features = "partial"
+reduced_motion = "unknown"
+responsive_layout = true
+pwa = true

@@ -1,0 +1,192 @@
+{# Shared rendering fragments.
+
+   Everything here reads precomputed payload fields. No template performs a
+   join, a lookup, or a calculation -- that all happened in Python (spec 46). #}
+
+{% macro rating(client) %}
+<span class="rating" title="{{ client.rating.points }} of 100 points">
+  <span class="stars" aria-hidden="true">{{ client.rating.stars_label }}</span>
+  <span class="visually-hidden">{{ client.rating.stars }} out of 5 stars</span>
+  {% if client.rating.unknown_features %}
+  <span class="rating-caveat" title="Rated on incomplete information">
+    ({{ client.rating.unknown_features }} unknown)
+  </span>
+  {% endif %}
+</span>
+{% endmacro %}
+
+
+{% macro health_badge(client) %}
+<span class="health health-{{ client.health.status }}">{{ client.health.label }}</span>
+{% endmacro %}
+
+
+{% macro feature_value(value) %}
+{# The class carries the meaning for CSS; the text carries it for everyone else. #}
+<span class="fv fv-{{ value | replace('_', '-') }}">{{ value }}</span>
+{% endmacro %}
+
+
+{% macro client_card(client) %}
+<article class="client-card">
+  <h3><a href="{{ SITEURL }}{{ client.url }}">{{ client.name }}</a></h3>
+  <p class="summary">{{ client.summary }}</p>
+  <p class="meta">
+    {{ rating(client) }}
+    <span class="sep" aria-hidden="true">·</span>
+    {{ health_badge(client) }}
+    <span class="sep" aria-hidden="true">·</span>
+    <span>{{ client.source_model_label }}</span>
+    <span class="sep" aria-hidden="true">·</span>
+    <span>{{ client.deployment_label }}</span>
+  </p>
+</article>
+{% endmacro %}
+
+
+{% macro client_list(clients, empty_message) %}
+{% if clients %}
+<div class="client-cards">
+  {% for client in clients %}
+  {{ client_card(client) }}
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty">{{ empty_message }}</p>
+{% endif %}
+{% endmacro %}
+
+
+{% macro directory_table(clients, caption) %}
+{# The complete directory in server-rendered HTML. JavaScript filters these rows
+   in place; it never fetches them (invariant 6, spec 28). #}
+<table class="directory" id="directory-table">
+  <caption>{{ caption }}</caption>
+  <thead>
+    <tr>
+      <th scope="col" data-sort="name">Client</th>
+      <th scope="col" data-sort="rating">Rating</th>
+      <th scope="col" data-sort="status">Maintenance</th>
+      <th scope="col" data-sort="source">Source</th>
+      <th scope="col" data-sort="deployment">Deployment</th>
+      <th scope="col" data-sort="reviewed">Last reviewed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for client in clients %}
+    <tr
+      data-name="{{ client.name | lower }}"
+      data-rating="{{ client.rating.points }}"
+      data-status="{{ client.health.status }}"
+      data-source="{{ client.source_model }}"
+      data-deployment="{{ client.deployment }}"
+      data-standalone="{{ 'yes' if client.standalone else 'no' }}"
+      data-reviewed="{{ client.reviewed_at }}"
+      data-audiences="{{ client.audiences | map(attribute='id') | join(' ') }}"
+      data-features="{% for f in client.features %}{% if f.value in ('yes', 'partial') %}{{ f.id }} {% endif %}{% endfor %}"
+      data-search="{{ client.name | lower }} {{ client.summary | lower }}">
+      <th scope="row">
+        <a href="{{ SITEURL }}{{ client.url }}">{{ client.name }}</a>
+        <span class="row-summary">{{ client.summary }}</span>
+      </th>
+      <td>{{ rating(client) }}</td>
+      <td>{{ health_badge(client) }}</td>
+      <td>{{ client.source_model_label }}{% if client.license %} <span class="licence">({{ client.license }})</span>{% endif %}</td>
+      <td>{{ client.deployment_label }}</td>
+      <td><time datetime="{{ client.reviewed_at }}">{{ client.reviewed_at }}</time></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
+
+
+{% macro links_list(client) %}
+{# Editorial links and their last observed state sit side by side. An
+   observation never replaces the recorded URL (spec 32). #}
+<ul class="links">
+  {% for link in client.links %}
+  <li>
+    <a href="{{ link.url }}" rel="nofollow noopener">{{ link.label }}</a>
+    <span class="link-url">{{ link.url }}</span>
+    {% if link.last_check %}
+    <span class="link-check {{ 'ok' if link.last_check.ok else 'bad' }}">
+      Last check: {{ link.last_check.summary }} on {{ link.last_check.at[:10] }}
+    </span>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+
+{% macro feature_matrix(features) %}
+<table class="feature-matrix">
+  <caption>Feature matrix. &ldquo;Unknown&rdquo; means we have not established the answer, not that the client lacks the feature.</caption>
+  <thead>
+    <tr>
+      <th scope="col">Feature</th>
+      <th scope="col">Supported</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for feature in features %}
+    <tr class="{{ 'core' if feature.core else 'extra' }}">
+      <th scope="row">
+        {% if feature.url %}<a href="{{ SITEURL }}{{ feature.url }}">{{ feature.label }}</a>{% else %}{{ feature.label }}{% endif %}
+        <span class="feature-desc">{{ feature.description }}</span>
+      </th>
+      <td>{{ feature_value(feature.value_label) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
+
+
+{% macro score_breakdown(client) %}
+<table class="score-breakdown">
+  <caption>How this rating was calculated. <a href="{{ SITEURL }}/methodology/scoring/">The full formula</a>.</caption>
+  <thead>
+    <tr>
+      <th scope="col">Component</th>
+      <th scope="col">Points</th>
+      <th scope="col">Basis</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for component in client.rating.components %}
+    <tr>
+      <th scope="row">{{ component.label }}</th>
+      <td>{{ component.points }} / {{ component.maximum }}</td>
+      <td>{{ component.detail }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <th scope="row">Total</th>
+      <td>{{ client.rating.points }} / 100</td>
+      <td>{{ client.rating.stars }} stars</td>
+    </tr>
+  </tfoot>
+</table>
+{% endmacro %}
+
+
+{% macro freshness(client) %}
+{# Two different facts, kept apart (spec 37). Fresh machine signals must not be
+   read as a fresh editorial review. #}
+<dl class="freshness">
+  <dt>Review last updated</dt>
+  <dd><time datetime="{{ client.reviewed_at }}">{{ client.reviewed_at }}</time></dd>
+  <dt>Automated project signals checked</dt>
+  <dd>
+    {% if client.observations_updated_at %}
+    <time datetime="{{ client.observations_updated_at }}">{{ client.observations_updated_at[:10] }}</time>
+    {% else %}
+    Not yet collected
+    {% endif %}
+  </dd>
+</dl>
+{% endmacro %}

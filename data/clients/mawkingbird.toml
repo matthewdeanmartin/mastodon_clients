@@ -1,0 +1,60 @@
+schema_version = 1
+
+slug = "mawkingbird"
+name = "Mawkingbird"
+summary = "A freemium Mastodon web client maintained by Matthew Martin, who also operates this directory. Listed here because omitting it would be a worse conflict of interest than including it."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+# The site's own product. Its entry is held to the same rules as every other:
+# facts are recorded in this file, and the rating is computed from them by the
+# same code that scores everything else. See /about/ for the full disclosure.
+source_model = "unknown"
+
+deployment = "hosted"
+server_dependency = "independent"
+funding_model = ["freemium"]
+
+audiences = [
+    "new-users",
+    "twitter-refugees",
+]
+
+[links]
+homepage = "https://mawkingbird.com/"
+hosted = "https://mawkingbird.com/"
+
+[features]
+multi_account = "unknown"
+lists = "unknown"
+filters = "unknown"
+push_notifications = "unknown"
+quote_posts = "unknown"
+scheduled_posts = "unknown"
+bookmarks = "unknown"
+translation = "unknown"
+local_timeline = "unknown"
+federated_timeline = "unknown"
+custom_emoji = "unknown"
+content_warnings = "unknown"
+moderation_controls = "unknown"
+column_layout = "unknown"
+keyboard_navigation = "unknown"
+advanced_search = "unknown"
+saved_searches = "unknown"
+hashtag_following = "unknown"
+thread_view = "unknown"
+media_galleries = "unknown"
+drafts = "unknown"
+polls = "unknown"
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = "unknown"
+profile_editing = "unknown"
+server_switching = "unknown"
+notification_filtering = "unknown"
+accessibility_features = "unknown"
+reduced_motion = "unknown"
+responsive_layout = "unknown"
+pwa = "unknown"

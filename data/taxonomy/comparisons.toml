@@ -1,0 +1,34 @@
+# Allow-listed comparison pages (spec/spec.md section 5.6).
+#
+# Comparison pages are generated ONLY for pairs listed here. The full pairwise
+# set grows quadratically and would be mass-produced low-value SEO content, which
+# invariant 8 and section 39 both rule out.
+#
+# Every comparison page is derived entirely from structured data. No pairwise
+# prose is authored or generated for these pages.
+#
+# Add a pair when readers plausibly weigh those two clients against each other.
+
+[[comparison]]
+left = "elk"
+right = "phanpy"
+
+[[comparison]]
+left = "elk"
+right = "mastodon-web"
+
+[[comparison]]
+left = "phanpy"
+right = "mastodon-web"
+
+[[comparison]]
+left = "enafore"
+right = "semaphore"
+
+[[comparison]]
+left = "elk"
+right = "sengi"
+
+[[comparison]]
+left = "phanpy"
+right = "enafore"

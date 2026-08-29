@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% set d = page.data | data %}
+
+{# Rendered from `scoring.describe_components()`, which lives beside the code
+   that computes the scores. The published explanation therefore cannot drift
+   from the actual formula (spec 17). #}
+
+{% block title %}How ratings are calculated — {{ SITENAME }}{% endblock %}
+{% block description %}{{ page.description }}{% endblock %}
+{% block canonical %}{{ SITEURL }}/methodology/scoring/{% endblock %}
+{% block og_title %}How Mawkingbird ratings are calculated{% endblock %}
+{% block og_description %}{{ page.description }}{% endblock %}
+{% block og_url %}{{ SITEURL }}/methodology/scoring/{% endblock %}
+
+{% block content %}
+<h1>How ratings are calculated</h1>
+
+<p class="lede">
+  A rating on this site is arithmetic, not an impression. It is computed by code from the structured
+  record for each client, and it is reproducible: anyone with the repository can recalculate every
+  star on the site and get the same numbers. No language model assigns or adjusts a rating.
+</p>
+
+<p>
+  The description below is generated from the scoring code itself, so it cannot drift out of date
+  with what the code actually does.
+</p>
+
+<h2>Components</h2>
+
+<table class="scoring">
+  <caption>The five rating components and the points available in each.</caption>
+  <thead>
+    <tr>
+      <th scope="col">Component</th>
+      <th scope="col">Points</th>
+      <th scope="col">What earns them</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for component in d.components %}
+    <tr>
+      <th scope="row">{{ component.label }}</th>
+      <td>{{ component.maximum }}</td>
+      <td>{{ component.description }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <th scope="row">Total</th>
+      <td>{{ d.total }}</td>
+      <td>Converted to a 0&ndash;5 scale in half-star steps.</td>
+    </tr>
+  </tfoot>
+</table>
+
+<h2>How unknown values are handled</h2>
+
+<p>
+  A feature we have not established reads as <em>unknown</em>. Unknown values earn no points, so an
+  incompletely researched client scores lower than a fully researched one with the same
+  capabilities. That is a deliberate choice, and it has an obvious failure mode: it can make a
+  little-known client look worse than it is.
+</p>
+
+<p>
+  To keep that visible rather than hidden, every client page and every directory row shows the
+  number of unknown core features alongside the rating. A client rated three stars with six unknowns
+  is telling you something different from a client rated three stars with none.
+  <a href="{{ SITEURL }}/submit/">Corrections that resolve an unknown are the most useful kind.</a>
+</p>
+
+<p>
+  A feature recorded as <em>not applicable</em> is removed from the denominator entirely rather than
+  counted against the client, because penalising a product for lacking something that cannot apply
+  to it would be measuring the wrong thing.
+</p>
+
+<h2>Why half stars</h2>
+
+<p>
+  Finer granularity would imply a precision the inputs do not support. The underlying data is a
+  hand-maintained record of a few dozen facts; resolving it to a tenth of a star would be false
+  confidence.
+</p>
+
+<h2>What the rating is not</h2>
+
+<p>
+  It is not a recommendation, and one number cannot capture what different readers need. A reader
+  who wants a client for a phone, a reader who wants a keyboard-driven deck, and a reader who wants
+  something a newcomer can be handed are looking for three different things, and the same star
+  count means something different to each of them.
+</p>
+
+<p>
+  That is why the <a href="{{ SITEURL }}/clients/">directory filters</a> and the audience pages
+  exist, and why the default ordering of the directory is alphabetical rather than by rating. Sorting
+  the whole field by stars is the least useful thing this data supports.
+</p>
+
+<h2>Core features</h2>
+
+<p>
+  These are the features that count toward the breadth component. Features outside this list are
+  recorded and displayed, but a client is not penalised for omitting one.
+</p>
+
+<ul class="core-features">
+  {% for feature in d.features %}
+  {% if feature.core %}
+  <li><strong>{{ feature.label }}</strong> &mdash; {{ feature.description }}</li>
+  {% endif %}
+  {% endfor %}
+</ul>
+
+<h2>Non-core features</h2>
+
+<ul class="extra-features">
+  {% for feature in d.features %}
+  {% if not feature.core %}
+  <li><strong>{{ feature.label }}</strong> &mdash; {{ feature.description }}</li>
+  {% endif %}
+  {% endfor %}
+</ul>
+
+<p class="see-also">
+  <a href="{{ SITEURL }}/methodology/">The broader methodology</a>, covering what qualifies as a
+  client, how maintenance is assessed, and how the site's conflict of interest is handled.
+</p>
+{% endblock %}

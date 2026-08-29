@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% set d = page.data | data %}
+
+{% block title %}{{ page.title }} — {{ SITENAME }}{% endblock %}
+{% block description %}{{ page.description }}{% endblock %}
+{% block canonical %}{{ SITEURL }}/clients/{% endblock %}
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block og_description %}{{ page.description }}{% endblock %}
+{% block og_url %}{{ SITEURL }}/clients/{% endblock %}
+
+{% block content %}
+<h1>{{ page.title }}</h1>
+
+<p class="lede">
+  Every client on this site, {{ d.clients | length }} in total. The default order is alphabetical,
+  which is a neutral ordering rather than a ranking. Ratings are computed from structured metadata
+  by code, never assigned by an editor &mdash; <a href="{{ SITEURL }}/methodology/scoring/">see the formula</a>.
+</p>
+
+{# The controls are inert markup until directory.js binds them. Marked hidden so
+   a visitor without JavaScript is not shown filters that cannot work; the table
+   below is complete either way (spec 28, invariant 6). #}
+<form class="directory-controls" id="directory-controls" hidden>
+  <fieldset>
+    <legend>Search and filter</legend>
+
+    <p class="field">
+      <label for="filter-search">Search</label>
+      <input type="search" id="filter-search" name="q" autocomplete="off"
+             placeholder="Client name or description">
+    </p>
+
+    <p class="field">
+      <label for="filter-audience">Audience</label>
+      <select id="filter-audience" name="audience">
+        <option value="">Any</option>
+        {% for audience in d.audiences %}
+        <option value="{{ audience.id }}">{{ audience.label }}</option>
+        {% endfor %}
+      </select>
+    </p>
+
+    <p class="field">
+      <label for="filter-source">Source model</label>
+      <select id="filter-source" name="source">
+        <option value="">Any</option>
+        <option value="open-source">Open source</option>
+        <option value="hybrid">Hybrid</option>
+        <option value="closed-source">Closed source</option>
+        <option value="unknown">Unknown</option>
+      </select>
+    </p>
+
+    <p class="field">
+      <label for="filter-deployment">Deployment</label>
+      <select id="filter-deployment" name="deployment">
+        <option value="">Any</option>
+        <option value="hosted">Hosted</option>
+        <option value="self-hostable">Self-hostable</option>
+        <option value="hosted-and-self-hostable">Hosted or self-hostable</option>
+        <option value="bundled-with-server">Bundled with a server</option>
+      </select>
+    </p>
+
+    <p class="field">
+      <label for="filter-status">Maintenance</label>
+      <select id="filter-status" name="status">
+        <option value="">Any</option>
+        <option value="actively-maintained">Actively maintained</option>
+        <option value="maintained">Maintained</option>
+        <option value="low-activity">Low activity</option>
+        <option value="possibly-unmaintained">Possibly unmaintained</option>
+        <option value="unmaintained">Unmaintained</option>
+        <option value="discontinued">Discontinued</option>
+        <option value="unknown">Unknown</option>
+      </select>
+    </p>
+
+    <p class="field field-check">
+      <input type="checkbox" id="filter-standalone" name="standalone">
+      <label for="filter-standalone">Works with any server (no server deployment needed)</label>
+    </p>
+
+    <fieldset class="feature-filters">
+      <legend>Required features</legend>
+      {% for feature in d.features %}
+      {% if feature.core %}
+      <span class="field-check">
+        <input type="checkbox" id="filter-feature-{{ feature.id }}" name="feature" value="{{ feature.id }}">
+        <label for="filter-feature-{{ feature.id }}">{{ feature.label }}</label>
+      </span>
+      {% endif %}
+      {% endfor %}
+    </fieldset>
+
+    <p class="controls-actions">
+      <button type="button" id="filter-reset">Clear filters</button>
+      <output id="filter-count" for="directory-controls" aria-live="polite"></output>
+    </p>
+  </fieldset>
+</form>
+
+{{ m.directory_table(d.clients, "Mastodon-compatible web clients reviewed on this site") }}
+
+<section class="directory-notes">
+  <h2>Reading this table</h2>
+  <dl>
+    <dt>Rating</dt>
+    <dd>
+      Computed from structured metadata: feature breadth, maintenance signals, deployment and
+      documentation, support resources, and accessibility. It is reproducible from the data in this
+      repository, and it deliberately does not capture every reader's priorities. The audience pages
+      and the filters above are more useful than sorting by stars.
+    </dd>
+    <dt>Maintenance</dt>
+    <dd>
+      Synthesised from several independent signals. No single signal &mdash; not a dead domain, not a
+      quiet month &mdash; is enough to call a project unmaintained. Each client's page shows the
+      underlying observations.
+    </dd>
+    <dt>Source</dt>
+    <dd>
+      Whether source is published, kept separate from which licence it carries. The two are
+      different facts and this site does not conflate them.
+    </dd>
+    <dt>Deployment</dt>
+    <dd>
+      How you obtain the client. A separate field, shown on each client's page, records whether the
+      client works with any Mastodon-compatible server or requires you to deploy one.
+    </dd>
+  </dl>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ SITEURL }}/assets/js/directory.js" defer></script>
+{% endblock %}

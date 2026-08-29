@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% set c = page.data | data %}
+
+{% block title %}{{ c.name }} — Mastodon web client review — {{ SITENAME }}{% endblock %}
+{% block description %}{{ c.summary }}{% endblock %}
+{% block canonical %}{{ SITEURL }}{{ c.url }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ c.name }} — Mastodon web client review{% endblock %}
+{% block og_description %}{{ c.summary }}{% endblock %}
+{% block og_url %}{{ SITEURL }}{{ c.url }}{% endblock %}
+
+{% block head %}
+{# JSON-LD derived from the same payload as the HTML (spec 27). SoftwareApplication
+   fits a web client cleanly; nothing is forced into a type it does not suit. #}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": {{ c.name | tojson }},
+  "description": {{ c.summary | tojson }},
+  "applicationCategory": "SocialNetworkingApplication",
+  "operatingSystem": "Web browser",
+  {% if c.license %}"license": {{ c.license | tojson }},{% endif %}
+  {% for link in c.links %}{% if link.type == 'homepage' %}"url": {{ link.url | tojson }},{% endif %}{% endfor %}
+  "isAccessibleForFree": true,
+  "review": {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": {{ c.rating.stars }},
+      "bestRating": 5,
+      "worstRating": 0
+    },
+    "author": {"@type": "Person", "name": "Matthew Martin"},
+    "datePublished": {{ c.reviewed_at | tojson }}
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="client-review">
+
+  {# 1-5: title, summary, status, rating, audiences #}
+  <header>
+    <h1>{{ c.name }}</h1>
+    <p class="lede">{{ c.summary }}</p>
+    <p class="headline-meta">
+      {{ m.rating(c) }}
+      <span class="sep" aria-hidden="true">·</span>
+      {{ m.health_badge(c) }}
+      <span class="sep" aria-hidden="true">·</span>
+      <span>{{ c.source_model_label }}</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>{{ c.deployment_label }}</span>
+    </p>
+    {% if c.rating.unknown_features %}
+    <p class="caveat">
+      This rating is based on incomplete information: {{ c.rating.unknown_features }}
+      core feature{{ 's' if c.rating.unknown_features != 1 }} have not been established.
+      Unknown values earn no points, so an under-researched client scores lower than a fully
+      researched one with the same capabilities.
+      <a href="{{ SITEURL }}/submit/">Corrections are welcome</a>.
+    </p>
+    {% endif %}
+  </header>
+
+  {# 15: editorial prose. Generated draft prose, with any human override already
+     merged in by section (invariant 3). #}
+  {% if c.prose %}
+  <section class="prose">
+    {% for section in c.prose %}
+    <h2 id="{{ section.id }}">{{ section.label }}</h2>
+    {{ section.text | md }}
+    {% endfor %}
+  </section>
+  {% else %}
+  <section class="prose">
+    <p class="empty">
+      No written review yet. The structured facts below are complete and were recorded by hand;
+      only the prose is outstanding.
+    </p>
+  </section>
+  {% endif %}
+
+  {# 6: who it is for #}
+  {% if c.audiences %}
+  <section id="audiences">
+    <h2>Who it is for</h2>
+    <ul class="audience-links">
+      {% for audience in c.audiences %}
+      <li><a href="{{ SITEURL }}{{ audience.url }}">{{ audience.label }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {# 7: feature matrix #}
+  <section id="features">
+    <h2>Features</h2>
+    {{ m.feature_matrix(c.features) }}
+  </section>
+
+  {# 8-10: deployment, source and licensing, funding #}
+  <section id="facts">
+    <h2>Deployment, source, and funding</h2>
+    <dl class="facts">
+      <dt>Deployment model</dt>
+      <dd>{{ c.deployment_label }}</dd>
+
+      <dt>Server dependency</dt>
+      <dd>
+        {{ c.server_dependency_label }}
+        {% if c.server_dependency == 'requires-server-deployment' %}
+        <span class="note">
+          This client cannot realistically be run as an independent frontend against an arbitrary
+          server; using it means operating the server side too.
+        </span>
+        {% endif %}
+      </dd>
+
+      <dt>Source model</dt>
+      <dd>{{ c.source_model_label }}</dd>
+
+      <dt>Licence</dt>
+      <dd>
+        {% if c.license %}{{ c.license }}{% else %}
+        Not recorded. Source availability and licensing are separate facts, and this site does not
+        infer one from the other.
+        {% endif %}
+      </dd>
+
+      <dt>Funding</dt>
+      <dd>
+        {% if c.funding_labels %}{{ c.funding_labels | join(', ') }}{% else %}Not recorded{% endif %}
+      </dd>
+    </dl>
+  </section>
+
+  {# 11 and 14: maintenance status, with the observations that produced it #}
+  <section id="maintenance">
+    <h2>Project health</h2>
+    <p>Synthesised status: {{ m.health_badge(c) }}</p>
+
+    {% if c.health.reasons %}
+    <ul class="health-reasons">
+      {% for reason in c.health.reasons %}
+      <li>{{ reason }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if c.health.warnings %}
+    <div class="warnings">
+      <h3>Flagged for review</h3>
+      <p>
+        These conditions are worth a human's attention. They are not conclusions: none of them,
+        alone or together, is treated as evidence that the project has been abandoned.
+      </p>
+      <ul>
+        {% for warning in c.health.warnings %}
+        <li>{{ warning }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if c.observations %}
+    <h3>Collected signals</h3>
+    <table class="observations">
+      <caption>The raw observations behind the status above, most recently collected {{ c.observations_updated_at[:10] if c.observations_updated_at }}.</caption>
+      <thead>
+        <tr>
+          <th scope="col">Signal</th>
+          <th scope="col">Result</th>
+          <th scope="col">Observed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in c.observations %}
+        <tr>
+          <th scope="row">{{ row.label }}</th>
+          <td>
+            {% if row.ok %}
+              {% for key, value in row.value.items() %}{{ key }}: {{ value }}{% if not loop.last %}, {% endif %}{% endfor %}
+            {% else %}
+              <span class="bad">{{ row.error or 'failed' }}</span>
+            {% endif %}
+          </td>
+          <td><time datetime="{{ row.observed_at }}">{{ row.observed_at[:10] }}</time></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty">
+      No automated signals have been collected for this client yet. Collection is run by hand rather
+      than on a schedule, so a page can be accurate and still show nothing here.
+    </p>
+    {% endif %}
+  </section>
+
+  {# 4 again, in detail: how the rating was reached #}
+  <section id="rating">
+    <h2>How this rating was calculated</h2>
+    {{ m.score_breakdown(c) }}
+  </section>
+
+  {# 12-13: support and important links #}
+  <section id="links">
+    <h2>Links</h2>
+    {{ m.links_list(c) }}
+  </section>
+
+  {# 16-17: the two freshness dates, kept distinct #}
+  <section id="freshness">
+    <h2>Freshness</h2>
+    {{ m.freshness(c) }}
+    <p class="note">
+      These are different facts. Automated signals can be much newer than the written review, and a
+      recent signal check does not mean a human has re-read the client.
+    </p>
+  </section>
+
+  {# 18: related clients, derived structurally #}
+  {% if c.related %}
+  <section id="related">
+    <h2>Related clients</h2>
+    <p class="note">Selected by shared audiences, overlapping features, and matching source and deployment model.</p>
+    <ul class="related">
+      {% for other in c.related %}
+      <li><a href="{{ SITEURL }}{{ other.url }}">{{ other.name }}</a> &mdash; {{ other.summary }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <footer class="review-footer">
+    <p>
+      Something wrong here? <a href="{{ SITEURL }}/submit/">Send a correction</a>. Facts on this page
+      come from a structured record in the site's repository, so a correction is a small, reviewable change.
+    </p>
+  </footer>
+</article>
+{% endblock %}

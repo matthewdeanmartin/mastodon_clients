@@ -1,0 +1,62 @@
+schema_version = 1
+
+slug = "sengi"
+name = "Sengi"
+summary = "A multi-account, multi-column client for Mastodon and Pleroma, laid out as a deck in the manner of the old TweetDeck. Available as a web application and as desktop builds."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "AGPL-3.0-only"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "power-users",
+    "news-junkies",
+    "twitter-refugees",
+]
+
+[links]
+homepage = "https://nicolasconstant.github.io/sengi/"
+hosted = "https://nicolasconstant.github.io/sengi/"
+source = "https://github.com/NicolasConstant/sengi"
+issues = "https://github.com/NicolasConstant/sengi/issues"
+releases = "https://github.com/NicolasConstant/sengi/releases"
+
+[features]
+multi_account = true
+lists = true
+filters = "unknown"
+push_notifications = "unknown"
+quote_posts = false
+scheduled_posts = "unknown"
+bookmarks = "unknown"
+translation = "unknown"
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = "partial"
+column_layout = true
+keyboard_navigation = "unknown"
+advanced_search = "unknown"
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = "unknown"
+polls = true
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = true
+profile_editing = "unknown"
+server_switching = true
+notification_filtering = "unknown"
+accessibility_features = "unknown"
+reduced_motion = "unknown"
+responsive_layout = "partial"
+pwa = "unknown"

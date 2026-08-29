@@ -1,0 +1,72 @@
+---
+name: Refresh machine metadata
+# Collect machine observations and open a pull request with the result.
+#
+# Deliberately manual. Spec section 15 says collection is an explicitly invoked
+# job and is not initially scheduled, and section 25 says the result must arrive
+# as a reviewable change rather than silently altering the live site from
+# transient network results.
+#
+# So this workflow never pushes to main and never deploys. It opens a pull
+# request against data/generated/observations.json, and a human decides.
+on:
+  workflow_dispatch:
+    inputs:
+      client:
+        description: Limit collection to one client slug (blank collects all)
+        required: false
+        default: ''
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: refresh-metadata
+  cancel-in-progress: false
+jobs:
+  refresh:
+    name: Collect observations
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        with:
+          python-version: '3.14'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
+        with:
+          enable-cache: true
+      - name: Sync dependencies
+        run: uv sync --locked --extra collect
+      # This is the one step in the repository that reaches the public internet.
+      # An unauthenticated GitHub API is rate-limited; the token raises the
+      # limit, and a failed request is recorded as a failed observation rather
+      # than crashing the run.
+      - name: Collect observations
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uv run python -m mawkingbird.cli refresh-metadata \
+            ${{ inputs.client && format('--client {0}', inputs.client) || '' }} \
+            | tee refresh-report.txt
+      - name: Verify the site still builds with the new observations
+        # A refresh that produces data the build cannot consume should fail here,
+        # not in the deploy after someone merges it.
+        run: make build
+      - name: Open a pull request with the changed observations
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e  # v7.0.8
+        with:
+          add-paths: data/generated/observations.json
+          branch: refresh-metadata
+          delete-branch: true
+          commit-message: 'data: refresh machine observations'
+          title: 'Refresh machine observations'
+          body-path: refresh-report.txt
+          labels: data

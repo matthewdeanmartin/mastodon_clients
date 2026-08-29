@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="{{ DEFAULT_LANG }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {# Each page sets its own title and description; spec 26 requires both be unique. #}
+  <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ SITESUBTITLE }}{% endblock %}">
+  <link rel="canonical" href="{% block canonical %}{{ SITEURL }}/{% endblock %}">
+
+  {# OpenGraph. No image is set: the site is text-first and a placeholder image
+     would be worse than none (spec 31 -- imagery must not block launch). #}
+  <meta property="og:site_name" content="{{ SITENAME }}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ SITENAME }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ SITESUBTITLE }}{% endblock %}">
+  <meta property="og:url" content="{% block og_url %}{{ SITEURL }}/{% endblock %}">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="stylesheet" href="{{ SITEURL }}/assets/css/mawkingbird.css">
+  {% if FEED_ALL_ATOM %}
+  <link rel="alternate" type="application/atom+xml" title="{{ SITENAME }}" href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}">
+  {% endif %}
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {# A skip link is the cheapest large accessibility win on a page whose main
+     content sits behind a nav (spec 40). #}
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <p class="site-title"><a href="{{ SITEURL }}/">{{ SITENAME }}</a></p>
+      <p class="site-tagline">{{ SITESUBTITLE }}</p>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="{{ SITEURL }}/clients/">All clients</a></li>
+          <li><a href="{{ SITEURL }}/for/new-users/">For new users</a></li>
+          <li><a href="{{ SITEURL }}/open-source/">Open source</a></li>
+          <li><a href="{{ SITEURL }}/methodology/">Methodology</a></li>
+          <li><a href="{{ SITEURL }}/about/">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      {# Spec 5.8 and invariant 10: the commercial relationship is disclosed
+         plainly, on every page, not only on the About page. #}
+      <p class="disclosure">
+        <strong>Disclosure.</strong> Mawkingbird is written and operated by Matthew Martin, who also
+        maintains <a href="https://mawkingbird.com/">Mawkingbird</a>, a freemium Mastodon web client.
+        This site therefore reviews a field in which its author competes.
+        <a href="{{ SITEURL }}/about/">How that is handled</a>.
+      </p>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="{{ SITEURL }}/about/">About</a></li>
+          <li><a href="{{ SITEURL }}/methodology/">Methodology</a></li>
+          <li><a href="{{ SITEURL }}/methodology/scoring/">How ratings work</a></li>
+          <li><a href="{{ SITEURL }}/submit/">Suggest a client or a correction</a></li>
+          <li><a href="{{ SITEURL }}/clients.json">Client data (JSON)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

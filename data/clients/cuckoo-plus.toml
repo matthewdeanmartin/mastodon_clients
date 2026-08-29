@@ -1,0 +1,61 @@
+schema_version = 1
+
+slug = "cuckoo-plus"
+name = "Cuckoo+"
+summary = "A Mastodon web client whose interface deliberately resembled Google+, with a card-based multi-column reading layout. No commits have been recorded since 2022."
+
+# Long inactive and its hosted instance reportedly unreachable, but no
+# announcement of discontinuation has been found. Recorded as inactive:
+# invariant 5 forbids reaching "discontinued" without evidence.
+status = "inactive"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "MIT"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "twitter-refugees",
+]
+
+[links]
+homepage = "https://github.com/NanaMorse/Cuckoo.Plus"
+source = "https://github.com/NanaMorse/Cuckoo.Plus"
+issues = "https://github.com/NanaMorse/Cuckoo.Plus/issues"
+
+[features]
+multi_account = "unknown"
+lists = "unknown"
+filters = "unknown"
+push_notifications = "unknown"
+quote_posts = false
+scheduled_posts = false
+bookmarks = "unknown"
+translation = "unknown"
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = "unknown"
+column_layout = true
+keyboard_navigation = "unknown"
+advanced_search = "unknown"
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = "unknown"
+polls = "unknown"
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = "unknown"
+profile_editing = "unknown"
+server_switching = true
+notification_filtering = "unknown"
+accessibility_features = "unknown"
+reduced_motion = "unknown"
+responsive_layout = "unknown"
+pwa = "unknown"

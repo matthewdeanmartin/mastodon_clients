@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% set d = page.data | data %}
+
+{% block title %}Mastodon web clients with {{ d.feature.label | lower }} — {{ SITENAME }}{% endblock %}
+{% block description %}{{ page.description }}{% endblock %}
+{% block canonical %}{{ SITEURL }}/features/{{ d.feature.id | replace('_', '-') }}/{% endblock %}
+{% block og_title %}Mastodon web clients with {{ d.feature.label | lower }}{% endblock %}
+{% block og_description %}{{ page.description }}{% endblock %}
+{% block og_url %}{{ SITEURL }}/features/{{ d.feature.id | replace('_', '-') }}/{% endblock %}
+
+{% block content %}
+<h1>{{ d.feature.label }}</h1>
+
+<p class="lede">{{ d.feature.description }}</p>
+
+<section class="matching">
+  <h2>Clients that support it</h2>
+  {% if d.clients %}
+  {{ m.client_list(d.clients, "") }}
+  {% else %}
+  <p class="empty">No client in the directory is recorded as supporting this feature.</p>
+  {% endif %}
+</section>
+
+{% if d.without %}
+<section class="not-matching">
+  <h2>Clients that do not</h2>
+  <p class="note">
+    Listed for completeness. &ldquo;Unknown&rdquo; means the answer has not been established rather
+    than that the feature is absent, and those clients appear here only because this site does not
+    guess.
+  </p>
+  <table class="compact">
+    <caption>Clients without {{ d.feature.label | lower }}</caption>
+    <thead>
+      <tr><th scope="col">Client</th><th scope="col">Status</th></tr>
+    </thead>
+    <tbody>
+      {% for client in d.without %}
+      <tr>
+        <th scope="row"><a href="{{ SITEURL }}{{ client.url }}">{{ client.name }}</a></th>
+        <td>{{ m.feature_value(client.value) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+<p class="see-also">
+  <a href="{{ SITEURL }}/clients/">Back to the full directory</a>
+</p>
+{% endblock %}

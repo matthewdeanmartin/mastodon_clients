@@ -1,0 +1,62 @@
+schema_version = 1
+
+slug = "phanpy"
+name = "Phanpy"
+summary = "A minimalist Mastodon web client that emphasises conversation threading and a boosted-post carousel, maintained primarily by a single developer."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "MIT"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["donations"]
+
+audiences = [
+    "power-users",
+    "news-junkies",
+]
+
+[links]
+homepage = "https://phanpy.social/"
+hosted = "https://phanpy.social/"
+source = "https://github.com/cheeaun/phanpy"
+issues = "https://github.com/cheeaun/phanpy/issues"
+changelog = "https://github.com/cheeaun/phanpy/releases"
+funding = "https://github.com/sponsors/cheeaun"
+
+[features]
+multi_account = true
+lists = true
+filters = true
+push_notifications = true
+quote_posts = false
+scheduled_posts = false
+bookmarks = true
+translation = true
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = true
+keyboard_navigation = true
+advanced_search = true
+saved_searches = false
+hashtag_following = true
+thread_view = true
+media_galleries = true
+drafts = "partial"
+polls = true
+post_editing = true
+account_notes = true
+follow_requests = true
+profile_editing = "partial"
+server_switching = true
+notification_filtering = true
+accessibility_features = true
+reduced_motion = true
+responsive_layout = true
+pwa = true

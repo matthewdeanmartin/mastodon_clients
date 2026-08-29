@@ -1,0 +1,65 @@
+schema_version = 1
+
+slug = "pinafore"
+name = "Pinafore"
+summary = "An accessibility-focused, deliberately lightweight Mastodon web client, retired by its author in January 2023 after a run as one of the best-regarded alternative frontends."
+
+# Retired by an explicit announcement from the author, not inferred from
+# inactivity. The repository description itself reads "(UNMAINTAINED)".
+status = "discontinued"
+reviewed_at = 2026-08-29
+discontinued_at = 2023-01-09
+discontinued_evidence = "The author, Nolan Lawson, announced the retirement in a post titled \"Retiring Pinafore\" on 9 January 2023, citing the deprecation of Svelte v2 and Sapper with no migration path, and the maintenance burden. The GitHub repository description was changed to read \"(UNMAINTAINED)\"."
+successors = ["semaphore", "enafore"]
+
+source_model = "open-source"
+license = "AGPL-3.0-only"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "new-users",
+    "power-users",
+]
+
+[links]
+homepage = "https://pinafore.social/"
+hosted = "https://pinafore.social/"
+source = "https://github.com/nolanlawson/pinafore"
+issues = "https://github.com/nolanlawson/pinafore/issues"
+
+[features]
+multi_account = true
+lists = true
+filters = true
+push_notifications = true
+quote_posts = false
+scheduled_posts = false
+bookmarks = true
+translation = false
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = false
+keyboard_navigation = true
+advanced_search = "partial"
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = false
+polls = true
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = true
+profile_editing = "partial"
+server_switching = true
+notification_filtering = "partial"
+accessibility_features = true
+reduced_motion = true
+responsive_layout = true
+pwa = true

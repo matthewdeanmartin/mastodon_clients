@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% set d = page.data | data %}
+
+{# One of the three curated facets of spec 5.5. Arbitrary metadata combinations
+   stay interface state and never get a URL of their own (spec 30). #}
+
+{% block title %}{{ page.title }} — {{ SITENAME }}{% endblock %}
+{% block description %}{{ page.description }}{% endblock %}
+{% block canonical %}{{ SITEURL }}/{{ page.url }}{% endblock %}
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block og_description %}{{ page.description }}{% endblock %}
+{% block og_url %}{{ SITEURL }}/{{ page.url }}{% endblock %}
+
+{% block content %}
+<h1>{{ page.title }}</h1>
+
+<p class="lede">{{ d.intro }}</p>
+
+{% if d.clients %}
+{{ m.directory_table(d.clients, page.title) }}
+{% else %}
+<p class="empty">No client in the directory currently matches.</p>
+{% endif %}
+
+<p class="see-also">
+  <a href="{{ SITEURL }}/clients/">Back to the full directory</a>
+</p>
+{% endblock %}

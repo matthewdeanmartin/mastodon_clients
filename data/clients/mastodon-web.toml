@@ -1,0 +1,68 @@
+schema_version = 1
+
+slug = "mastodon-web"
+name = "Mastodon web interface"
+summary = "The web client that ships with Mastodon itself, served by every Mastodon server and offering both a single-column and a multi-column layout."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "AGPL-3.0-or-later"
+
+# Not a separate deployment: it is part of the server. Recorded as
+# bundled-with-server rather than self-hostable, because "self-hosting" it means
+# operating a Mastodon instance.
+deployment = "bundled-with-server"
+server_dependency = "requires-server-deployment"
+funding_model = ["donations", "grants", "sponsorship"]
+
+audiences = [
+    "new-users",
+    "power-users",
+    "news-junkies",
+]
+
+[links]
+homepage = "https://joinmastodon.org/"
+documentation = "https://docs.joinmastodon.org/"
+source = "https://github.com/mastodon/mastodon"
+issues = "https://github.com/mastodon/mastodon/issues"
+releases = "https://github.com/mastodon/mastodon/releases"
+changelog = "https://github.com/mastodon/mastodon/blob/main/CHANGELOG.md"
+funding = "https://joinmastodon.org/sponsors"
+community = "https://discourse.joinmastodon.org/"
+
+[features]
+multi_account = false
+lists = true
+filters = true
+push_notifications = true
+quote_posts = "unknown"
+scheduled_posts = false
+bookmarks = true
+translation = true
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = true
+keyboard_navigation = true
+advanced_search = true
+saved_searches = false
+hashtag_following = true
+thread_view = true
+media_galleries = true
+drafts = false
+polls = true
+post_editing = true
+account_notes = true
+follow_requests = true
+profile_editing = true
+server_switching = false
+notification_filtering = true
+accessibility_features = true
+reduced_motion = true
+responsive_layout = true
+pwa = true

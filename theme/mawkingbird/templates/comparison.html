@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% set d = page.data | data %}
+{% set left = d.left %}
+{% set right = d.right %}
+
+{# Entirely derived from structured metadata. No pairwise prose is written or
+   generated for this page, and pages exist only for allow-listed pairs
+   (spec 5.6, invariant 8). #}
+
+{% block title %}{{ left.name }} vs {{ right.name }} — {{ SITENAME }}{% endblock %}
+{% block description %}{{ page.description }}{% endblock %}
+{% block canonical %}{{ SITEURL }}/compare/{{ left.slug }}/{{ right.slug }}/{% endblock %}
+{% block og_title %}{{ left.name }} compared with {{ right.name }}{% endblock %}
+{% block og_description %}{{ page.description }}{% endblock %}
+{% block og_url %}{{ SITEURL }}/compare/{{ left.slug }}/{{ right.slug }}/{% endblock %}
+
+{% block content %}
+<h1>{{ left.name }} compared with {{ right.name }}</h1>
+
+<p class="lede">
+  Every row on this page is generated from the two clients' structured records. Nothing here is
+  written prose about the pairing, and no attempt is made to declare a winner &mdash; which of these
+  suits you depends on what you need, and the
+  <a href="{{ SITEURL }}{{ left.url }}">{{ left.name }}</a> and
+  <a href="{{ SITEURL }}{{ right.url }}">{{ right.name }}</a> reviews say more than a table can.
+</p>
+
+<table class="comparison">
+  <caption>Summary</caption>
+  <thead>
+    <tr>
+      <th scope="col">&nbsp;</th>
+      <th scope="col"><a href="{{ SITEURL }}{{ left.url }}">{{ left.name }}</a></th>
+      <th scope="col"><a href="{{ SITEURL }}{{ right.url }}">{{ right.name }}</a></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Summary</th>
+      <td>{{ left.summary }}</td>
+      <td>{{ right.summary }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Rating</th>
+      <td>{{ m.rating(left) }}</td>
+      <td>{{ m.rating(right) }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Maintenance</th>
+      <td>{{ m.health_badge(left) }}</td>
+      <td>{{ m.health_badge(right) }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Source model</th>
+      <td>{{ left.source_model_label }}</td>
+      <td>{{ right.source_model_label }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Licence</th>
+      <td>{{ left.license or 'Not recorded' }}</td>
+      <td>{{ right.license or 'Not recorded' }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Deployment</th>
+      <td>{{ left.deployment_label }}</td>
+      <td>{{ right.deployment_label }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Server dependency</th>
+      <td>{{ left.server_dependency_label }}</td>
+      <td>{{ right.server_dependency_label }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Funding</th>
+      <td>{{ left.funding_labels | join(', ') or 'Not recorded' }}</td>
+      <td>{{ right.funding_labels | join(', ') or 'Not recorded' }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Audiences</th>
+      <td>{{ left.audiences | map(attribute='label') | join(', ') or '—' }}</td>
+      <td>{{ right.audiences | map(attribute='label') | join(', ') or '—' }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Last reviewed</th>
+      <td><time datetime="{{ left.reviewed_at }}">{{ left.reviewed_at }}</time></td>
+      <td><time datetime="{{ right.reviewed_at }}">{{ right.reviewed_at }}</time></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Component scores</h2>
+<table class="comparison">
+  <caption>Rating components. <a href="{{ SITEURL }}/methodology/scoring/">How these are computed</a>.</caption>
+  <thead>
+    <tr>
+      <th scope="col">Component</th>
+      <th scope="col">{{ left.name }}</th>
+      <th scope="col">{{ right.name }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for component in left.rating.components %}
+    <tr>
+      <th scope="row">{{ component.label }}</th>
+      <td>{{ component.points }} / {{ component.maximum }}</td>
+      {% for other in right.rating.components %}
+      {% if other.id == component.id %}
+      <td>{{ other.points }} / {{ other.maximum }}</td>
+      {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Feature by feature</h2>
+<table class="comparison feature-comparison">
+  <caption>Rows where the two differ are marked. &ldquo;Unknown&rdquo; means unestablished, not absent.</caption>
+  <thead>
+    <tr>
+      <th scope="col">Feature</th>
+      <th scope="col">{{ left.name }}</th>
+      <th scope="col">{{ right.name }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in d.features %}
+    <tr class="{{ 'differs' if row.differs }} {{ 'core' if row.core else 'extra' }}">
+      <th scope="row">{{ row.label }}</th>
+      <td>{{ m.feature_value(row.left) }}</td>
+      <td>{{ m.feature_value(row.right) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="see-also">
+  Full reviews: <a href="{{ SITEURL }}{{ left.url }}">{{ left.name }}</a> ·
+  <a href="{{ SITEURL }}{{ right.url }}">{{ right.name }}</a>
+</p>
+{% endblock %}

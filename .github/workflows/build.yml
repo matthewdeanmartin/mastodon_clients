@@ -1,0 +1,74 @@
+---
+name: CI
+# Validate and build every pull request and every push to main.
+#
+# The build is entirely offline with respect to the sites being reviewed: it
+# reads committed data only, never the live internet. A network call during this
+# job is a bug, not a flake. Machine observations enter the repository through
+# refresh-metadata.yml, which a human dispatches and reviews.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  quality-gates:
+    name: Quality gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        with:
+          python-version: '3.14'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
+        with:
+          enable-cache: true
+      - name: Sync dependencies
+        run: uv sync --locked
+      - name: Lint
+        run: make lint
+      - name: Type check
+        run: make typecheck
+      - name: Test
+        run: make test
+      # Validation is a gate in its own right, not just a build step: a data
+      # error should fail with the validator's own report rather than as a
+      # confusing template error further down.
+      - name: Validate data
+        run: make validate
+      - name: Build site
+        run: make build
+      - name: Check the build produced the expected pages
+        # A build that "succeeds" while emitting nothing is the failure mode a
+        # green CI run would otherwise hide.
+        run: |
+          test -f output/index.html
+          test -f output/clients/index.html
+          test -f output/about/index.html
+          test -f output/methodology/index.html
+          test -f output/methodology/scoring/index.html
+          test -f output/sitemap.xml
+          test -f output/robots.txt
+          test -f output/clients.json
+          for audience in new-users power-users twitter-refugees news-junkies content-creators; do
+            test -f "output/for/$audience/index.html"
+          done
+      - name: Upload the built site
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # v5.0.0
+        with:
+          name: site
+          path: output/
+          retention-days: 7

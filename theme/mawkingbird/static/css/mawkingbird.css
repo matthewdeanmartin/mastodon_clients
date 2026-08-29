@@ -1,0 +1,410 @@
+/* Mawkingbird stylesheet.
+ *
+ * One hand-written file, no framework, no build step (spec 41). The site is
+ * text-first; the styling exists to make dense tables readable, not to decorate.
+ *
+ * Accessibility choices are deliberate (spec 40): visible focus rings that are
+ * never removed, a real skip link, honoured reduced-motion, and contrast checked
+ * against WCAG AA in both colour schemes.
+ */
+
+:root {
+  --ink: #1a1a1a;
+  --ink-muted: #55595e;
+  --ink-faint: #6b7075;
+  --paper: #fdfdfc;
+  --paper-raised: #f4f4f1;
+  --rule: #d9d9d4;
+  --link: #12507a;
+  --link-visited: #5a3a7a;
+  --focus: #b3450a;
+  --ok: #1d6032;
+  --bad: #96261c;
+  --warn: #8a5a06;
+  --measure: 42rem;
+  --wide: 68rem;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e6e4e0;
+    --ink-muted: #a8a49e;
+    --ink-faint: #918d87;
+    --paper: #15161a;
+    --paper-raised: #1e2026;
+    --rule: #35383f;
+    --link: #74b3e0;
+    --link-visited: #b79ad6;
+    --focus: #f0a35e;
+    --ok: #6ec98a;
+    --bad: #e88a80;
+    --warn: #d9ab52;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap {
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* --- links and focus ---------------------------------------------------- */
+
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:visited { color: var(--link-visited); }
+a:hover { text-decoration-thickness: 2px; }
+
+/* Focus is never removed, only restyled. A keyboard user must always be able to
+   see where they are. */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--focus);
+  z-index: 10;
+}
+.skip-link:focus { left: 0.5rem; top: 0.5rem; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- header and footer -------------------------------------------------- */
+
+.site-header {
+  border-bottom: 1px solid var(--rule);
+  padding: 1.5rem 0 1rem;
+  margin-bottom: 2rem;
+}
+
+.site-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.site-title a { color: var(--ink); text-decoration: none; }
+.site-title a:hover { text-decoration: underline; }
+
+.site-tagline {
+  margin: 0.15rem 0 1rem;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+
+.site-header nav ul,
+.site-footer nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  margin-top: 4rem;
+  padding: 1.5rem 0 3rem;
+  font-size: 0.9rem;
+}
+
+/* The conflict-of-interest disclosure sits on every page (invariant 10) and is
+   styled to be noticed rather than skipped. */
+.disclosure {
+  background: var(--paper-raised);
+  border-left: 4px solid var(--warn);
+  padding: 0.85rem 1rem;
+  margin: 0 0 1.25rem;
+  max-width: var(--measure);
+}
+
+/* --- typography --------------------------------------------------------- */
+
+h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
+h1 { font-size: 2rem; margin: 0 0 0.5rem; }
+h2 { font-size: 1.4rem; margin: 2.5rem 0 0.75rem; }
+h3 { font-size: 1.1rem; margin: 1.75rem 0 0.5rem; }
+
+p, li, dd { max-width: var(--measure); }
+
+.lede { font-size: 1.15rem; color: var(--ink); margin-bottom: 1.5rem; }
+.note, .caveat, .empty, .row-summary, .feature-desc, .link-url {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+.caveat {
+  background: var(--paper-raised);
+  border-left: 3px solid var(--warn);
+  padding: 0.7rem 0.9rem;
+  max-width: var(--measure);
+}
+.sep { color: var(--ink-faint); margin: 0 0.4rem; }
+.see-also { margin-top: 2.5rem; font-family: var(--sans); font-size: 0.95rem; }
+
+/* --- tables ------------------------------------------------------------- */
+
+/* Wide tables scroll inside their own container rather than making the page
+   scroll sideways. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 2rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  display: block;
+  overflow-x: auto;
+}
+
+caption {
+  caption-side: top;
+  text-align: left;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  padding-bottom: 0.5rem;
+  max-width: var(--measure);
+}
+
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.6rem 0.75rem 0.6rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+thead th {
+  border-bottom: 2px solid var(--rule);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+tbody th { font-weight: 600; }
+
+tfoot th, tfoot td {
+  border-top: 2px solid var(--rule);
+  border-bottom: none;
+  font-weight: 600;
+}
+
+.row-summary {
+  display: block;
+  font-weight: 400;
+  max-width: 30rem;
+}
+
+.feature-desc { display: block; font-weight: 400; max-width: 32rem; }
+
+tr.differs { background: var(--paper-raised); }
+tr.extra th { font-weight: 400; }
+
+/* --- ratings, health, feature values ------------------------------------ */
+
+.stars { font-size: 1rem; letter-spacing: 0.05em; white-space: nowrap; }
+.rating-caveat { color: var(--warn); font-size: 0.8rem; }
+.licence { color: var(--ink-muted); }
+
+.health {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.health-actively-maintained { color: var(--ok); border-color: var(--ok); }
+.health-maintained { color: var(--ok); border-color: var(--rule); }
+.health-low-activity, .health-unknown { color: var(--ink-muted); }
+.health-possibly-unmaintained { color: var(--warn); border-color: var(--warn); }
+.health-unmaintained, .health-discontinued { color: var(--bad); border-color: var(--bad); }
+
+/* Feature values carry meaning in the text as well as the colour, so a reader
+   who cannot distinguish the colours loses nothing. */
+.fv { font-size: 0.85rem; white-space: nowrap; }
+.fv-Yes { color: var(--ok); font-weight: 600; }
+.fv-No { color: var(--ink-muted); }
+.fv-Partial { color: var(--warn); }
+.fv-Unknown { color: var(--ink-faint); font-style: italic; }
+.fv-N\/A { color: var(--ink-faint); }
+
+.bad { color: var(--bad); }
+
+.status-banner {
+  display: inline-block;
+  background: var(--bad);
+  color: var(--paper);
+  padding: 0.2rem 0.7rem;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+}
+
+/* --- definition lists --------------------------------------------------- */
+
+dl.facts, dl.freshness, .directory-notes dl { margin: 1rem 0 2rem; }
+dl.facts dt, dl.freshness dt, .directory-notes dt {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  margin-top: 1rem;
+}
+dl.facts dd, dl.freshness dd, .directory-notes dd { margin: 0.15rem 0 0; }
+
+/* --- client cards ------------------------------------------------------- */
+
+.client-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.client-card {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1rem 1.1rem;
+  background: var(--paper-raised);
+}
+.client-card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.client-card .summary { margin: 0 0 0.6rem; font-size: 0.92rem; }
+.client-card .meta { margin: 0; font-family: var(--sans); font-size: 0.82rem; }
+
+/* --- links list --------------------------------------------------------- */
+
+ul.links { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+ul.links li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  max-width: none;
+}
+.link-url { display: block; font-family: var(--mono); font-size: 0.8rem; word-break: break-all; }
+.link-check { display: block; font-family: var(--sans); font-size: 0.8rem; }
+.link-check.ok { color: var(--ok); }
+.link-check.bad { color: var(--bad); }
+
+ul.related, ul.audience-links, ul.criteria-list, ul.criteria-met {
+  padding-left: 1.2rem;
+}
+ul.criteria-met { list-style: none; padding: 0; margin: 0; font-size: 0.82rem; }
+
+.warnings {
+  border-left: 4px solid var(--warn);
+  background: var(--paper-raised);
+  padding: 0.85rem 1rem;
+  margin: 1.5rem 0;
+}
+.warnings h3 { margin-top: 0; }
+
+/* --- directory controls (JavaScript only) ------------------------------- */
+
+/* The form is `hidden` in the markup and revealed by directory.js. A visitor
+   without JavaScript never sees controls that cannot work; the complete table
+   below them is server-rendered either way. */
+.directory-controls {
+  margin: 1.5rem 0 2rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+.directory-controls[hidden] { display: none; }
+
+.directory-controls fieldset {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1rem 1.25rem 1.25rem;
+}
+.directory-controls legend { font-weight: 600; padding: 0 0.4rem; }
+
+.directory-controls .field {
+  display: inline-block;
+  margin: 0 1.5rem 0.75rem 0;
+  max-width: none;
+}
+.directory-controls label { display: block; margin-bottom: 0.2rem; color: var(--ink-muted); }
+.directory-controls .field-check { display: inline-flex; align-items: baseline; gap: 0.35rem; margin-right: 1rem; }
+.directory-controls .field-check label { display: inline; margin: 0; color: var(--ink); }
+
+.directory-controls input[type="search"],
+.directory-controls select {
+  font: inherit;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  min-width: 12rem;
+}
+
+.feature-filters { margin-top: 0.5rem; }
+.feature-filters legend { font-weight: 400; color: var(--ink-muted); font-size: 0.85rem; }
+
+.controls-actions { margin: 1rem 0 0; display: flex; align-items: center; gap: 1rem; }
+.controls-actions button {
+  font: inherit;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  cursor: pointer;
+}
+#filter-count { color: var(--ink-muted); }
+
+/* Sortable headers only become buttons once the script binds them. */
+th[data-sort][aria-sort] { cursor: pointer; }
+th[data-sort][aria-sort="ascending"]::after { content: " \25B2"; font-size: 0.7em; }
+th[data-sort][aria-sort="descending"]::after { content: " \25BC"; font-size: 0.7em; }
+
+/* --- motion ------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- print -------------------------------------------------------------- */
+
+@media print {
+  .site-header nav, .directory-controls, .skip-link { display: none; }
+  body { font-size: 11pt; }
+  a::after { content: " (" attr(href) ")"; font-size: 0.8em; word-break: break-all; }
+}

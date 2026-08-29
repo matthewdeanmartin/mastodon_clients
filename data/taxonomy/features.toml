@@ -1,0 +1,245 @@
+# Feature taxonomy (spec/spec.md section 10).
+#
+# `core = true`  -- counts toward the feature-breadth score. Omitting a core
+#                   feature lowers a client's rating; omitting a non-core one
+#                   does not.
+# `page = true`  -- gets a /features/<id>/ landing page. Only features with real
+#                   navigational value do, so the site does not mass-produce
+#                   near-duplicate pages (spec 39).
+#
+# Adding a feature here does not invalidate existing client records: an
+# unrecorded feature reads as "unknown".
+
+# --- Core Mastodon capabilities -------------------------------------------
+
+[[feature]]
+id = "multi_account"
+label = "Multi-account"
+description = "Sign in to more than one account, on one or several servers, and switch between them without logging out."
+core = true
+page = true
+
+[[feature]]
+id = "lists"
+label = "Lists"
+description = "Create and read Mastodon lists as separate timelines."
+core = true
+page = true
+
+[[feature]]
+id = "filters"
+label = "Filters"
+description = "Server-side or client-side filtering of posts by keyword, and muting of users or servers."
+core = true
+page = true
+
+[[feature]]
+id = "push_notifications"
+label = "Push notifications"
+description = "Web Push notifications delivered when the client is not open."
+core = true
+page = true
+
+[[feature]]
+id = "quote_posts"
+label = "Quote posts"
+description = "Compose or display quote posts, as supported by the server."
+core = true
+page = false
+
+[[feature]]
+id = "scheduled_posts"
+label = "Scheduled posts"
+description = "Compose a post now and have the server publish it at a chosen time."
+core = true
+page = true
+
+[[feature]]
+id = "bookmarks"
+label = "Bookmarks"
+description = "Save posts to a private bookmarks collection and browse it."
+core = true
+page = false
+
+[[feature]]
+id = "translation"
+label = "Translation"
+description = "Translate a post's text, whether through the server's translation endpoint or another provider."
+core = true
+page = false
+
+[[feature]]
+id = "local_timeline"
+label = "Local timeline"
+description = "Browse the server's local public timeline."
+core = true
+page = false
+
+[[feature]]
+id = "federated_timeline"
+label = "Federated timeline"
+description = "Browse the federated public timeline."
+core = true
+page = false
+
+[[feature]]
+id = "custom_emoji"
+label = "Custom emoji"
+description = "Render, and offer a picker for, a server's custom emoji."
+core = true
+page = false
+
+[[feature]]
+id = "content_warnings"
+label = "Content warnings"
+description = "Display and compose content warnings, and honour the reader's expand preference."
+core = true
+page = false
+
+[[feature]]
+id = "moderation_controls"
+label = "Moderation controls"
+description = "Report, block, and mute accounts and servers from within the client."
+core = true
+page = false
+
+# --- Reading and navigation -----------------------------------------------
+
+[[feature]]
+id = "column_layout"
+label = "Column layout"
+description = "A multi-column or deck layout showing several timelines side by side."
+core = false
+page = true
+
+[[feature]]
+id = "keyboard_navigation"
+label = "Keyboard navigation"
+description = "Navigate and act on timelines using the keyboard alone."
+core = true
+page = false
+
+[[feature]]
+id = "advanced_search"
+label = "Advanced search"
+description = "Search beyond a plain term, for example by author, date, or post type."
+core = false
+page = false
+
+[[feature]]
+id = "saved_searches"
+label = "Saved searches"
+description = "Store a search and return to it."
+core = false
+page = false
+
+[[feature]]
+id = "hashtag_following"
+label = "Hashtag following"
+description = "Follow a hashtag so its posts appear in the home timeline."
+core = true
+page = false
+
+[[feature]]
+id = "thread_view"
+label = "Thread view"
+description = "Read a post together with its ancestors and replies as a coherent conversation."
+core = true
+page = false
+
+[[feature]]
+id = "media_galleries"
+label = "Media galleries"
+description = "Browse attached media as a gallery, with a full-size viewer."
+core = false
+page = false
+
+# --- Composing -------------------------------------------------------------
+
+[[feature]]
+id = "drafts"
+label = "Drafts"
+description = "Keep an unfinished post and return to it later."
+core = false
+page = false
+
+[[feature]]
+id = "polls"
+label = "Polls"
+description = "Create polls and vote in them."
+core = true
+page = false
+
+[[feature]]
+id = "post_editing"
+label = "Post editing"
+description = "Edit a published post, where the server supports it."
+core = true
+page = false
+
+# --- Account management ----------------------------------------------------
+
+[[feature]]
+id = "account_notes"
+label = "Account notes"
+description = "Attach a private note to another account."
+core = false
+page = false
+
+[[feature]]
+id = "follow_requests"
+label = "Follow requests"
+description = "Review, accept, and reject follow requests."
+core = true
+page = false
+
+[[feature]]
+id = "profile_editing"
+label = "Profile editing"
+description = "Edit display name, bio, avatar, header, and profile fields."
+core = true
+page = false
+
+[[feature]]
+id = "server_switching"
+label = "Server switching"
+description = "Point the client at an arbitrary Mastodon-compatible server rather than a single fixed one."
+core = true
+page = false
+
+[[feature]]
+id = "notification_filtering"
+label = "Notification filtering"
+description = "Narrow the notifications view by type, or suppress categories of notification."
+core = false
+page = false
+
+# --- Presentation and platform --------------------------------------------
+
+[[feature]]
+id = "accessibility_features"
+label = "Accessibility features"
+description = "Deliberate accessibility work: alt-text prompts, screen-reader support, and honouring system contrast and motion preferences."
+core = true
+page = true
+
+[[feature]]
+id = "reduced_motion"
+label = "Reduced motion"
+description = "Honour the operating system's reduced-motion preference."
+core = false
+page = false
+
+[[feature]]
+id = "responsive_layout"
+label = "Responsive layout"
+description = "Usable on a phone-sized screen as well as a desktop one."
+core = true
+page = false
+
+[[feature]]
+id = "pwa"
+label = "Installable (PWA)"
+description = "Installable as a progressive web app, with an offline-tolerant shell."
+core = false
+page = true

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{# Pelican needs an index template; the home page itself is a hand-written page
+   saved to the site root, so this only renders if that page is missing. #}
+
+{% block content %}
+<h1>{{ SITENAME }}</h1>
+<p>{{ SITESUBTITLE }}</p>
+<p><a href="{{ SITEURL }}/clients/">Browse the client directory</a></p>
+{% endblock %}

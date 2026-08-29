@@ -1,0 +1,71 @@
+---
+name: Deploy to GitHub Pages
+# Build the production site and publish it to the gh-pages branch root.
+#
+# One production site, one branch, one URL. There is no canary and no test
+# deployment: the whole build is deterministic from committed data, so what CI
+# validated on the pull request is byte-for-byte what deploys here.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to publish (branch, tag, or commit SHA)
+        required: false
+        default: main
+        type: string
+permissions:
+  contents: read
+# Serialise deploys rather than cancelling them: a half-written gh-pages branch
+# is worse than a slightly stale one.
+concurrency:
+  group: gh-pages-branch
+  cancel-in-progress: false
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      CUSTOM_DOMAIN: mawkingbird.com
+      SITE_URL: https://mawkingbird.com
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        with:
+          python-version: '3.14'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
+        with:
+          enable-cache: true
+      - name: Sync dependencies
+        run: uv sync --locked
+      # Validation gates the deploy as well as the pull request. A data error
+      # must never reach the published site, even if it somehow reached main.
+      - name: Validate data
+        run: make validate
+      - name: Build production site
+        run: make build-prod SITE_URL="$SITE_URL"
+      - name: Add custom domain
+        run: printf '%s' "$CUSTOM_DOMAIN" > output/CNAME
+      - name: Verify the build before publishing
+        run: |
+          test -f output/index.html
+          test -f output/clients/index.html
+          test -f output/sitemap.xml
+          test -f output/CNAME
+          # Absolute URLs are what distinguishes a production build from a local
+          # one; publishing relative ones would break every canonical tag.
+          grep --fixed-strings 'https://mawkingbird.com/' output/index.html
+      - name: Publish to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/scripts/publish-gh-pages.sh output

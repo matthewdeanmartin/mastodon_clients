@@ -1,0 +1,65 @@
+schema_version = 1
+
+slug = "hyperspace"
+name = "Hyperspace"
+summary = "A Mastodon client built in React and TypeScript with a Material-styled interface, offered both as a hosted web application and as desktop builds. Its repository is archived."
+
+status = "discontinued"
+reviewed_at = 2026-08-29
+discontinued_at = 2022-06-17
+discontinued_evidence = "The source repository at github.com/hyperspacedev/hyperspace has been archived by its owner, and no commits have been recorded since June 2022. Archiving is an explicit act by the maintainer rather than an inference from inactivity."
+successors = ["elk", "phanpy"]
+
+source_model = "open-source"
+# The repository reports a non-standard licence that GitHub could not identify,
+# so the specific licence is not recorded rather than guessed.
+license = "NOASSERTION"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "new-users",
+    "twitter-refugees",
+]
+
+[links]
+homepage = "https://hyperspace.marquiskurt.net/"
+source = "https://github.com/hyperspacedev/hyperspace"
+issues = "https://github.com/hyperspacedev/hyperspace/issues"
+releases = "https://github.com/hyperspacedev/hyperspace/releases"
+
+[features]
+multi_account = "unknown"
+lists = "unknown"
+filters = "unknown"
+push_notifications = "unknown"
+quote_posts = false
+scheduled_posts = false
+bookmarks = "unknown"
+translation = "unknown"
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = "partial"
+column_layout = false
+keyboard_navigation = "unknown"
+advanced_search = "unknown"
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = "unknown"
+polls = "unknown"
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = "unknown"
+profile_editing = "partial"
+server_switching = true
+notification_filtering = "unknown"
+accessibility_features = "unknown"
+reduced_motion = "unknown"
+responsive_layout = true
+pwa = "unknown"

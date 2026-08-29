@@ -1,0 +1,64 @@
+schema_version = 1
+
+slug = "semaphore"
+name = "Semaphore"
+summary = "A fork of Pinafore by Nick Colley that continued its accessibility-first approach after the original was retired. Its source repository is now archived."
+
+# The repository is archived, which is a strong signal but not an announcement
+# of discontinuation. Recorded as inactive rather than discontinued: no
+# statement from the maintainer has been found, and invariant 5 forbids
+# reaching "discontinued" from a repository flag alone.
+status = "inactive"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "AGPL-3.0-only"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "new-users",
+    "power-users",
+]
+
+[links]
+homepage = "https://semaphore-social.vercel.app/"
+hosted = "https://semaphore-social.vercel.app/"
+source = "https://github.com/NickColley/semaphore"
+issues = "https://github.com/NickColley/semaphore/issues"
+
+[features]
+multi_account = true
+lists = true
+filters = true
+push_notifications = true
+quote_posts = false
+scheduled_posts = false
+bookmarks = true
+translation = "unknown"
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = false
+keyboard_navigation = true
+advanced_search = "partial"
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = false
+polls = true
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = true
+profile_editing = "partial"
+server_switching = true
+notification_filtering = "partial"
+accessibility_features = true
+reduced_motion = "unknown"
+responsive_layout = true
+pwa = true

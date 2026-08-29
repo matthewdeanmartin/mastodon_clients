@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% set d = page.data | data %}
+
+{% block title %}Mastodon web clients for {{ d.audience.label | lower }} — {{ SITENAME }}{% endblock %}
+{% block description %}{{ page.description }}{% endblock %}
+{% block canonical %}{{ SITEURL }}/for/{{ d.audience.id }}/{% endblock %}
+{% block og_title %}Mastodon web clients for {{ d.audience.label | lower }}{% endblock %}
+{% block og_description %}{{ page.description }}{% endblock %}
+{% block og_url %}{{ SITEURL }}/for/{{ d.audience.id }}/{% endblock %}
+
+{% block content %}
+<h1>Mastodon web clients for {{ d.audience.label | lower }}</h1>
+
+<div class="audience-intro">
+  {{ d.audience.intro | md }}
+</div>
+
+{% if d.criteria %}
+<section class="criteria">
+  <h2>What matters here</h2>
+  <p class="note">
+    Clients below are ordered by how many of these they offer, then by rating. That ordering is
+    computed, not editorial.
+  </p>
+  <ul class="criteria-list">
+    {% for criterion in d.criteria %}
+    <li>
+      {% if criterion.url %}<a href="{{ SITEURL }}{{ criterion.url }}">{{ criterion.label }}</a>
+      {% else %}{{ criterion.label }}{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="matching">
+  <h2>Matching clients</h2>
+  {% if d.clients %}
+  <table class="directory">
+    <caption>Clients recorded as suited to {{ d.audience.label | lower }}.</caption>
+    <thead>
+      <tr>
+        <th scope="col">Client</th>
+        <th scope="col">Criteria met</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Maintenance</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for client in d.clients %}
+      <tr>
+        <th scope="row">
+          <a href="{{ SITEURL }}{{ client.url }}">{{ client.name }}</a>
+          <span class="row-summary">{{ client.summary }}</span>
+        </th>
+        <td>
+          <ul class="criteria-met">
+            {% for criterion in d.criteria %}
+            {% for feature in client.features %}
+            {% if feature.id == criterion.id %}
+            <li class="fv-{{ feature.value }}">{{ feature.label }}: {{ feature.value_label }}</li>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+          </ul>
+        </td>
+        <td>{{ m.rating(client) }}</td>
+        <td>{{ m.health_badge(client) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">
+    No client is currently recorded as suited to this audience. That is a gap in the data rather
+    than a judgement &mdash; <a href="{{ SITEURL }}/submit/">suggest one</a>.
+  </p>
+  {% endif %}
+</section>
+
+<p class="see-also">
+  See also <a href="{{ SITEURL }}/clients/">the full directory</a>, where you can filter on any
+  combination of these criteria.
+</p>
+{% endblock %}

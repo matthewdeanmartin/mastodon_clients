@@ -1,0 +1,73 @@
+schema_version = 1
+
+slug = "soapbox"
+name = "Soapbox"
+summary = "An alternative fediverse frontend, deployed by server operators in place of the stock interface rather than used as a standalone client against an arbitrary instance."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "AGPL-3.0-only"
+
+# Deployed by an operator alongside a server, which is a materially different
+# proposition from a client a reader can simply open.
+deployment = "self-hostable"
+server_dependency = "requires-server-deployment"
+funding_model = ["donations", "volunteer"]
+
+audiences = [
+    "power-users",
+]
+
+[[links]]
+type = "homepage"
+url = "https://soapbox.pub/"
+
+[[links]]
+type = "source"
+url = "https://gitlab.com/soapbox-pub/soapbox"
+label = "Primary repository (GitLab)"
+
+[[links]]
+type = "source"
+url = "https://github.com/soapbox-pub/soapbox"
+label = "GitHub mirror"
+
+[[links]]
+type = "issues"
+url = "https://gitlab.com/soapbox-pub/soapbox/-/issues"
+
+[features]
+multi_account = "unknown"
+lists = true
+filters = true
+push_notifications = "unknown"
+quote_posts = true
+scheduled_posts = true
+bookmarks = true
+translation = "unknown"
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = true
+keyboard_navigation = "unknown"
+advanced_search = "unknown"
+saved_searches = false
+hashtag_following = "unknown"
+thread_view = true
+media_galleries = true
+drafts = "unknown"
+polls = true
+post_editing = "unknown"
+account_notes = "unknown"
+follow_requests = true
+profile_editing = true
+server_switching = false
+notification_filtering = "unknown"
+accessibility_features = "unknown"
+reduced_motion = "unknown"
+responsive_layout = true
+pwa = "unknown"

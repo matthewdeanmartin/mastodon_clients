@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% set c = page.data | data %}
+
+{# A discontinued client keeps its canonical URL rather than disappearing
+   (spec 5.7, invariant 9). Links to it from elsewhere on the web keep working,
+   and a reader who arrives learns what happened. #}
+
+{% block title %}{{ c.name }} — discontinued Mastodon web client — {{ SITENAME }}{% endblock %}
+{% block description %}{{ c.name }} is no longer maintained. {{ c.summary }}{% endblock %}
+{% block canonical %}{{ SITEURL }}{{ c.url }}{% endblock %}
+{% block og_title %}{{ c.name }} — discontinued{% endblock %}
+{% block og_description %}{{ c.summary }}{% endblock %}
+{% block og_url %}{{ SITEURL }}{{ c.url }}{% endblock %}
+
+{% block content %}
+<article class="client-historical">
+  <header>
+    <p class="status-banner">Discontinued</p>
+    <h1>{{ c.name }}</h1>
+    <p class="lede">{{ c.summary }}</p>
+  </header>
+
+  <section id="what-happened">
+    <h2>What happened</h2>
+    <dl class="facts">
+      <dt>Status</dt>
+      <dd>
+        Discontinued.
+        <span class="note">
+          This site distinguishes <em>discontinued</em> (the project has ended) from
+          <em>unmaintained</em> (nobody is working on it), <em>inaccessible</em> (it cannot currently
+          be reached), <em>temporarily unavailable</em>, and <em>unknown</em>. A dead domain on its
+          own is never enough to place a client here.
+        </span>
+      </dd>
+
+      {% if c.discontinued_at %}
+      <dt>Status changed</dt>
+      <dd><time datetime="{{ c.discontinued_at }}">{{ c.discontinued_at }}</time></dd>
+      {% endif %}
+
+      {% if c.discontinued_evidence %}
+      <dt>Evidence</dt>
+      <dd>{{ c.discontinued_evidence }}</dd>
+      {% endif %}
+    </dl>
+  </section>
+
+  <section id="what-it-was">
+    <h2>What it was</h2>
+    <dl class="facts">
+      <dt>Source model</dt>
+      <dd>{{ c.source_model_label }}{% if c.license %} ({{ c.license }}){% endif %}</dd>
+      <dt>Deployment model</dt>
+      <dd>{{ c.deployment_label }}</dd>
+      <dt>Server dependency</dt>
+      <dd>{{ c.server_dependency_label }}</dd>
+    </dl>
+
+    {% if c.links %}
+    <h3>Former links</h3>
+    <p class="note">
+      Recorded as they were. Some may no longer resolve; they are kept because a working archive
+      link is often more useful than a removed one.
+    </p>
+    {{ m.links_list(c) }}
+    {% endif %}
+  </section>
+
+  {% if c.observations %}
+  <section id="last-known">
+    <h2>Last known activity</h2>
+    <table class="observations">
+      <caption>The final observations collected for this client.</caption>
+      <thead>
+        <tr><th scope="col">Signal</th><th scope="col">Result</th><th scope="col">Observed</th></tr>
+      </thead>
+      <tbody>
+        {% for row in c.observations %}
+        <tr>
+          <th scope="row">{{ row.label }}</th>
+          <td>
+            {% if row.ok %}
+              {% for key, value in row.value.items() %}{{ key }}: {{ value }}{% if not loop.last %}, {% endif %}{% endfor %}
+            {% else %}<span class="bad">{{ row.error or 'failed' }}</span>{% endif %}
+          </td>
+          <td><time datetime="{{ row.observed_at }}">{{ row.observed_at[:10] }}</time></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  {% endif %}
+
+  {% if c.successors %}
+  <section id="successors">
+    <h2>Where its users went</h2>
+    <ul class="related">
+      {% for successor in c.successors %}
+      <li><a href="{{ SITEURL }}{{ successor.url }}">{{ successor.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if c.related %}
+  <section id="alternatives">
+    <h2>Comparable clients still active</h2>
+    <ul class="related">
+      {% for other in c.related %}
+      <li><a href="{{ SITEURL }}{{ other.url }}">{{ other.name }}</a> &mdash; {{ other.summary }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <footer class="review-footer">
+    <p>
+      If this client is in fact still going, that is a correction worth making &mdash;
+      <a href="{{ SITEURL }}/submit/">tell us</a>.
+    </p>
+  </footer>
+</article>
+{% endblock %}

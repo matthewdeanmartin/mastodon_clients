@@ -1,0 +1,51 @@
+# Human prose override (spec/spec.md section 20).
+#
+# Sections here replace the generated prose of the same name at build time, and
+# survive every future regeneration -- nothing in `make generate-review` writes
+# to this file tree.
+#
+# This particular file exists because Mawkingbird is the site owner's own
+# product. Its entry should not be drafted by a model working from the same
+# facts as everyone else's, because the interesting thing about it is not what
+# it does but why it is listed at all. That is an editorial statement, so a
+# human writes it.
+
+[prose]
+
+summary = """
+Mawkingbird is a freemium Mastodon web client maintained by Matthew Martin, who
+also writes and operates this directory.
+
+It is listed here because leaving it out would be the worse of the two available
+conflicts of interest. A review site whose author quietly omits their own
+competing product is harder to trust than one that includes it and says so.
+"""
+
+who_is_it_for = """
+Not stated here. Recommending my own product on a site I run, in a directory
+where I assess competitors, is precisely the thing the disclosure exists to warn
+you about.
+
+If Mawkingbird interests you, try it and form your own view. The other entries in
+this directory are the honest comparison.
+"""
+
+maintenance = """
+No automated signals are collected for this entry.
+
+Every other client in this directory has its project health synthesised from
+observations gathered by the same job. Mawkingbird does not, because the person
+running that job is the person whose product would be assessed by it, and a
+maintenance status I generate about my own software is worth very little to you.
+"""
+
+verdict = """
+Its rating is currently the lowest in the directory, at half a star. That is not
+modesty and it is not self-deprecation: it is the scoring formula applied
+without exception. Almost nothing about Mawkingbird has been recorded as an
+established fact here, unknown values earn no points, and the arithmetic follows.
+
+The same rule costs several other clients in this directory points too. It seemed
+worth letting it cost the site's own product the most, rather than making an
+exception where an exception would be most convenient.
+"""
