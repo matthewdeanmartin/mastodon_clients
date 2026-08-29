@@ -16,7 +16,7 @@ import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
-from mawkingbird.errors import ValidationReport
+from mastodon_clients.errors import ValidationReport
 
 # The canonical prose sections. A generated file may omit sections; it may not
 # invent new ones, because the client template renders these by name.

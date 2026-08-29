@@ -53,7 +53,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          uv run python -m mawkingbird.cli refresh-metadata \
+          uv run python -m mastodon_clients.cli refresh-metadata \
             ${{ inputs.client && format('--client {0}', inputs.client) || '' }} \
             | tee refresh-report.txt
       - name: Verify the site still builds with the new observations

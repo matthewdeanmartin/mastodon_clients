@@ -12,7 +12,7 @@ import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
-from mawkingbird.errors import ValidationReport
+from mastodon_clients.errors import ValidationReport
 
 # Feature ids grouped as accessibility-related, for the accessibility scoring
 # component (spec 17). Named here rather than flagged per-feature because the

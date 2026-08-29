@@ -1,15 +1,21 @@
-# Mawkingbird
+# Mastodon Web Clients
 
-A static directory and review site for Mastodon-compatible **web clients**, at
-[mawkingbird.com](https://mawkingbird.com/).
+A directory and review site for Mastodon-compatible **web clients**, at
+<https://matthewdeanmartin.github.io/mastodon_clients/>.
+
+Mastodon has more than one web client, and no good way to find them. This
+directory records what each one does, under what licence, funded how, and
+maintained how actively — so people can compare them on something other than
+whichever one their server administrator happened to install.
 
 Facts live in structured TOML, one file per client. Prose sits on top of that
 data rather than hiding facts inside narrative. Ratings are computed by code.
 Machine observations are collected by an explicitly invoked job and committed to
 the repository, so an ordinary build reaches no third-party site at all.
 
-**Disclosure:** the site is operated by Matthew Martin, who also maintains
-Mawkingbird, a freemium Mastodon web client. This directory reviews a field in
+**Disclosure:** the directory is written by Matthew Martin, who also maintains
+[Mawkingbird](https://mawkingbird.com/), a freemium Mastodon web client that is
+listed here alongside the others. This directory therefore reviews a field in
 which its author competes. See [`content/pages/about.md`](content/pages/about.md).
 
 ## Quick start
@@ -34,8 +40,8 @@ content/pages/             hand-written pages; the generator never touches these
 content/generated/clients/ LLM-drafted prose, one file per client
 content/overrides/clients/ human prose overrides, which always win
 content/_generated/        assembled by `make build`; do not edit
-mawkingbird/               the data layer: validation, scoring, health, assembly
-theme/mawkingbird/         Jinja templates, CSS, and the progressive-enhancement JS
+mastodon_clients/          the data layer: validation, scoring, health, assembly
+theme/mastodon_clients/    Jinja templates, CSS, and the progressive-enhancement JS
 prompts/                   versioned prompts for prose generation
 spec/                      the specification and the sprint plan
 ```

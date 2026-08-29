@@ -9,7 +9,7 @@ a structural guarantee is stronger than a test.
 
 | # | Invariant | Enforced by |
 | --- | --- | --- |
-| 1 | A normal site build does not access an LLM or the public Internet | `test_invariants.py::test_the_build_path_never_imports_the_collector` walks the import graph of every build-path module and fails on `httpx`, `socket`, `ssl`, `anthropic`, or `mawkingbird.collect`. A module never imported cannot make a request. |
+| 1 | A normal site build does not access an LLM or the public Internet | `test_invariants.py::test_the_build_path_never_imports_the_collector` walks the import graph of every build-path module and fails on `httpx`, `socket`, `ssl`, `anthropic`, or `mastodon_clients.collect`. A module never imported cannot make a request. |
 | 2 | Generating one review does not regenerate unrelated reviews | `generate.py` hashes every other generated file before and after the write and fails on any difference. Tested both ways: `test_generating_one_review_leaves_other_reviews_byte_identical` and `test_generation_reports_collateral_damage`, which simulates the failure and asserts the guard catches it. |
 | 3 | Human prose overrides survive all LLM regeneration | Structural: no code path in `generate.py` writes to `content/overrides/`. Also checked — `_hash_override_tree` excludes nothing, not even the client being regenerated. Tested by `test_regeneration_leaves_human_overrides_byte_identical` and `test_the_override_still_wins_after_regeneration`. |
 | 4 | Structured facts are canonical; LLM prose is not | Ratings come from `scoring.py`, which reads only structured data. The rating is stripped from the generation prompt entirely, so a model cannot see a score to justify. |
@@ -47,8 +47,8 @@ a structural guarantee is stronger than a test.
 
 ## Two notes on how this turned out
 
-**The disclosure is load-bearing, not decorative.** Mawkingbird — the site
-owner's own client — currently scores lowest in the directory, because almost
+**The disclosure is load-bearing, not decorative.** Mawkingbird — the directory
+author's own client — currently scores lowest in the directory, because almost
 nothing about it has been established and unknown values earn no points. That is
 the scoring rule working as intended rather than a problem to fix: the same
 arithmetic applies to the proprietor's product as to everyone else's, and the

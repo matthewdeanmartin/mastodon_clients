@@ -15,7 +15,7 @@ from pelicanconf import *  # noqa: F403, E402
 
 # Absolute URL, with no trailing slash. Canonical links, OpenGraph tags, the
 # sitemap, and the feeds all build on it, so an override must not add one.
-SITEURL = os.environ.get("MAWKINGBIRD_SITEURL", "https://mawkingbird.com").rstrip("/")
+SITEURL = os.environ.get("SITE_URL_OVERRIDE", "https://matthewdeanmartin.github.io/mastodon_clients").rstrip("/")
 
 RELATIVE_URLS = False
 

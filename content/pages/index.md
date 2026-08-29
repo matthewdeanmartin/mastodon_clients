@@ -1,4 +1,4 @@
-Title: Mawkingbird
+Title: Mastodon Web Clients
 Slug: index
 URL:
 Save_as: index.html
@@ -46,10 +46,10 @@ something rather than filling the gap.
 
 ## A disclosure you should read first
 
-This site is written and operated by Matthew Martin, who also maintains
-**Mawkingbird**, a freemium Mastodon web client. That is a direct commercial
-interest in the field being reviewed here, and it is the first thing you should
-know about this directory.
+This directory is written and operated by Matthew Martin, who also maintains
+**[Mawkingbird](/clients/mawkingbird/)**, a freemium Mastodon web client &mdash;
+one of the clients listed here. That is a direct commercial interest in the field
+being reviewed, and it is the first thing you should know about this site.
 
 [How that conflict is handled](/about/) &mdash; including what it does and does
 not change about how clients are assessed.

@@ -19,13 +19,17 @@ audiences = [
     "new-users",
 ]
 
+# enafore.social is a running deployment of the client, not a project page. The
+# repository is where the project describes itself, so that is the homepage.
 [[links]]
 type = "homepage"
-url = "https://enafore.social/"
+url = "https://github.com/enafore/enafore"
+label = "Project page"
 
 [[links]]
 type = "hosted"
 url = "https://enafore.social/"
+label = "Flagship deployment"
 
 [[links]]
 type = "source"

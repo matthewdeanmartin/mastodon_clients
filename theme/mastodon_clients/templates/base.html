@@ -17,7 +17,7 @@
   <meta property="og:url" content="{% block og_url %}{{ SITEURL }}/{% endblock %}">
   <meta name="twitter:card" content="summary">
 
-  <link rel="stylesheet" href="{{ SITEURL }}/assets/css/mawkingbird.css">
+  <link rel="stylesheet" href="{{ SITEURL }}/assets/css/site.css">
   {% if FEED_ALL_ATOM %}
   <link rel="alternate" type="application/atom+xml" title="{{ SITENAME }}" href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}">
   {% endif %}
@@ -53,10 +53,10 @@
       {# Spec 5.8 and invariant 10: the commercial relationship is disclosed
          plainly, on every page, not only on the About page. #}
       <p class="disclosure">
-        <strong>Disclosure.</strong> Mawkingbird is written and operated by Matthew Martin, who also
-        maintains <a href="https://mawkingbird.com/">Mawkingbird</a>, a freemium Mastodon web client.
-        This site therefore reviews a field in which its author competes.
-        <a href="{{ SITEURL }}/about/">How that is handled</a>.
+        <strong>Disclosure.</strong> This directory is written and operated by Matthew Martin, who also
+        maintains <a href="{{ SITEURL }}/clients/mawkingbird/">Mawkingbird</a>, a freemium Mastodon web
+        client listed here alongside the others. This site therefore reviews a field in which its
+        author competes. <a href="{{ SITEURL }}/about/">How that is handled</a>.
       </p>
       <nav aria-label="Footer">
         <ul>

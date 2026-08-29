@@ -8,7 +8,9 @@ layer could name a page a template failed to emit.
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
+from urllib.parse import urlparse
 from xml.sax.saxutils import escape
 
 # Rough crawl priorities. These are a hint at best; the ordering reflects how
@@ -61,6 +63,35 @@ def write_sitemap(output: Path, site_url: str) -> int:
 
     (output / "sitemap.xml").write_text("\n".join(lines) + "\n", encoding="utf-8")
     return len(urls)
+
+
+def check_local_assets(output: Path, site_url: str) -> list[str]:
+    """Verify every same-site asset a page references was actually written.
+
+    A renamed stylesheet that no template followed still produces a "successful"
+    build -- one that ships an unstyled site. Comparing the referenced paths
+    against what is on disk turns that into a build failure instead.
+
+    Returns the missing paths, site-relative.
+    """
+    base = site_url.rstrip("/")
+    prefix = urlparse(base).path.rstrip("/")
+    pattern = re.compile(r'(?:href|src)="([^"]+\.(?:css|js))"')
+
+    missing: set[str] = set()
+    for page in output.rglob("*.html"):
+        for reference in pattern.findall(page.read_text(encoding="utf-8")):
+            if reference.startswith(base):
+                relative = reference[len(base) :]
+            elif reference.startswith("/"):
+                # Root-relative: strip the project sub-path if it carries one.
+                relative = reference[len(prefix) :] if prefix and reference.startswith(prefix) else reference
+            else:
+                # Off-site or genuinely relative; not ours to verify.
+                continue
+            if not (output / relative.lstrip("/")).is_file():
+                missing.add(relative)
+    return sorted(missing)
 
 
 def write_robots(output: Path, site_url: str) -> None:

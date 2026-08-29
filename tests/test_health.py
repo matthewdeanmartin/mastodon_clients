@@ -9,8 +9,8 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
-from mawkingbird.health import ObservationSet, derive, load_observations
-from mawkingbird.models import Client, Deployment, Health, Lifecycle, Observation, ServerDependency, SourceModel
+from mastodon_clients.health import ObservationSet, derive, load_observations
+from mastodon_clients.models import Client, Deployment, Health, Lifecycle, Observation, ServerDependency, SourceModel
 
 TODAY = date(2026, 8, 29)
 

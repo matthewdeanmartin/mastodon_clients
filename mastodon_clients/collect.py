@@ -26,14 +26,17 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-from mawkingbird.models import CHECKABLE_LINK_TYPES, Client, Observation
-from mawkingbird.repository import Site
+from mastodon_clients.models import CHECKABLE_LINK_TYPES, Client, Observation
+from mastodon_clients.repository import Site
 
 OBSERVATIONS_PATH = Path("data") / "generated" / "observations.json"
 
 # A descriptive agent string is a courtesy to the operators whose sites this
 # checks: it tells them who is asking and where to complain.
-USER_AGENT = "MawkingbirdBot/0.1 (+https://mawkingbird.com/about/; directory metadata check)"
+USER_AGENT = (
+    "MastodonClientsDirectoryBot/0.1 "
+    "(+https://github.com/matthewdeanmartin/mastodon_clients; directory metadata check)"
+)
 
 _GITHUB_RE = re.compile(r"^https?://(?:www\.)?github\.com/([^/]+)/([^/#?]+)")
 _GITLAB_RE = re.compile(r"^https?://(?:www\.)?gitlab\.com/(.+?)/?(?:$|[#?])")
@@ -416,7 +419,7 @@ def _print_warnings(site: Site, merged: dict[tuple[str, str], Observation]) -> N
     These are conditions worth a human's attention, not conclusions. Nothing
     here changes a client's editorial status (spec 38, invariant 5).
     """
-    from mawkingbird.health import ObservationSet, derive
+    from mastodon_clients.health import ObservationSet, derive
 
     by_client: dict[str, dict[str, Observation]] = {}
     for (client_slug, signal), observation in merged.items():

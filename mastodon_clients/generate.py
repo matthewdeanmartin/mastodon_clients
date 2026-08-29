@@ -23,8 +23,8 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-from mawkingbird.build_content import client_payload
-from mawkingbird.overrides import (
+from mastodon_clients.build_content import client_payload
+from mastodon_clients.overrides import (
     GENERATED_DIR,
     OVERRIDE_DIR,
     SECTIONS,
@@ -32,7 +32,7 @@ from mawkingbird.overrides import (
     parse_generated,
     render_generated,
 )
-from mawkingbird.repository import Site
+from mastodon_clients.repository import Site
 
 PROMPT_DIR = Path("prompts")
 BUILD_PROMPT_DIR = Path("build") / "prompts"
@@ -157,7 +157,7 @@ def _assemble_prompt(site: Site, slug: str, *, refresh: bool) -> PromptBundle:
     # structurally cannot: nothing here writes to the override tree (spec 35).
     override_path = site.root / OVERRIDE_DIR / f"{slug}.toml"
     if override_path.is_file():
-        from mawkingbird.errors import ValidationReport
+        from mastodon_clients.errors import ValidationReport
 
         overrides = load_override(override_path, ValidationReport())
         if overrides:

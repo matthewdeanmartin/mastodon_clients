@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from mawkingbird.errors import ValidationReport
-from mawkingbird.overrides import (
+from mastodon_clients.errors import ValidationReport
+from mastodon_clients.overrides import (
     GENERATED_DIR,
     OVERRIDE_DIR,
     SECTIONS,
@@ -168,6 +168,6 @@ def test_unknown_generated_section_is_reported(repo: Path) -> None:
 
 def test_every_canonical_section_has_a_label() -> None:
     """A section without a label would render as an unheaded block of prose."""
-    from mawkingbird.overrides import SECTION_LABELS
+    from mastodon_clients.overrides import SECTION_LABELS
 
     assert set(SECTIONS) == set(SECTION_LABELS)

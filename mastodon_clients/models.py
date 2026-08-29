@@ -88,7 +88,7 @@ class Funding(StrEnum):
 class Health(StrEnum):
     """Derived maintenance status (spec 14).
 
-    Produced only by `mawkingbird.health` from several observations. No single
+    Produced only by `mastodon_clients.health` from several observations. No single
     signal may reach `UNMAINTAINED` or `DISCONTINUED` (invariant 5).
     """
 
@@ -157,6 +157,12 @@ class FeatureValue(StrEnum):
 
 # Link types recognised by the schema (spec 9). Unknown types fail validation
 # rather than passing through, so a typo cannot quietly produce an unrendered link.
+#
+# `homepage` and `hosted` are different things and must not be conflated. A
+# homepage is where the project describes itself -- a project page, a docs site,
+# or the repository README. `hosted` is a URL where the client actually runs.
+# Many projects have only one of the two, and recording a running deployment as
+# a homepage overstates what the project publishes about itself.
 LINK_TYPES: tuple[str, ...] = (
     "homepage",
     "hosted",

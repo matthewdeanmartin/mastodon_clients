@@ -12,8 +12,8 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from mawkingbird.errors import ValidationError
-from mawkingbird.repository import Site, load_site, unpublished_reason
+from mastodon_clients.errors import ValidationError
+from mastodon_clients.repository import Site, load_site, unpublished_reason
 
 
 def _root(args: argparse.Namespace) -> Path:
@@ -65,7 +65,7 @@ def cmd_score(args: argparse.Namespace) -> int:
 def cmd_build_content(args: argparse.Namespace) -> int:
     # Imported here rather than at module scope so `validate` and `score` do not
     # pay for the content builder's imports.
-    from mawkingbird.build_content import build_content
+    from mastodon_clients.build_content import build_content
 
     site = _load(args)
     _fail_on_issues(site)
@@ -75,12 +75,19 @@ def cmd_build_content(args: argparse.Namespace) -> int:
 
 
 def cmd_sitemap(args: argparse.Namespace) -> int:
-    from mawkingbird.sitemap import write_robots, write_sitemap
+    from mastodon_clients.sitemap import check_local_assets, write_robots, write_sitemap
 
     output = Path(args.output).resolve()
     if not output.is_dir():
         print(f"{output} does not exist; run the Pelican build first.", file=sys.stderr)
         return 1
+    missing = check_local_assets(output, args.site_url)
+    if missing:
+        print("Pages reference assets that were not built:", file=sys.stderr)
+        for path in missing:
+            print(f"  {path}", file=sys.stderr)
+        return 1
+
     count = write_sitemap(output, args.site_url)
     write_robots(output, args.site_url)
     print(f"Wrote sitemap.xml with {count} URLs, and robots.txt.")
@@ -88,7 +95,7 @@ def cmd_sitemap(args: argparse.Namespace) -> int:
 
 
 def cmd_generate_review(args: argparse.Namespace) -> int:
-    from mawkingbird.generate import generate_review
+    from mastodon_clients.generate import generate_review
 
     site = _load(args)
     _fail_on_issues(site)
@@ -98,14 +105,14 @@ def cmd_generate_review(args: argparse.Namespace) -> int:
 def cmd_refresh_metadata(args: argparse.Namespace) -> int:
     # The only subcommand permitted to reach the network, and the only one that
     # imports the collector at all (invariant 1).
-    from mawkingbird.collect import refresh_metadata
+    from mastodon_clients.collect import refresh_metadata
 
     site = _load(args)
     return refresh_metadata(site, only=args.client, timeout=args.timeout)
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="mawkingbird", description=__doc__)
+    parser = argparse.ArgumentParser(prog="mastodon_clients", description=__doc__)
     parser.add_argument("--root", default=".", help="repository root (default: current directory)")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -120,7 +127,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     sitemap = subparsers.add_parser("sitemap", help="write sitemap.xml and robots.txt into the built site")
     sitemap.add_argument("--output", default="output", help="the Pelican output directory")
-    sitemap.add_argument("--site-url", default="https://mawkingbird.com", help="absolute site URL")
+    sitemap.add_argument("--site-url", default="https://matthewdeanmartin.github.io/mastodon_clients", help="absolute site URL")
     sitemap.set_defaults(func=cmd_sitemap)
 
     generate = subparsers.add_parser("generate-review", help="generate prose for exactly one client")

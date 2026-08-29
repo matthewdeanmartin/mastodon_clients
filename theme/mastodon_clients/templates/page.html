@@ -2,7 +2,8 @@
 
 {# Hand-written pages from `content/pages/`. The generator never touches them. #}
 
-{% block title %}{{ page.title }} — {{ SITENAME }}{% endblock %}
+{# The home page's own title is the site name, so suffixing would double it. #}
+{% block title %}{% if page.title == SITENAME %}{{ SITENAME }} — {{ SITESUBTITLE }}{% else %}{{ page.title }} — {{ SITENAME }}{% endif %}{% endblock %}
 {% block description %}{{ page.description or SITESUBTITLE }}{% endblock %}
 {% block canonical %}{{ SITEURL }}/{{ page.url }}{% endblock %}
 {% block og_title %}{{ page.title }}{% endblock %}

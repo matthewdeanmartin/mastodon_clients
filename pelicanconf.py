@@ -1,6 +1,6 @@
 """Pelican configuration for local development.
 
-Pelican's job here is narrow: turn the content `mawkingbird.build_content`
+Pelican's job here is narrow: turn the content `mastodon_clients.build_content`
 prepared into HTML (spec 46). It performs no data processing of its own, and the
 build reaches no third-party site (invariant 1).
 
@@ -14,8 +14,8 @@ from pathlib import Path
 from typing import Any
 
 AUTHOR = "Matthew Martin"
-SITENAME = "Mawkingbird"
-SITESUBTITLE = "A directory of Mastodon-compatible web clients"
+SITENAME = "Mastodon Web Clients"
+SITESUBTITLE = "A directory and review site for Mastodon-compatible web clients"
 SITEURL = ""
 
 PATH = "content"
@@ -23,7 +23,7 @@ TIMEZONE = "UTC"
 DEFAULT_LANG = "en"
 LOCALE = "C"
 
-THEME = "theme/mawkingbird"
+THEME = "theme/mastodon_clients"
 # The theme's static tree is copied to /assets/ rather than Pelican's default
 # /theme/, which reads as an implementation detail in a URL.
 THEME_STATIC_DIR = "assets"

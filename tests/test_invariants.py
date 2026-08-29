@@ -18,10 +18,10 @@ from typing import Any
 
 import pytest
 
-from mawkingbird.build_content import build_content
-from mawkingbird.generate import _hash_generated_tree, _hash_override_tree, generate_review
-from mawkingbird.overrides import GENERATED_DIR, OVERRIDE_DIR, load_prose, render_generated
-from mawkingbird.repository import load_site
+from mastodon_clients.build_content import build_content
+from mastodon_clients.generate import _hash_generated_tree, _hash_override_tree, generate_review
+from mastodon_clients.overrides import GENERATED_DIR, OVERRIDE_DIR, load_prose, render_generated
+from mastodon_clients.repository import load_site
 
 
 def _seed_prose(repo: Path, slug: str, text: str) -> Path:
@@ -55,7 +55,7 @@ def stub_model(monkeypatch: pytest.MonkeyPatch):
     """
 
     def _install(sections: dict[str, str]) -> None:
-        monkeypatch.setattr("mawkingbird.generate._call_model", lambda bundle, model: sections)
+        monkeypatch.setattr("mastodon_clients.generate._call_model", lambda bundle, model: sections)
 
     return _install
 
@@ -95,7 +95,7 @@ def test_generation_reports_collateral_damage(repo: Path, stub_model, monkeypatc
         beta_path.write_text("clobbered", encoding="utf-8")
         return {"summary": "Alpha's regenerated summary."}
 
-    monkeypatch.setattr("mawkingbird.generate._call_model", _saboteur)
+    monkeypatch.setattr("mastodon_clients.generate._call_model", _saboteur)
     site = load_site(repo)
     assert generate_review(site, "alpha") == 1
 
@@ -165,16 +165,16 @@ def test_the_build_path_never_imports_the_collector() -> None:
     import ast
 
     build_path_modules = [
-        "mawkingbird/repository.py",
-        "mawkingbird/build_content.py",
-        "mawkingbird/schema.py",
-        "mawkingbird/scoring.py",
-        "mawkingbird/health.py",
-        "mawkingbird/overrides.py",
-        "mawkingbird/taxonomy.py",
-        "mawkingbird/sitemap.py",
+        "mastodon_clients/repository.py",
+        "mastodon_clients/build_content.py",
+        "mastodon_clients/schema.py",
+        "mastodon_clients/scoring.py",
+        "mastodon_clients/health.py",
+        "mastodon_clients/overrides.py",
+        "mastodon_clients/taxonomy.py",
+        "mastodon_clients/sitemap.py",
     ]
-    forbidden = {"httpx", "requests", "urllib.request", "socket", "ssl", "anthropic", "mawkingbird.collect"}
+    forbidden = {"httpx", "requests", "urllib.request", "socket", "ssl", "anthropic", "mastodon_clients.collect"}
 
     for module in build_path_modules:
         tree = ast.parse(Path(module).read_text(encoding="utf-8"))

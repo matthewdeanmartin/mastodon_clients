@@ -14,7 +14,7 @@
 ### Package layout
 
 ```text
-mawkingbird/
+mastodon_clients/
   __init__.py
   models.py        # dataclasses for Client, Link, Feature, Observation
   schema.py        # TOML -> model parsing + strict validation
@@ -43,7 +43,7 @@ mawkingbird/
 
 ### Scoring (§17)
 
-Five components, documented in `mawkingbird/scoring.py` and rendered verbatim on `/methodology/`:
+Five components, documented in `mastodon_clients/scoring.py` and rendered verbatim on `/methodology/`:
 
 | Component | Max | Source |
 | --- | --- | --- |

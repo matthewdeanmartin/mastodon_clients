@@ -53,7 +53,9 @@ jobs:
         run: make build
       - name: Check the build produced the expected pages
         # A build that "succeeds" while emitting nothing is the failure mode a
-        # green CI run would otherwise hide.
+        # green CI run would otherwise hide. `make build` also fails if any page
+        # references a stylesheet or script that was not written -- a renamed
+        # asset otherwise ships as a silently unstyled site.
         run: |
           test -f output/index.html
           test -f output/clients/index.html

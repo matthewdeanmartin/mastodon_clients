@@ -13,8 +13,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import ROUND_HALF_UP, Decimal
 
-from mawkingbird.models import Client, Deployment, FeatureValue, Health, SourceModel
-from mawkingbird.taxonomy import ACCESSIBILITY_FEATURE_IDS, Taxonomy
+from mastodon_clients.models import Client, Deployment, FeatureValue, Health, SourceModel
+from mastodon_clients.taxonomy import ACCESSIBILITY_FEATURE_IDS, Taxonomy
 
 # Points available per component. They sum to 100.
 FEATURE_BREADTH_MAX = 40

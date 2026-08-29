@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from pathlib import Path
 
-from mawkingbird.models import Client, Health, Lifecycle, Observation
+from mastodon_clients.models import Client, Health, Lifecycle, Observation
 
 # Activity thresholds in days. Chosen to be defensible rather than precise: a
 # six-month-old commit on a mature, feature-complete client is not a problem,

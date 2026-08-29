@@ -1,7 +1,7 @@
 [project]
-name = "mawkingbird"
+name = "mastodon_clients"
 version = "0.1.0"
-description = "Static directory and review site for Mastodon-compatible web clients"
+description = "A directory and review site for Mastodon-compatible web clients"
 readme = "README.md"
 authors = [{ name = "Matthew Martin", email = "matthewdeanmartin@gmail.com" }]
 keywords = ["mastodon", "fediverse", "pelican", "directory", "reviews"]
@@ -33,11 +33,11 @@ collect = [
 ]
 
 [project.scripts]
-mawkingbird = "mawkingbird.cli:main"
+mastodon-clients = "mastodon_clients.cli:main"
 
 [project.urls]
 Repository = "https://github.com/matthewdeanmartin/mastodon_clients"
-homepage = "https://mawkingbird.com/"
+homepage = "https://matthewdeanmartin.github.io/mastodon_clients/"
 issues = "https://github.com/matthewdeanmartin/mastodon_clients/issues/"
 
 [build-system]
@@ -45,7 +45,7 @@ requires = ["hatchling>=1.27.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["mawkingbird"]
+packages = ["mastodon_clients"]
 
 [dependency-groups]
 # Minimal by design: ruff, mypy, pytest. Versions match ../mastodon_mock so the
@@ -69,7 +69,7 @@ addopts = "-q"
 [tool.mypy]
 python_version = "3.12"
 strict = true
-packages = ["mawkingbird", "tests"]
+packages = ["mastodon_clients", "tests"]
 
 # Fixtures are passed into tests as bare parameters; annotating every one adds
 # noise without catching anything, so the test package relaxes those two checks

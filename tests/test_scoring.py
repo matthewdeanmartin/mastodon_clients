@@ -5,11 +5,20 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
-from mawkingbird.errors import ValidationReport
-from mawkingbird.models import Client, Deployment, FeatureValue, Health, Lifecycle, Link, ServerDependency, SourceModel
-from mawkingbird.schema import load_clients
-from mawkingbird.scoring import TOTAL_MAX, Score, describe_components, score_client
-from mawkingbird.taxonomy import load_taxonomy
+from mastodon_clients.errors import ValidationReport
+from mastodon_clients.models import (
+    Client,
+    Deployment,
+    FeatureValue,
+    Health,
+    Lifecycle,
+    Link,
+    ServerDependency,
+    SourceModel,
+)
+from mastodon_clients.schema import load_clients
+from mastodon_clients.scoring import TOTAL_MAX, Score, describe_components, score_client
+from mastodon_clients.taxonomy import load_taxonomy
 
 
 def _taxonomy(repo: Path):

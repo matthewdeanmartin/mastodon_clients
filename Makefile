@@ -4,10 +4,10 @@ MAKEFLAGS += --no-print-directory
 # score output uses. Forcing UTF-8 keeps `make score` working everywhere.
 export PYTHONUTF8 := 1
 
-PACKAGE := mawkingbird
-PYTHON_TARGETS := mawkingbird tests
+PACKAGE := mastodon_clients
+PYTHON_TARGETS := mastodon_clients tests
 OUTPUT := output
-SITE_URL ?= https://mawkingbird.com
+SITE_URL ?= https://matthewdeanmartin.github.io/mastodon_clients
 
 .PHONY: \
 	help setup sync \
@@ -49,10 +49,10 @@ setup sync:
 # ── Data ──────────────────────────────────────────────────────────────────────
 
 validate:
-	@$(UV) run python -m mawkingbird.cli validate
+	@$(UV) run python -m mastodon_clients.cli validate
 
 score: validate
-	@$(UV) run python -m mawkingbird.cli score
+	@$(UV) run python -m mastodon_clients.cli score
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 #
@@ -61,14 +61,14 @@ score: validate
 # bug, not a flake.
 
 build: validate
-	@$(UV) run python -m mawkingbird.cli build-content
+	@$(UV) run python -m mastodon_clients.cli build-content
 	@$(UV) run pelican content -s pelicanconf.py -o $(OUTPUT)
-	@$(UV) run python -m mawkingbird.cli sitemap --output $(OUTPUT) --site-url $(SITE_URL)
+	@$(UV) run python -m mastodon_clients.cli sitemap --output $(OUTPUT) --site-url $(SITE_URL)
 
 build-prod: validate
-	@$(UV) run python -m mawkingbird.cli build-content
-	@MAWKINGBIRD_SITEURL=$(SITE_URL) $(UV) run pelican content -s publishconf.py -o $(OUTPUT)
-	@$(UV) run python -m mawkingbird.cli sitemap --output $(OUTPUT) --site-url $(SITE_URL)
+	@$(UV) run python -m mastodon_clients.cli build-content
+	@SITE_URL_OVERRIDE=$(SITE_URL) $(UV) run pelican content -s publishconf.py -o $(OUTPUT)
+	@$(UV) run python -m mastodon_clients.cli sitemap --output $(OUTPUT) --site-url $(SITE_URL)
 
 serve: build
 	@echo "Serving $(OUTPUT)/ at http://localhost:8000/"
@@ -111,11 +111,11 @@ check-ci: lint typecheck test validate build
 
 generate-review:
 	@test -n "$(CLIENT)" || { echo "Usage: make generate-review CLIENT=<slug>"; exit 1; }
-	@$(UV) run python -m mawkingbird.cli generate-review $(CLIENT)
+	@$(UV) run python -m mastodon_clients.cli generate-review $(CLIENT)
 
 refresh-review:
 	@test -n "$(CLIENT)" || { echo "Usage: make refresh-review CLIENT=<slug>"; exit 1; }
-	@$(UV) run python -m mawkingbird.cli generate-review $(CLIENT) --refresh
+	@$(UV) run python -m mastodon_clients.cli generate-review $(CLIENT) --refresh
 
 # Bulk generation exists but is never implied by another target, so the ordinary
 # workflow cannot accidentally rewrite every review (spec 18).
@@ -125,7 +125,7 @@ generate-all-reviews:
 	@for toml in data/clients/*.toml; do \
 		slug=$$(basename "$$toml" .toml); \
 		echo "--- $$slug"; \
-		$(UV) run python -m mawkingbird.cli generate-review "$$slug" || exit 1; \
+		$(UV) run python -m mastodon_clients.cli generate-review "$$slug" || exit 1; \
 	done
 
 # ── Machine metadata (NETWORK) ────────────────────────────────────────────────
@@ -136,10 +136,10 @@ generate-all-reviews:
 
 refresh-metadata:
 	@$(UV) sync --extra collect
-	@$(UV) run python -m mawkingbird.cli refresh-metadata $(if $(CLIENT),--client $(CLIENT),)
+	@$(UV) run python -m mastodon_clients.cli refresh-metadata $(if $(CLIENT),--client $(CLIENT),)
 
 check-links: validate
-	@$(UV) run python -m mawkingbird.cli validate
+	@$(UV) run python -m mastodon_clients.cli validate
 
 # ── Publish ───────────────────────────────────────────────────────────────────
 

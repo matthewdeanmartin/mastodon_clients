@@ -20,8 +20,8 @@ from enum import StrEnum
 from pathlib import Path
 from urllib.parse import urlparse
 
-from mawkingbird.errors import ValidationReport
-from mawkingbird.models import (
+from mastodon_clients.errors import ValidationReport
+from mastodon_clients.models import (
     LINK_TYPES,
     Client,
     Deployment,
@@ -34,7 +34,7 @@ from mawkingbird.models import (
     ServerDependency,
     SourceModel,
 )
-from mawkingbird.taxonomy import Taxonomy
+from mastodon_clients.taxonomy import Taxonomy
 
 SCHEMA_VERSION = 1
 

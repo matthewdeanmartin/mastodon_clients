@@ -21,8 +21,10 @@ audiences = [
     "twitter-refugees",
 ]
 
+# mawkingbird.com is where the client runs. No separate project page or
+# repository has been recorded, so no homepage link is claimed -- a deployment
+# URL is not a project page, and this directory does not pretend otherwise.
 [links]
-homepage = "https://mawkingbird.com/"
 hosted = "https://mawkingbird.com/"
 
 [features]

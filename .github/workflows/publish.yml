@@ -30,8 +30,11 @@ jobs:
     permissions:
       contents: write
     env:
-      CUSTOM_DOMAIN: mawkingbird.com
-      SITE_URL: https://mawkingbird.com
+      # The site is served from a GitHub project Pages URL, so it lives under a
+      # sub-path rather than at an origin root. Every canonical link, OpenGraph
+      # URL, and sitemap entry is built from this one value; point it at a custom
+      # domain later and add a CNAME step, and nothing else needs to change.
+      SITE_URL: https://matthewdeanmartin.github.io/mastodon_clients
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
@@ -54,17 +57,17 @@ jobs:
         run: make validate
       - name: Build production site
         run: make build-prod SITE_URL="$SITE_URL"
-      - name: Add custom domain
-        run: printf '%s' "$CUSTOM_DOMAIN" > output/CNAME
       - name: Verify the build before publishing
         run: |
           test -f output/index.html
           test -f output/clients/index.html
           test -f output/sitemap.xml
-          test -f output/CNAME
-          # Absolute URLs are what distinguishes a production build from a local
-          # one; publishing relative ones would break every canonical tag.
-          grep --fixed-strings 'https://mawkingbird.com/' output/index.html
+          # No CNAME: this is a project Pages site, not a custom domain.
+          test ! -e output/CNAME
+          # Absolute, sub-path-aware URLs are what distinguish a production build
+          # from a local one. Publishing root-relative links here would send every
+          # canonical tag and sitemap entry to the wrong host.
+          grep --fixed-strings "$SITE_URL/clients/" output/index.html
       - name: Publish to gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

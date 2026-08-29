@@ -7,9 +7,9 @@
 `make build` runs, in order:
 
 ```sh
-uv run python -m mawkingbird.cli validate
-uv run python -m mawkingbird.cli score
-uv run python -m mawkingbird.cli build-content
+uv run python -m mastodon_clients.cli validate
+uv run python -m mastodon_clients.cli score
+uv run python -m mastodon_clients.cli build-content
 uv run pelican content -s publishconf.py
 ```
 
@@ -32,7 +32,7 @@ Discontinued clients keep their `/clients/<slug>/` URL and get a historical page
 
 ## Theme
 
-`theme/mawkingbird/` — Jinja templates plus one hand-written stylesheet. No CSS or JS framework (§41).
+`theme/mastodon_clients/` — Jinja templates plus one hand-written stylesheet. No CSS or JS framework (§41).
 
 - Semantic HTML, real `<table>` with `<th scope>` and `<caption>`, visible focus states, `prefers-reduced-motion` honoured (§40).
 - Per-page unique `<title>`, meta description, canonical link, OpenGraph tags (§26).

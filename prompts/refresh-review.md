@@ -1,6 +1,6 @@
 prompt_version: 1
 
-# Refresh an existing client review for Mawkingbird
+# Refresh an existing client review for the Mastodon Web Clients directory
 
 An existing review is being regenerated because the client's structured facts or
 its machine observations have changed. You are given the current facts, the

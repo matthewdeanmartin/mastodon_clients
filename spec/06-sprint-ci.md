@@ -25,7 +25,7 @@ Plus `make lint-check` and `make typecheck`. The CI build contacts no client web
 
 ## `publish.yml` — production deploy
 
-Triggered on push to `main` and by `workflow_dispatch`. Builds with `publishconf.py`, writes `CNAME` containing `mawkingbird.com`, and pushes `output/` to the `gh-pages` branch root via `.github/scripts/publish-gh-pages.sh`.
+Triggered on push to `main` and by `workflow_dispatch`. Builds with `publishconf.py` and pushes `output/` to the `gh-pages` branch root via `.github/scripts/publish-gh-pages.sh`. Served from the project Pages URL <https://matthewdeanmartin.github.io/mastodon_clients/>, so the build uses a sub-path base and writes no `CNAME`; `SITE_URL` is the single value to change if a custom domain is added later.
 
 Single production site: no canary, no test deployment, no mirror repository. A `gh-pages-branch` concurrency group with `cancel-in-progress: false` prevents two deploys racing.
 

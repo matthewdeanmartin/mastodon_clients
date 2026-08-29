@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from mawkingbird.errors import ValidationReport
-from mawkingbird.models import Deployment, FeatureValue, Lifecycle, SourceModel
-from mawkingbird.schema import load_clients
-from mawkingbird.taxonomy import load_taxonomy
+from mastodon_clients.errors import ValidationReport
+from mastodon_clients.models import Deployment, FeatureValue, Lifecycle, SourceModel
+from mastodon_clients.schema import load_clients
+from mastodon_clients.taxonomy import load_taxonomy
 
 
 def _load(repo: Path):

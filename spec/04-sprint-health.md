@@ -9,7 +9,7 @@ make refresh-metadata              # all clients
 make refresh-metadata CLIENT=elk   # one client
 ```
 
-Runs `uv run python -m mawkingbird.cli refresh-metadata`. Explicitly invoked, never scheduled, never part of a Pelican build. Results land in `data/generated/observations.json`, which is committed; the site build consumes the committed file and makes zero network requests (§44, Invariant 1).
+Runs `uv run python -m mastodon_clients.cli refresh-metadata`. Explicitly invoked, never scheduled, never part of a Pelican build. Results land in `data/generated/observations.json`, which is committed; the site build consumes the committed file and makes zero network requests (§44, Invariant 1).
 
 Collectors:
 
@@ -38,7 +38,7 @@ The file stores the latest value per `(client, signal)`. The shape leaves room f
 
 ## Health synthesis (§14, Invariant 5)
 
-`mawkingbird/health.py` derives one of `actively-maintained`, `maintained`, `low-activity`, `possibly-unmaintained`, `unmaintained`, `discontinued`, `unknown`.
+`mastodon_clients/health.py` derives one of `actively-maintained`, `maintained`, `low-activity`, `possibly-unmaintained`, `unmaintained`, `discontinued`, `unknown`.
 
 Rules are deterministic, documented on `/methodology/`, and conservative:
 

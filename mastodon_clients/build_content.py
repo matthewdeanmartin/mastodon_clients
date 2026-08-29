@@ -17,10 +17,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from mawkingbird.models import CHECKABLE_LINK_TYPES, Client, Deployment, ServerDependency, SourceModel
-from mawkingbird.overrides import SECTION_LABELS, SECTIONS
-from mawkingbird.repository import Site
-from mawkingbird.scoring import describe_components
+from mastodon_clients.models import CHECKABLE_LINK_TYPES, Client, Deployment, ServerDependency, SourceModel
+from mastodon_clients.overrides import SECTION_LABELS, SECTIONS
+from mastodon_clients.repository import Site
+from mastodon_clients.scoring import describe_components
 
 # Where the generated Pelican content tree lives. Wiped and rewritten on every
 # build, so nothing hand-edited may be placed here -- hand-written pages live in

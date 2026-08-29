@@ -12,13 +12,13 @@ from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path
 
-from mawkingbird.errors import ValidationReport
-from mawkingbird.health import HealthResult, ObservationSet, Warning_, derive_all, load_observations
-from mawkingbird.models import Client, Deployment, Health, Lifecycle, ServerDependency, SourceModel
-from mawkingbird.overrides import ProseDocument, load_prose
-from mawkingbird.schema import load_clients
-from mawkingbird.scoring import Score, score_all
-from mawkingbird.taxonomy import Taxonomy, load_taxonomy, validate_taxonomy
+from mastodon_clients.errors import ValidationReport
+from mastodon_clients.health import HealthResult, ObservationSet, Warning_, derive_all, load_observations
+from mastodon_clients.models import Client, Deployment, Health, Lifecycle, ServerDependency, SourceModel
+from mastodon_clients.overrides import ProseDocument, load_prose
+from mastodon_clients.schema import load_clients
+from mastodon_clients.scoring import Score, score_all
+from mastodon_clients.taxonomy import Taxonomy, load_taxonomy, validate_taxonomy
 
 
 @dataclass(frozen=True, slots=True)

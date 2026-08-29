@@ -1,4 +1,4 @@
-Title: About Mawkingbird
+Title: About this directory
 Slug: about
 URL: about/
 Save_as: about/index.html
@@ -11,11 +11,13 @@ This site is written and operated by **Matthew Martin**.
 
 ## The conflict of interest
 
-Matthew Martin also maintains **Mawkingbird**, a freemium Mastodon web client,
-at [mawkingbird.com](https://mawkingbird.com/).
+Matthew Martin also maintains **Mawkingbird**, a freemium Mastodon web client, at
+[mawkingbird.com](https://mawkingbird.com/). It is
+[listed in this directory](/clients/mawkingbird/) alongside every other client.
 
-That means the person writing these reviews sells a product in the category
-being reviewed. Every client listed here is, to some degree, a competitor.
+That means the person writing these reviews sells a product in the category being
+reviewed. Every other client listed here is, to some degree, a competitor &mdash;
+and this directory exists in part so that people can find them.
 
 This is not a footnote and there is no framing that makes it disappear. It is
 the single most important thing to know when reading anything on this site, and

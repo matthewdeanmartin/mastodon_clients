@@ -4,7 +4,7 @@
 # survive every future regeneration -- nothing in `make generate-review` writes
 # to this file tree.
 #
-# This particular file exists because Mawkingbird is the site owner's own
+# This particular file exists because Mawkingbird is the directory author's own
 # product. Its entry should not be drafted by a model working from the same
 # facts as everyone else's, because the interesting thing about it is not what
 # it does but why it is listed at all. That is an editorial statement, so a
@@ -16,9 +16,14 @@ summary = """
 Mawkingbird is a freemium Mastodon web client maintained by Matthew Martin, who
 also writes and operates this directory.
 
-It is listed here because leaving it out would be the worse of the two available
-conflicts of interest. A review site whose author quietly omits their own
-competing product is harder to trust than one that includes it and says so.
+The directory exists in part because of this client: having built one, the
+obvious next problem was that people had no good way to find it, or any of the
+alternatives. So the honest thing is to list all of them, this one included, and
+be plain about who is doing the listing.
+
+Leaving it out would be the worse of the two available conflicts of interest. A
+review site whose author quietly omits their own competing product is harder to
+trust than one that includes it and says so.
 """
 
 who_is_it_for = """
