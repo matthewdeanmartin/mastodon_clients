@@ -79,10 +79,20 @@ jobs:
           test -f output/sitemap.xml
           # No CNAME: this is a project Pages site, not a custom domain.
           test ! -e output/CNAME
-          # Absolute, sub-path-aware URLs are what distinguish a production build
-          # from a local one. Publishing root-relative links here would send every
-          # canonical tag and sitemap entry to the wrong host.
-          grep --fixed-strings "$SITE_URL/clients/" output/index.html
+          # Canonical tags and sitemap entries must be absolute, or they point at
+          # the wrong host.
+          grep --fixed-strings "rel=\"canonical\" href=\"$SITE_URL/\"" output/index.html
+          grep --fixed-strings "<loc>$SITE_URL/clients/</loc>" output/sitemap.xml
+          # Internal links must carry the project sub-path. Without it a browser
+          # resolves them against the origin root and every one 404s -- the bug
+          # that shipped a thousand broken links on a build reporting success.
+          # `make build-prod` already fails on this via check_local_links; this is
+          # a second, independent look at the artifact about to be published.
+          if grep -rhoE 'href="/[^"]*"' output/ | grep -v '^href="/mastodon_clients' | grep -q .; then
+            echo "::error::Internal links are missing the /mastodon_clients prefix:"
+            grep -rhoE 'href="/[^"]*"' output/ | grep -v '^href="/mastodon_clients' | sort -u | head -20
+            exit 1
+          fi
       - name: Upload the site artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
         with:
