@@ -40,9 +40,11 @@ client's stated aim of serving several backends rather than one.
 Automatic language detection and URL cleaning — stripping tracking parameters
 from pasted links — are both unusual enough to be worth naming.
 
-A number of capabilities were not established from the available material, among
-them multi-account handling, keyboard navigation, and accessibility work. They
-are recorded as unknown rather than assumed from the Soapbox lineage.
+Reading the source rather than the marketing settles the rest: multi-account
+handling, push notifications, keyboard navigation, hashtag following, account
+notes, notification filtering, a column layout, a service worker, and a
+reduced-motion setting are all present, alongside 332 aria- attributes across the
+component tree. The only core capability absent is saved searches.
 
 <!-- section: deployment -->
 

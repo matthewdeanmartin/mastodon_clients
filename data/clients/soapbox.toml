@@ -47,36 +47,55 @@ label = "GitHub mirror"
 type = "issues"
 url = "https://gitlab.com/soapbox-pub/soapbox/-/issues"
 
+# Feature values were established by reading the source (cloned from
+# gitlab.com/soapbox-pub/soapbox), not inferred from the project's description.
+# Named evidence for the values that were previously unknown:
+#
+#   multi_account          src/actions/auth.ts
+#   push_notifications     src/actions/push-notifications/registerer.ts
+#   translation            src/actions/statuses.ts
+#   keyboard_navigation    src/components/pure-status.tsx
+#   advanced_search        src/actions/compose.ts
+#   hashtag_following      src/actions/tags.ts
+#   account_notes          src/features/ui/components/panels/account-note-panel.tsx
+#   notification_filtering src/actions/notifications.ts
+#   drafts                 src/actions/compose-status.ts
+#   post_editing           src/actions/statuses.ts
+#   reduced_motion         src/actions/settings.ts (a real user setting)
+#   pwa                    src/service-worker/
+#
+# `saved_searches` is partial: recent searches exist, but only inside the groups
+# feature rather than as a general saved-search facility.
 [features]
-multi_account = "unknown"
+multi_account = true
 lists = true
 filters = true
-push_notifications = "unknown"
+push_notifications = true
 quote_posts = true
 scheduled_posts = true
 bookmarks = true
-translation = "unknown"
+translation = true
 local_timeline = true
 federated_timeline = true
 custom_emoji = true
 content_warnings = true
 moderation_controls = true
 column_layout = true
-keyboard_navigation = "unknown"
-advanced_search = "unknown"
-saved_searches = false
-hashtag_following = "unknown"
+keyboard_navigation = true
+advanced_search = true
+saved_searches = "partial"
+hashtag_following = true
 thread_view = true
 media_galleries = true
-drafts = "unknown"
+drafts = true
 polls = true
-post_editing = "unknown"
-account_notes = "unknown"
+post_editing = true
+account_notes = true
 follow_requests = true
 profile_editing = true
 server_switching = false
-notification_filtering = "unknown"
-accessibility_features = "unknown"
-reduced_motion = "unknown"
+notification_filtering = true
+accessibility_features = true
+reduced_motion = true
 responsive_layout = true
-pwa = "unknown"
+pwa = true

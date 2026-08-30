@@ -51,7 +51,7 @@ _GITLAB_RE = re.compile(r"^https?://(?:www\.)?gitlab\.com/(.+?)/?(?:$|[#?])")
 # truth. `forgejo` covers Gitea too; the two share this API shape.
 _KNOWN_FORGES: dict[str, str] = {
     "codeberg.org": "forgejo",
-    "git.pleroma.social": "gitlab",
+    "git.pleroma.social": "forgejo",
     "git.sr.ht": "sourcehut",
 }
 

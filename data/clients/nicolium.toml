@@ -37,40 +37,56 @@ label = "Public deployment"
 type = "source"
 url = "https://git.pleroma.social/nicolium/nicolium"
 
-# Feature values are taken from the project's own documented capabilities and
-# from its Soapbox lineage. Where neither established an answer the value is
-# `unknown` rather than inferred -- the same standard applied to every record
-# here, and the reason this entry scores below a fully researched one.
+[[links]]
+type = "issues"
+url = "https://git.pleroma.social/nicolium/nicolium/issues"
+
+# Feature values were established by reading the source (cloned from
+# git.pleroma.social, commit of 2026-08-29), not from the project's marketing
+# copy and not by assuming the parent's values carry over. Named evidence:
+#
+#   multi_account          packages/nicolium/src/components/auth/external-login-form.tsx
+#   push_notifications     packages/nicolium/src/actions/push-notifications.ts
+#   column_layout          packages/nicolium/src/columns/ (bookmarks, notifications, ...)
+#   hashtag_following      packages/nicolium/src/columns/timeline.tsx
+#   account_notes          packages/nicolium/src/components/accounts/account-menu.tsx
+#   notification_filtering packages/nicolium/src/queries/notifications/use-notifications.ts
+#   reduced_motion         packages/nicolium/src/components/animated-number.tsx
+#   translation            packages/nicolium/src/components/statuses/action-bar/buttons/
+#   pwa                    packages/nicolium/src/service-worker/sw.ts + manifest.json
+#   accessibility          332 aria- attributes across the component tree
+#
+# `saved_searches` is recorded as absent: nothing in the source implements it.
 [features]
-multi_account = "unknown"
+multi_account = true
 lists = true
 filters = true
-push_notifications = "unknown"
+push_notifications = true
 quote_posts = true
 scheduled_posts = true
 bookmarks = true
-translation = "unknown"
+translation = true
 local_timeline = true
 federated_timeline = true
 custom_emoji = true
 content_warnings = true
 moderation_controls = true
-column_layout = "unknown"
-keyboard_navigation = "unknown"
-advanced_search = "unknown"
-saved_searches = "unknown"
-hashtag_following = "unknown"
+column_layout = true
+keyboard_navigation = true
+advanced_search = true
+saved_searches = false
+hashtag_following = true
 thread_view = true
 media_galleries = true
 drafts = true
 polls = true
 post_editing = true
-account_notes = "unknown"
+account_notes = true
 follow_requests = true
 profile_editing = true
 server_switching = true
-notification_filtering = "unknown"
-accessibility_features = "unknown"
-reduced_motion = "unknown"
+notification_filtering = true
+accessibility_features = true
+reduced_motion = true
 responsive_layout = true
-pwa = "unknown"
+pwa = true

@@ -165,3 +165,42 @@ def test_rewriting_with_no_prefix_changes_nothing() -> None:
 
     html = '<a href="/clients/">c</a>'
     assert rewrite_text(html, "") == html
+
+
+# --- repository collectors -------------------------------------------------
+#
+# Fediverse projects are unusually likely to live on a self-hosted forge. The
+# collector originally matched only github.com and gitlab.com, so anything on
+# Codeberg or a project's own Forgejo recorded no activity signal at all --
+# which reads as `unknown` maintenance and costs 19 rating points against the
+# truth. Nicolium sat at 46.6 instead of 86.0 for exactly that reason.
+
+
+def test_known_self_hosted_forges_are_recognised() -> None:
+    from mastodon_clients.collect import _FORGE_PATH_RE, _KNOWN_FORGES
+
+    for url, host in (
+        ("https://codeberg.org/enafore/enafore", "codeberg.org"),
+        ("https://git.pleroma.social/nicolium/nicolium", "git.pleroma.social"),
+    ):
+        match = _FORGE_PATH_RE.match(url)
+        assert match is not None
+        assert match.group(1) == host
+        assert host in _KNOWN_FORGES
+
+
+def test_the_forge_path_pattern_splits_host_from_project() -> None:
+    from mastodon_clients.collect import _FORGE_PATH_RE
+
+    match = _FORGE_PATH_RE.match("https://git.example.org/group/subgroup/project")
+    assert match is not None
+    assert match.group(1) == "git.example.org"
+    assert match.group(2) == "group/subgroup/project"
+
+
+def test_an_unknown_host_is_probed_rather_than_abandoned() -> None:
+    """Recording "host not recognised" makes a maintained project look dead."""
+    from mastodon_clients.collect import _PROBE_ORDER
+
+    assert "forgejo" in _PROBE_ORDER
+    assert "gitlab" in _PROBE_ORDER

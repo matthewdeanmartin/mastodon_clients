@@ -25,12 +25,15 @@ fit. The deployment you use is chosen by whoever runs your server, not by you.
 
 <!-- section: notable_features -->
 
-Quote posts and scheduled posts, both absent from several clients here. Lists,
-filters, bookmarks, polls, and a column layout are supported.
+Soapbox supports every core capability in this directory's taxonomy: quote posts
+and scheduled posts, both absent from several clients here, along with lists,
+filters, bookmarks, polls, drafts, post editing, push notifications, keyboard
+navigation, hashtag following, account notes, and a column layout.
 
-Several capabilities are recorded as unknown: multi-account handling, push
-notifications, keyboard navigation, and accessibility work were not established
-from the available material, and are marked unknown rather than assumed.
+Two qualifications. Saved searches exist only inside the groups feature rather
+than as a general facility, so they are recorded as partial. And server switching
+is absent by design: this is a frontend deployed with a server, not a client you
+point at an arbitrary instance.
 
 <!-- section: deployment -->
 
@@ -63,7 +66,7 @@ support channel is recorded here.
 
 <!-- section: verdict -->
 
-A frontend for people running servers, not a client for people using them. If
+A capable frontend for people running servers, not a client for people using them. If
 you operate an instance and want control over how it presents itself, that is
 what this is built for; if you are looking for something to open and log into,
 the public deployment will show you what it is like, but the product is aimed
