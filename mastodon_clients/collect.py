@@ -41,6 +41,27 @@ USER_AGENT = (
 _GITHUB_RE = re.compile(r"^https?://(?:www\.)?github\.com/([^/]+)/([^/#?]+)")
 _GITLAB_RE = re.compile(r"^https?://(?:www\.)?gitlab\.com/(.+?)/?(?:$|[#?])")
 
+# Hosts that are not github.com or gitlab.com but run a compatible API. Keyed by
+# host so a new one is a data edit rather than another regex.
+#
+# Fediverse projects are unusually likely to be self-hosted -- Codeberg, a
+# project's own Forgejo, a community GitLab -- so treating "not github.com" as
+# "no collector available" left real projects with no activity signal at all,
+# and therefore an `unknown` maintenance status worth 19 points less than the
+# truth. `forgejo` covers Gitea too; the two share this API shape.
+_KNOWN_FORGES: dict[str, str] = {
+    "codeberg.org": "forgejo",
+    "git.pleroma.social": "gitlab",
+    "git.sr.ht": "sourcehut",
+}
+
+# Any other host is probed by shape rather than by name: a self-hosted forge is
+# far more likely than a bespoke one, and a wrong guess costs one failed request
+# recorded as a failed observation.
+_PROBE_ORDER: tuple[str, ...] = ("forgejo", "gitlab")
+
+_FORGE_PATH_RE = re.compile(r"^https?://([^/]+)/(.+?)/?(?:$|[#?])")
+
 
 @dataclass(slots=True)
 class Collector:
@@ -210,7 +231,10 @@ def _collect_repository(collector: Collector, http: Any, client: Client) -> None
 
     gitlab = _GITLAB_RE.match(source_url)
     if gitlab:
-        _collect_gitlab(collector, http, client.slug, gitlab.group(1))
+        _collect_gitlab(collector, http, client.slug, gitlab.group(1), host="gitlab.com")
+        return
+
+    if _collect_self_hosted(collector, http, client.slug, source_url):
         return
 
     collector.record(
@@ -218,8 +242,62 @@ def _collect_repository(collector: Collector, http: Any, client: Client) -> None
         "repo_metadata",
         source="repo",
         ok=False,
-        error="source host not recognised; no collector available",
+        error="source host exposes no readable repository API",
     )
+
+
+def _collect_self_hosted(collector: Collector, http: Any, slug: str, source_url: str) -> bool:
+    """Try a self-hosted forge. Returns whether anything was collected.
+
+    Known hosts go straight to the right API. Unknown ones are probed, because
+    the alternative -- recording "host not recognised" -- makes a maintained
+    project indistinguishable from an abandoned one in the score.
+    """
+    match = _FORGE_PATH_RE.match(source_url)
+    if not match:
+        return False
+    host, project_path = match.group(1), match.group(2).removesuffix(".git")
+
+    kinds = [_KNOWN_FORGES[host]] if host in _KNOWN_FORGES else list(_PROBE_ORDER)
+    for kind in kinds:
+        if kind == "forgejo" and _collect_forgejo(collector, http, slug, host, project_path):
+            return True
+        if kind == "gitlab" and _collect_gitlab(collector, http, slug, project_path, host=host):
+            return True
+    return False
+
+
+def _collect_forgejo(collector: Collector, http: Any, slug: str, host: str, project_path: str) -> bool:
+    """Codeberg, Gitea, and Forgejo all serve this API shape."""
+    try:
+        response = http.get(f"https://{host}/api/v1/repos/{project_path}")
+    except Exception as exc:
+        collector.record(slug, "repo_metadata", source="forgejo", ok=False, error=_describe(exc))
+        return True
+
+    if response.status_code != 200:
+        # Not this kind of forge, or the API is closed. Let the caller try the
+        # next shape rather than recording a misleading failure.
+        return False
+
+    data = response.json()
+    collector.record(
+        slug,
+        "repo_metadata",
+        source="forgejo",
+        ok=True,
+        value={"full_name": data.get("full_name"), "stars": data.get("stars_count")},
+    )
+    collector.record(slug, "repo_archived", source="forgejo", ok=True, value={"archived": bool(data.get("archived"))})
+    if data.get("updated_at"):
+        collector.record(
+            slug,
+            "repo_latest_commit",
+            source="forgejo",
+            ok=True,
+            value={"committed_at": data["updated_at"]},
+        )
+    return True
 
 
 def _collect_github(collector: Collector, http: Any, slug: str, owner: str, repo: str) -> None:
@@ -286,19 +364,28 @@ def _collect_github(collector: Collector, http: Any, slug: str, owner: str, repo
         collector.record(slug, "repo_latest_release", source="github", ok=False, error=_describe(exc))
 
 
-def _collect_gitlab(collector: Collector, http: Any, slug: str, project_path: str) -> None:
+def _collect_gitlab(collector: Collector, http: Any, slug: str, project_path: str, *, host: str) -> bool:
+    """GitLab, hosted or self-run. Returns whether the API answered.
+
+    A False return means "not a GitLab, or its API is closed", which lets the
+    caller try another forge shape instead of recording a failure that would
+    read as evidence about the project.
+    """
     from urllib.parse import quote
 
-    api = f"https://gitlab.com/api/v4/projects/{quote(project_path, safe='')}"
+    api = f"https://{host}/api/v4/projects/{quote(project_path, safe='')}"
     try:
         response = http.get(api)
     except Exception as exc:
         collector.record(slug, "repo_metadata", source="gitlab", ok=False, error=_describe(exc))
-        return
+        return True
 
     if response.status_code != 200:
-        collector.record(slug, "repo_metadata", source="gitlab", ok=False, error=f"HTTP {response.status_code}")
-        return
+        if host == "gitlab.com":
+            # A known GitLab that refused is a real failure worth recording.
+            collector.record(slug, "repo_metadata", source="gitlab", ok=False, error=f"HTTP {response.status_code}")
+            return True
+        return False
 
     data = response.json()
     collector.record(
@@ -317,6 +404,7 @@ def _collect_gitlab(collector: Collector, http: Any, slug: str, project_path: st
             ok=True,
             value={"committed_at": data["last_activity_at"]},
         )
+    return True
 
 
 # --- persistence and reporting ---------------------------------------------
