@@ -1,0 +1,96 @@
+schema_version = 1
+
+slug = "brutaldon"
+name = "Brutaldon"
+summary = "A deliberately plain, Web 1.0 interface for Mastodon and Pleroma that works entirely without JavaScript, including in text-mode browsers such as Lynx and w3m."
+
+status = "active"
+reviewed_at = 2026-08-29
+
+source_model = "open-source"
+license = "AGPL-3.0-or-later"
+
+deployment = "hosted-and-self-hostable"
+server_dependency = "independent"
+funding_model = ["volunteer"]
+
+audiences = [
+    "new-users",
+]
+
+[[links]]
+type = "homepage"
+url = "https://brutaldon.org/"
+
+[[links]]
+type = "hosted"
+url = "https://brutaldon.org/"
+label = "Public deployment"
+
+[[links]]
+type = "source"
+url = "https://gitlab.com/brutaldon/brutaldon"
+
+# No issues link: the project's GitLab tracker is not readable without signing
+# in, so both /-/issues and /issues return 404 to an anonymous visitor. Recording
+# a link that fails for the reader would be worse than recording none, and the
+# README points people at the tracker anyway.
+
+# Established by reading the source (Django app, cloned from GitLab). Route
+# definitions in brutaldon/urls.py settle most of these directly.
+#
+# The project's README says it lacks lists, filters, and profile editing.
+# Filters are in fact present -- there are filters/list, filters/create,
+# filters/edit and filters/delete routes -- so the README is out of date on that
+# point, and the recorded value follows the code rather than the prose.
+#
+#   multi_account          brutaldon/views.py switch_accounts()
+#   filters                brutaldon/urls.py filters/* routes
+#   polls                  vote/<id> route
+#   post_editing           redraft/<id> route
+#   follow_requests        requests/ routes
+#   moderation_controls    block/<id>, mute/<id>
+#
+# Absent, confirmed by the lack of any route or API call: lists, bookmarks,
+# profile editing, hashtag following, scheduled posts, translation.
+[features]
+multi_account = true
+lists = false
+filters = true
+push_notifications = false
+quote_posts = false
+scheduled_posts = false
+bookmarks = false
+translation = false
+local_timeline = true
+federated_timeline = true
+custom_emoji = true
+content_warnings = true
+moderation_controls = true
+column_layout = false
+# No JavaScript at all in the default rendering, so navigation is whatever the
+# browser provides -- which in a text browser is thorough keyboard operation by
+# definition, and in a graphical one is ordinary link traversal. Recorded as
+# partial because it is a consequence of the design rather than a keyboard
+# interface someone built.
+keyboard_navigation = "partial"
+advanced_search = false
+saved_searches = false
+hashtag_following = false
+thread_view = true
+media_galleries = true
+drafts = false
+polls = true
+post_editing = true
+account_notes = false
+follow_requests = true
+profile_editing = false
+server_switching = true
+notification_filtering = false
+# Working in Lynx and w3m without JavaScript is a strong accessibility position
+# by construction: it cannot depend on scripted widgets, and it degrades to
+# plain semantic HTML.
+accessibility_features = true
+reduced_motion = "not-applicable"
+responsive_layout = true
+pwa = false

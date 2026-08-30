@@ -248,14 +248,14 @@
         </section>
       </div>
 
-      {% if c.forks %}
-      <section id="forks">
-        <h2>Forks</h2>
+      {% if c.family %}
+      <section id="family">
+        <h2>Related by lineage</h2>
         <p class="note">
-          These are the same software, continued by different people. They share this page's
-          lineage, so the useful difference between them is usually who is still maintaining one.
+          The same software, continued or adapted by different people. What usually separates them
+          is who is still maintaining one, so that is the first column.
         </p>
-        {{ m.fork_table(c.forks) }}
+        {{ m.family_table(c.family) }}
       </section>
       {% endif %}
 

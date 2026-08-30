@@ -246,7 +246,7 @@
 {% endmacro %}
 
 
-{% macro fork_table(forks) %}
+{% macro family_table(forks) %}
 {# What actually differs between members of a family is usually maintenance,
    so that column leads. #}
 <table class="forks">
@@ -264,6 +264,7 @@
     <tr>
       <th scope="row">
         <a href="{{ fork.url }}">{{ fork.name }}</a>
+        {% if fork.is_parent %}<span class="row-summary">The original</span>{% endif %}
         {% if fork.public_instance %}
         <span class="row-summary">
           <a href="{{ fork.public_instance }}" target="_blank" rel="noopener">Open it</a>

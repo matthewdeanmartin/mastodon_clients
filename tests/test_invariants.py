@@ -423,3 +423,94 @@ def test_equal_scores_break_ties_by_name(repo: Path) -> None:
     site = load_site(repo)
     rows = [(round(site.scores[c.slug].points, 4), c.name.lower()) for c in site.listed]
     assert rows == sorted(rows, key=lambda row: (-row[0], row[1]))
+
+
+def test_the_directory_shows_the_best_member_of_a_family(repo: Path, write_client, write_observations) -> None:
+    """The bug this fixes: a dead parent listed while its live fork was hidden.
+
+    Showing the parent unconditionally meant the directory advertised
+    discontinued Pinafore and concealed maintained Enafore behind it -- a
+    directory failing at the one thing it is for.
+    """
+    write_client(
+        "oldclient",
+        """
+        schema_version = 1
+        slug = "oldclient"
+        name = "Oldclient"
+        summary = "Ended, but forked."
+        status = "discontinued"
+        reviewed_at = 2026-08-29
+        discontinued_at = 2024-01-01
+        discontinued_evidence = "The maintainer announced it."
+        source_model = "closed-source"
+        deployment = "hosted"
+        homepage = "https://oldclient.example.com/"
+        """,
+    )
+    _write_fork(write_client, "newfork", "oldclient")
+    write_observations(
+        "2026-08-29T00:00:00Z",
+        [
+            {
+                "client": "newfork",
+                "signal": "repo_latest_commit",
+                "observed_at": "2026-08-29T00:00:00Z",
+                "source": "test",
+                "ok": True,
+                "value": {"committed_at": "2026-08-20T00:00:00Z"},
+                "error": None,
+            }
+        ],
+    )
+
+    site = load_site(repo)
+    listed = {c.slug for c in site.listed}
+    assert "newfork" in listed, "the maintained fork should be the family's row"
+    assert "oldclient" not in listed, "the discontinued parent should not be"
+
+    # Both still have pages, so neither URL breaks.
+    assert {"newfork", "oldclient"} <= {c.slug for c in site.with_pages}
+
+
+def test_health_outranks_rating_when_choosing_a_family_head(repo: Path, write_client, write_observations) -> None:
+    """A maintained fork represents its family even if the parent scores higher.
+
+    Someone choosing a client cares more that it is still maintained than that
+    it scores a few points better.
+    """
+    _write_fork(write_client, "alphafork", "alpha")
+    write_observations(
+        "2026-08-29T00:00:00Z",
+        [
+            {
+                "client": "alphafork",
+                "signal": "repo_latest_commit",
+                "observed_at": "2026-08-29T00:00:00Z",
+                "source": "test",
+                "ok": True,
+                "value": {"committed_at": "2026-08-25T00:00:00Z"},
+                "error": None,
+            }
+        ],
+    )
+    site = load_site(repo)
+    alpha = site.client("alpha")
+    assert alpha is not None
+
+    # Alpha has more recorded facts and so scores higher, but has no signals at
+    # all and therefore reads as unknown; the fork is actively maintained.
+    assert site.scores["alpha"].points > site.scores["alphafork"].points
+    assert site.family_head(alpha).slug == "alphafork"
+
+
+def test_a_fork_page_shows_its_parent_and_siblings(repo: Path, write_client) -> None:
+    """A fork can be the directory's row now, so its page cannot only look down."""
+    _write_fork(write_client, "forkone", "alpha")
+    _write_fork(write_client, "forktwo", "alpha")
+    site = load_site(repo)
+
+    one = site.client("forkone")
+    assert one is not None
+    family = {c.slug for c in site.family_of(one)}
+    assert family == {"alpha", "forkone", "forktwo"}

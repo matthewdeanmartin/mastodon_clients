@@ -190,20 +190,25 @@ def client_payload(site: Site, client: Client) -> dict[str, Any]:
             if client.fork_of
             else None
         ),
-        "forks": [
+        # Every member of the family except this one, whichever member this is.
+        # A fork can be the directory's row for its family now, so its page has
+        # to show its parent and siblings rather than only looking downward.
+        "family": [
             {
-                "slug": fork.slug,
-                "name": fork.name,
-                "url": fork.url,
-                "summary": fork.summary,
-                "note": fork.fork_note,
-                "status": site.status_of(fork.slug).value,
-                "status_label": site.status_of(fork.slug).label,
-                "stars": site.scores[fork.slug].stars,
-                "license": fork.licence,
-                "public_instance": fork.public_instance,
+                "slug": member.slug,
+                "name": member.name,
+                "url": member.url,
+                "summary": member.summary,
+                "note": member.fork_note,
+                "status": site.status_of(member.slug).value,
+                "status_label": site.status_of(member.slug).label,
+                "stars": site.scores[member.slug].stars,
+                "license": member.licence,
+                "public_instance": member.public_instance,
+                "is_parent": not member.is_fork,
             }
-            for fork in site.forks_of(client.slug)
+            for member in site.family_of(client)
+            if member.slug != client.slug
         ],
         "family_status": site.family_status(client).value,
         "family_status_label": site.family_status(client).label,
@@ -424,20 +429,20 @@ def _write_features(site: Site, target: Path) -> int:
 
 
 def _write_facets(site: Site, target: Path) -> int:
-    """The three curated source/deployment facets of spec 5.5.
+    """The curated deployment facets of spec 5.5.
 
-    Only these three exist. Arbitrary metadata combinations stay user-interface
-    state rather than becoming crawlable URLs (spec 30).
+    Only these exist. Arbitrary metadata combinations stay user-interface state
+    rather than becoming crawlable URLs (spec 30).
+
+    There is deliberately no "open source" facet. Open core is common in this
+    field -- a published client with proprietary server-side components is a
+    normal arrangement, not a compromise -- and a top-level yes/no page turns
+    that spectrum into a pass/fail, quietly marking hybrid projects as
+    failures. The source model is still recorded per client, still shown on
+    every page, and still filterable in the directory, which answers the
+    question without editorialising it.
     """
     facets = (
-        (
-            "open-source",
-            "Open-source Mastodon web clients",
-            "Clients whose source is published under a licence that permits inspection and modification. "
-            "Source availability and licence are recorded as separate facts: a client can be open source "
-            "under several different licences, and a published repository is not by itself a licence grant.",
-            site.by_source_model(SourceModel.OPEN_SOURCE),
-        ),
         (
             "hosted",
             "Hosted Mastodon web clients",

@@ -71,13 +71,41 @@ class Site:
         `candidate` and `excluded` records are deliberately absent too: they let
         the repository hold a decision without publishing it (spec 33).
 
+        The row is the family's **best member**, not necessarily its parent. An
+        earlier version always showed the parent, which buried Nicolium behind
+        the Soapbox it improves on, and -- worse -- showed discontinued Pinafore
+        while hiding the maintained Enafore behind it. A directory that lists a
+        dead client and conceals its living successor has failed at its one job.
+
         Ordered by rating descending, name ascending as tiebreak. Alphabetical
         was the earlier default on the grounds that it implied no ranking, but a
         reader opening a directory of clients is asking which to use, and making
         them scroll to find out serves the principle at their expense.
         """
-        rows = (c for c in (*self.published, *self.historical) if not c.is_fork)
+        rows = [self.family_head(c) for c in (*self.published, *self.historical) if not c.is_fork]
         return tuple(sorted(rows, key=lambda c: (-self.scores[c.slug].points, c.name.lower())))
+
+    def family_head(self, parent: Client) -> Client:
+        """The member of a family that should represent it in the directory.
+
+        Health first, then rating. Health leads because a reader choosing a
+        client cares more that it is still maintained than that it scores two
+        points higher -- and because the whole reason a family has several
+        members is usually that maintenance moved between them.
+        """
+        members = (parent, *self.forks_of(parent.slug))
+        return min(
+            members,
+            key=lambda c: (_HEALTH_RANK.get(self.status_of(c.slug), 99), -self.scores[c.slug].points),
+        )
+
+    def family_of(self, client: Client) -> tuple[Client, ...]:
+        """Every member of a client's family, whichever member is passed in."""
+        root_slug = client.fork_of or client.slug
+        root = self.client(root_slug)
+        if root is None:
+            return (client,)
+        return (root, *self.forks_of(root_slug))
 
     @property
     def with_pages(self) -> tuple[Client, ...]:
