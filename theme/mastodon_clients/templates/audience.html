@@ -20,8 +20,7 @@
 <section class="criteria">
   <h2>What matters here</h2>
   <p class="note">
-    Clients below are ordered by how many of these they offer, then by rating. That ordering is
-    computed, not editorial.
+    Clients below are ordered by how many of these they offer, then by rating. Ratings help distinguish clients with similar coverage.
   </p>
   <ul class="criteria-list">
     {% for criterion in d.criteria %}
@@ -37,6 +36,8 @@
 <section class="matching">
   <h2>Matching clients</h2>
   {% if d.clients %}
+  {{ m.client_list(d.clients, "") }}
+  <details><summary>Compare criteria and ratings</summary>
   <table class="directory">
     <caption>Clients recorded as suited to {{ d.audience.label | lower }}.</caption>
     <thead>
@@ -71,6 +72,7 @@
       {% endfor %}
     </tbody>
   </table>
+  </details>
   {% else %}
   <p class="empty">
     No client is currently recorded as suited to this audience. That is a gap in the data rather

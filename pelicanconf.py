@@ -15,7 +15,7 @@ from typing import Any
 
 AUTHOR = "Matthew Martin"
 SITENAME = "Mastodon Web Clients"
-SITESUBTITLE = "A directory and review site for Mastodon-compatible web clients"
+SITESUBTITLE = "Find the right Mastodon web client for you"
 SITEURL = ""
 
 PATH = "content"

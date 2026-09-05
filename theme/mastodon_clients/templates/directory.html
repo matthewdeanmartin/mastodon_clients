@@ -12,18 +12,8 @@
 {% block content %}
 <h1>{{ page.title }}</h1>
 
-<p class="lede">
-  {{ d.clients | length }} client families, best-rated first. Ratings are computed from structured
-  metadata by code, never assigned by an editor &mdash;
-  <a href="/methodology/scoring/">see the formula</a>. A rating is one blunt number, so the
-  filters below and the audience pages will serve you better than the ordering will.
-</p>
-<p class="note">
-  Where a client has been forked, the family occupies one row rather than several. Forks are
-  compared on the parent's page, since what usually differs between them is which is still
-  maintained.
-</p>
-
+<p class="lede">Find the right fit for how you read and post. Explore {{ d.clients | length }} client families, or narrow your shortlist by what matters to you.</p>
+<nav class="need-links" aria-label="Choose by need"><a href="/for/new-users/">New to Mastodon</a><a href="/for/twitter-refugees/">A familiar experience</a><a href="/for/power-users/">More control</a><a href="/for/news-junkies/">Reading and news</a></nav>
 {# The controls are inert markup until directory.js binds them. Marked hidden so
    a visitor without JavaScript is not shown filters that cannot work; the table
    below is complete either way (spec 28, invariant 6). #}
@@ -37,6 +27,7 @@
              placeholder="Client name or description">
     </p>
 
+    <details class="advanced-filters"><summary>Advanced filters</summary>
     <p class="field">
       <label for="filter-audience">Audience</label>
       <select id="filter-audience" name="audience">
@@ -100,6 +91,8 @@
       {% endfor %}
     </fieldset>
 
+    </details>
+    <div id="active-filters" class="active-filters" aria-label="Active filters"></div>
     <p class="controls-actions">
       <button type="button" id="filter-reset">Clear filters</button>
       <output id="filter-count" for="directory-controls" aria-live="polite"></output>
@@ -107,9 +100,16 @@
   </fieldset>
 </form>
 
+<div class="view-controls" id="view-controls" hidden><span>View:</span><button type="button" data-view="cards" aria-pressed="true">Cards</button><button type="button" data-view="table" aria-pressed="false">Comparison table</button></div>
+<div class="client-cards" id="directory-cards">
+{% for client in d.clients | sort(attribute='name') %}{{ m.client_card(client) }}{% endfor %}
+</div>
+<p id="no-results" hidden>No clients match those filters. Try removing a requirement or clearing your search.</p>
+<details id="table-view"><summary>Compare ratings and details</summary>
 {{ m.directory_table(d.clients, "Mastodon-compatible web clients reviewed on this site") }}
 
-<section class="directory-notes">
+</details>
+<details class="directory-notes"><summary>How to read the comparison</summary>
   <h2>Reading this table</h2>
   <dl>
     <dt>Rating</dt>
@@ -136,7 +136,7 @@
       client works with any Mastodon-compatible server or requires you to deploy one.
     </dd>
   </dl>
-</section>
+</details>
 {% endblock %}
 
 {% block scripts %}

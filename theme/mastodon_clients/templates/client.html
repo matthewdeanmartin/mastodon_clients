@@ -23,7 +23,6 @@
   "operatingSystem": "Web browser",
   {% if c.license %}"license": {{ c.license | tojson }},{% endif %}
   {% if c.public_instance %}"url": {{ c.public_instance | tojson }},{% endif %}
-  "isAccessibleForFree": true,
   "review": {
     "@type": "Review",
     "reviewRating": {
@@ -33,7 +32,7 @@
       "worstRating": 0
     },
     "author": {"@type": "Person", "name": "Matthew Martin"},
-    "datePublished": {{ c.reviewed_at | tojson }}
+    "dateModified": {{ c.reviewed_at | tojson }}
   }
 }
 </script>
@@ -74,26 +73,6 @@
 
     <div class="review-main">
 
-      {# Ratings first: it is the summary judgement a reader came for, and
-         burying it below the prose made them hunt. #}
-      <section id="rating">
-        <h2>Score and components</h2>
-        <p class="note">
-          Computed from the structured record by code, never assigned by an editor.
-          <a href="/methodology/scoring/">How the formula works</a>.
-        </p>
-        {% if c.rating.unknown_features %}
-        <p class="caveat">
-          Rated on incomplete information: {{ c.rating.unknown_features }}
-          core feature{{ 's' if c.rating.unknown_features != 1 }} not established.
-          Unknown values earn no points, so an under-researched client scores below a
-          fully researched one with the same capabilities.
-          <a href="/submit/">Corrections welcome</a>.
-        </p>
-        {% endif %}
-        {{ m.score_breakdown(c) }}
-      </section>
-
       {# Two panels. Without JavaScript they are ordinary stacked sections and
          everything is present; client.js turns them into tabs (invariant 6, 7). #}
       <div class="tabs" data-tabs>
@@ -114,8 +93,12 @@
           {% if c.prose %}
           <div class="prose">
             {% for section in c.prose %}
-            <h3 id="{{ section.id }}">{{ section.label }}</h3>
+            {% if section.id in ('deployment', 'source_and_licensing', 'maintenance', 'support') %}
+            <details class="review-detail"><summary id="{{ section.id }}">{{ section.label }}</summary>{{ section.text | md }}</details>
+            {% else %}
+            <h3 id="{{ section.id }}">{{ 'Why choose it' if section.id == 'verdict' else ('Free and paid options' if section.id == 'funding' else section.label) }}</h3>
             {{ section.text | md }}
+            {% endif %}
             {% endfor %}
           </div>
           {% else %}
@@ -134,13 +117,34 @@
           </ul>
           {% endif %}
 
+      <details id="rating"><summary>Rating and feature coverage</summary>
+        <h2>Score and components</h2>
+        <p class="note">
+          Computed from the structured record by code, never assigned by an editor.
+          <a href="/methodology/scoring/">How the formula works</a>.
+        </p>
+        {% if c.rating.unknown_features %}
+        <p class="caveat">
+          Rated on incomplete information: {{ c.rating.unknown_features }}
+          core feature{{ 's' if c.rating.unknown_features != 1 }} not established.
+          Unknown values earn no points, so an under-researched client scores below a
+          fully researched one with the same capabilities.
+          <a href="/submit/">Corrections welcome</a>.
+        </p>
+        {% endif %}
+        {{ m.score_breakdown(c) }}
+      </details>
+
+
+          <details class="review-detail"><summary>Technical details and project checks</summary>
           <h3 id="facts">Deployment, source, and funding</h3>
           <dl class="facts">
             <dt>Where to use it</dt>
             <dd>
               {% if c.public_instance %}
               <a href="{{ c.public_instance }}" target="_blank" rel="noopener">{{ c.public_instance }}</a>
-              &mdash; open it and sign in with your existing account on any Mastodon-compatible server.
+              {% if c.slug == 'mawkingbird' %}&mdash; browse anonymously or sign in.
+              {% else %}&mdash; open it and sign in with your existing account on a compatible server.{% endif %}
               {% elif c.deployment == 'bundled-with-server' %}
               No separate application to open. This client is what a server running it serves to its
               own users, so you meet it by using such a server.
@@ -210,6 +214,7 @@
             These are different facts. Automated signals can be much newer than the written review,
             and a recent signal check does not mean a human has re-read the client.
           </p>
+          </details>
         </section>
 
         <section class="tabpanel" id="panel-features" role="tabpanel" aria-labelledby="tab-features" tabindex="0">

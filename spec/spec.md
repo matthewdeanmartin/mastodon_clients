@@ -1,3 +1,5 @@
+> Editorial direction updated September 2026: this is a product comparison and marketing website by Matthew Martin, creator of Mawkingbird. Lead with best fit for reader needs; use stars for closer comparisons. Use a concise author credit, confident factual promotion, and tasteful house ads. These requirements supersede older instructions below that prohibit marketing or demand repeated conflict-of-interest framing. Keep facts accurate, comparisons useful, and pages crawlable without JavaScript. Default theme: Editorial; modes: System (default), Light, Dark.
+
 # Mawkingbird Mastodon Web Client Review Site
 
 ## Product and Technical Specification

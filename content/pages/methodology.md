@@ -196,10 +196,9 @@ from the structured facts and never as an authority over them. A language model
 never assigns a rating, never establishes a fact, and never rewrites text a
 human has edited.
 
-## The commercial interest behind this site
+## About the author
 
-The site's editor sells a competing product.
-[The full disclosure and what follows from it](/about/).
+Created by Matthew Martin, creator of Mawkingbird, a Mastodon client for new users and power users. [About this guide](/about/).
 
 ## Corrections
 

@@ -21,6 +21,25 @@
 
   var tbody = table.tBodies[0];
   var rows = Array.prototype.slice.call(tbody.rows);
+  var cards = Array.prototype.slice.call(document.querySelectorAll("#directory-cards .client-card"));
+  var cardsContainer = document.getElementById("directory-cards");
+  var tableView = document.getElementById("table-view");
+  var viewControls = document.getElementById("view-controls");
+  if (viewControls && tableView && cardsContainer) {
+    viewControls.hidden = false;
+    tableView.hidden = true;
+    viewControls.querySelectorAll("button").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var showCards = button.dataset.view === "cards";
+        cardsContainer.hidden = !showCards;
+        tableView.hidden = showCards;
+        tableView.open = !showCards;
+        viewControls.querySelectorAll("button").forEach(function (item) {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+      });
+    });
+  }
   var count = document.getElementById("filter-count");
   var reset = document.getElementById("filter-reset");
 
@@ -75,6 +94,31 @@
       if (visible) shown++;
     });
 
+    cards.forEach(function (card) {
+      var row = rows.find(function (item) { return item.dataset.name === card.dataset.name; });
+      card.hidden = row ? row.hidden : false;
+    });
+    var empty = document.getElementById("no-results");
+    if (empty) empty.hidden = shown !== 0;
+    var active = document.getElementById("active-filters");
+    if (active) {
+      active.replaceChildren();
+      Array.prototype.forEach.call(form.elements, function (input) {
+        if (!input.name || !input.value || input.type === "fieldset" || input.type === "search") return;
+        if (input.type === "checkbox" && !input.checked) return;
+        if (input.type !== "checkbox" && input.tagName !== "SELECT") return;
+        var chip = document.createElement("button");
+        chip.type = "button";
+        var label = input.tagName === "SELECT" ? input.options[input.selectedIndex].text : input.labels[0].textContent;
+        chip.textContent = label + " ×";
+        chip.setAttribute("aria-label", "Remove filter: " + label);
+        chip.addEventListener("click", function () {
+          if (input.type === "checkbox") input.checked = false; else input.value = "";
+          apply();
+        });
+        active.appendChild(chip);
+      });
+    }
     if (count) {
       count.textContent =
         shown === rows.length
@@ -197,7 +241,8 @@
     fragment.split("&").forEach(function (pair) {
       var bits = pair.split("=");
       var key = bits[0];
-      var value = decodeURIComponent(bits.slice(1).join("=") || "");
+      var value;
+      try { value = decodeURIComponent(bits.slice(1).join("=") || ""); } catch (_) { return; }
 
       if (key === "q") form.elements.q.value = value;
       else if (key === "standalone") form.elements.standalone.checked = true;
@@ -237,6 +282,7 @@
     }
   });
 
+  window.addEventListener("hashchange", function () { form.reset(); readFragment(); apply(); });
   readFragment();
   apply();
 })();

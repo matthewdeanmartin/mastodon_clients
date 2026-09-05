@@ -226,3 +226,6 @@ content/extra/
 
 # Assembled prompts, written by `make generate-review` for inspection.
 build/prompts/
+
+# Local visual review artifacts
+.preview/

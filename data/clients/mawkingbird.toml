@@ -2,10 +2,10 @@ schema_version = 1
 
 slug = "mawkingbird"
 name = "Mawkingbird"
-summary = "A Mastodon web client with a command bar, keyboard-driven navigation, and reading tools including translation, saved bookmarks, and analytics over your own timeline. Free to use with paid server-side features."
+summary = "A familiar, Twitter-inspired Mastodon client with Bluesky and RSS integration, starter kits to build your feed, and anonymous browsing before you join. Free to use, with optional Plus features."
 
 status = "active"
-reviewed_at = 2026-08-29
+reviewed_at = 2026-09-05
 
 # Open core: the client is published under the MIT licence as part of the
 # mastodon_mock repository, while the server-side components behind the paid
@@ -43,10 +43,7 @@ url = "https://github.com/matthewdeanmartin/mastodon_mock/issues"
 type = "documentation"
 url = "https://mastodon-mock.readthedocs.io/en/latest/"
 
-# Feature values were established by reading the client's source rather than by
-# taking the maintainer's word for it, which is the standard applied to every
-# other record here. Where the source did not settle a question, the value is
-# `unknown` rather than a guess -- the same rule that costs other clients points.
+# Feature values are based on the client source; unresolved capabilities stay unknown.
 [features]
 multi_account = true
 lists = true

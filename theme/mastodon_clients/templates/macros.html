@@ -28,18 +28,12 @@
 
 
 {% macro client_card(client) %}
-<article class="client-card">
+<article class="client-card" data-name="{{ client.name | lower }}">
   <h3><a href="{{ client.url }}">{{ client.name }}</a></h3>
   <p class="summary">{{ client.summary }}</p>
-  <p class="meta">
-    {{ rating(client) }}
-    <span class="sep" aria-hidden="true">·</span>
-    {{ health_badge(client) }}
-    <span class="sep" aria-hidden="true">·</span>
-    <span>{{ client.source_model_label }}</span>
-    <span class="sep" aria-hidden="true">·</span>
-    <span>{{ client.deployment_label }}</span>
-  </p>
+  {% if client.audiences %}<p class="card-fit">For {{ client.audiences | map(attribute='label') | join(' · ') }}</p>{% endif %}
+  <p class="meta">{{ health_badge(client) }} <span>{{ client.deployment_label }}</span></p>
+  <a class="card-link" href="{{ client.url }}">Explore {{ client.name }} →</a>
 </article>
 {% endmacro %}
 
@@ -203,8 +197,8 @@
     </a>
   </p>
   <p class="use-it-note">
-    Opens {{ client.public_instance }} in a new tab. Sign in with your existing account on any
-    Mastodon-compatible server.
+    {% if client.slug == 'mawkingbird' %}Browse anonymously or sign in. Free to use, with optional Plus features.
+    {% else %}Opens in a new tab. Use your existing account on a compatible server.{% endif %}
   </p>
   {% elif client.deployment == 'bundled-with-server' %}
   <p class="use-it-none">

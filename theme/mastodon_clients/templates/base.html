@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ DEFAULT_LANG }}">
+<html lang="{{ DEFAULT_LANG }}" data-theme="editorial" data-mode="system">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,10 +17,22 @@
   <meta property="og:url" content="{% block og_url %}{{ SITEURL }}/{% endblock %}">
   <meta name="twitter:card" content="summary">
 
+  <meta name="color-scheme" content="light dark">
+  <script src="/assets/js/appearance.js"></script>
   <link rel="stylesheet" href="/assets/css/site.css">
   {% if FEED_ALL_ATOM %}
   <link rel="alternate" type="application/atom+xml" title="{{ SITENAME }}" href="/{{ FEED_ALL_ATOM }}">
   {% endif %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": {{ SITENAME | tojson }},
+    "url": {{ (SITEURL ~ '/') | tojson }},
+    "description": {{ SITESUBTITLE | tojson }},
+    "creator": {"@type": "Person", "name": "Matthew Martin", "url": {{ (SITEURL ~ '/about/') | tojson }}}
+  }
+  </script>
   {% block head %}{% endblock %}
 </head>
 <body>
@@ -32,32 +44,44 @@
     <div class="wrap">
       <p class="site-title"><a href="/">{{ SITENAME }}</a></p>
       <p class="site-tagline">{{ SITESUBTITLE }}</p>
+      <div class="header-tools">
       <nav aria-label="Primary">
         <ul>
           <li><a href="/clients/">All clients</a></li>
           <li><a href="/for/new-users/">For new users</a></li>
           <li><a href="/hosted/">Hosted</a></li>
-          <li><a href="/methodology/">Methodology</a></li>
+          <li><a href="/for/power-users/">For power users</a></li>
           <li><a href="/about/">About</a></li>
         </ul>
       </nav>
+      <details class="appearance" id="appearance" hidden>
+        <summary>Appearance</summary>
+        <div class="appearance-options">
+          <label for="theme-choice">Theme</label>
+          <select id="theme-choice"><option value="editorial">Editorial</option><option value="garden">Garden</option><option value="studio">Studio</option></select>
+          <label for="mode-choice">Mode</label>
+          <select id="mode-choice"><option value="system">Use system setting</option><option value="light">Light</option><option value="dark">Dark</option></select>
+        </div>
+      </details>
+      </div>
     </div>
   </header>
 
   <main id="main" class="wrap">
     {% block content %}{% endblock %}
+    <aside class="house-ad" aria-label="From the creator of this guide">
+      <div><p class="eyebrow">From the creator of this guide · Mawkingbird</p>
+      <h2>Your next feed starts here.</h2>
+      <p>A familiar, Twitter-inspired design. Mastodon, Bluesky and RSS. Starter kits to help you find your people. Explore before you create an account.</p></div>
+      <div class="ad-action"><a class="button" href="https://mawkingbird.com/">Try Mawkingbird <span aria-hidden="true">↗</span></a>
+      <span>Browse anonymously or sign in. Plus is optional.</span></div>
+    </aside>
   </main>
 
   <footer class="site-footer">
     <div class="wrap">
-      {# Spec 5.8 and invariant 10: the commercial relationship is disclosed
-         plainly, on every page, not only on the About page. #}
-      <p class="disclosure">
-        <strong>Disclosure.</strong> This directory is written and operated by Matthew Martin, who also
-        maintains <a href="/clients/mawkingbird/">Mawkingbird</a>, a freemium Mastodon web
-        client listed here alongside the others. This site therefore reviews a field in which its
-        author competes. <a href="/about/">How that is handled</a>.
-      </p>
+      <p class="disclosure">Created by <a href="/about/">Matthew Martin</a>, creator of
+        <a href="https://mawkingbird.com/">Mawkingbird</a>, a Mastodon client for new users and power users.</p>
       <nav aria-label="Footer">
         <ul>
           <li><a href="/about/">About</a></li>

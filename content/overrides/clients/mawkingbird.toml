@@ -1,98 +1,44 @@
-# Human prose override (spec/spec.md section 20).
-#
-# Sections here replace the generated prose of the same name at build time, and
-# survive every future regeneration -- nothing in `make generate-review` writes
-# to this file tree.
-#
-# This entry is written by hand because it is the directory author's own client,
-# and having a model draft promotional copy for it would be worse than writing
-# it plainly and signing it. The relationship is stated once, in the summary,
-# and in the site-wide footer. It does not need restating in every section.
-
+# Human editorial copy; retained across generated review refreshes.
 [prose]
-
 summary = """
-Mawkingbird is a Mastodon web client built around a command bar and keyboard
-navigation, with a set of reading tools -- translation, bookmarks, and analytics
-over your own timeline -- that most clients in this directory do not offer.
+Mawkingbird brings the familiar feel of Twitter’s 2018 design to Mastodon, with Bluesky and RSS integration that broadens what you can read in one place. Start with a feed you enjoy, then explore more features at your own pace.
 
-It is free to use against any Mastodon-compatible server. Some server-side
-features are paid.
-
-It is maintained by Matthew Martin, who also writes this directory.
-[More on that](/about/).
+Browse anonymously before you create an account, or sign in and join the conversation. Mawkingbird is created by Matthew Martin, the author of this guide.
 """
-
 who_is_it_for = """
-The command bar and keyboard shortcuts suit people who would rather type than
-click, and who already know what they want to do. Readers who prefer to browse
-by pointing will find that machinery gets out of the way rather than helping.
+New to Mastodon? Starter kits help you find people and topics on day one. You can explore public content before deciding to create an account.
 
-The reading tools -- translation, bookmarks, timeline analytics -- are aimed at
-people who follow accounts across languages or read enough to want a record of
-what they read.
+If you miss old Twitter, the familiar design gives you a place to settle in. If your interests span Mastodon, Bluesky and RSS, Mawkingbird brings those reading experiences into the same client.
 
-If you want several timelines side by side, this is the wrong client: there is
-no column or deck layout, and clients that offer one are listed in this
-directory.
+For power users, lists, filters and composition tools are there when you want them. You can leave those features alone until you need them.
 """
-
 notable_features = """
-The command bar is the main organising idea: most actions are reachable by
-typing rather than navigating to them.
+- **A familiar starting point:** a design inspired by Twitter in 2018.
+- **More of what you follow:** Mastodon, Bluesky and RSS integration.
+- **A feed from day one:** starter kits help you discover people and sources.
+- **Explore before joining:** anonymous browsing lets you get to know the experience before signing in. Posting and replying require an account.
+- **Room to grow:** drafts, scheduled posts, translation, lists and filters support deeper use as your needs change.
 
-Beyond the usual core set, the client supports quote posts and scheduled posts,
-both of which several clients here do not. Translation is built in, as are
-drafts, post editing, and polls.
-
-Timeline analytics are unusual for a Mastodon client -- summaries of your own
-reading and posting rather than of an audience.
-
-Two gaps worth naming: there is no column layout, and no web push notifications,
-so nothing arrives while the client is closed.
+If side-by-side timeline columns are essential, compare clients with a column layout. Mawkingbird uses a different approach to reading; it also does not currently offer web push notifications.
 """
-
 deployment = """
-Usable at mawkingbird.com against any Mastodon-compatible server -- no server
-deployment of your own, and no account beyond the one you already have.
+[Open Mawkingbird](https://mawkingbird.com/) and choose to browse anonymously or sign in. The live preview lets you see the experience before choosing.
 
-The client is also self-hostable: it builds from the public source as a static
-site. Self-hosting gives you the client without the paid server-side features,
-which are not part of the open source.
+The browser client can also be self-hosted from its public source. Plus server-side services are separate.
 """
-
 source_and_licensing = """
-Open core. The client is published under the MIT licence as part of the
-mastodon_mock repository, where it builds from `ui/` as the `mockingbird`
-configuration. You can read it, fork it, and run your own.
-
-The server-side components behind the paid tier are not open source. This
-directory records the client as hybrid for that reason rather than calling the
-whole product open source, since the distinction is exactly the sort of thing a
-reader deserves to have stated plainly.
+The browser client is published under the MIT licence. The paid server-side components are separate, so the product uses an open-core model.
 """
-
 funding = """
-Freemium: the client is free to use, and some server-side features are paid.
+**Free to use, with optional Plus.** The anonymous and free signed-in experiences are ongoing ways to use Mawkingbird, not a 30-day trial.
 
-For a reader, that is worth knowing in the same way it is worth knowing that a
-donation-funded client depends on its maintainer's willingness to keep paying
-for hosting. A commercial tier is a different sustainability model, not
-automatically a better or worse one.
+Free users can keep their feeds and settings in the browser and move them by file. Plus adds the convenience of syncing across devices and reading more full articles without leaving the app. Opening article links in a new tab remains free.
+
+[See the current Free and Plus details](https://mawkingbird.com/plans).
 """
-
 maintenance = """
-The signals here are collected by the same job, on the same schedule, as every
-other entry: commit and release dates, repository state, and whether the hosted
-application and documentation respond.
-
-One caveat the numbers do not carry on their own. Those signals come from the
-mastodon_mock repository, which holds the mock Mastodon server as well as this
-client. A commit there is not necessarily a commit to the client, so the
-activity reading is more generous to Mawkingbird than a client with its own
-repository would get from the same evidence.
-
-That is worth stating because this entry currently rates at the top of the
-directory, and part of why is a repository boundary rather than anything about
-the software.
+Mawkingbird is maintained by Matthew Martin. The project signals below show the latest recorded checks. Repository activity includes the Mastodon mock server as well as the client.
+"""
+verdict = """
+Try Mawkingbird if you want a familiar interface, help finding your first feed, or a reading experience that reaches across Mastodon, Bluesky and RSS. You can begin anonymously and discover the deeper tools when you’re ready.
 """

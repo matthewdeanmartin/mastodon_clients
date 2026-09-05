@@ -47,12 +47,7 @@ a structural guarantee is stronger than a test.
 
 ## Two notes on how this turned out
 
-**The disclosure is load-bearing, not decorative.** Mawkingbird — the directory
-author's own client — currently scores lowest in the directory, because almost
-nothing about it has been established and unknown values earn no points. That is
-the scoring rule working as intended rather than a problem to fix: the same
-arithmetic applies to the proprietor's product as to everyone else's, and the
-unknown count is published beside the rating so the reason is visible.
+**Authorship is clear.** Every page credits Matthew Martin, creator of Mawkingbird. Marketing and useful comparisons are explicit purposes of the site; ratings retain their common calculation while needs guide the initial choice.
 
 **Several clients sit at `inactive` rather than `discontinued`.** Semaphore's
 repository is archived and Cuckoo+ has not seen a commit since 2022, both of
