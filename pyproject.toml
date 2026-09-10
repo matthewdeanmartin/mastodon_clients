@@ -59,6 +59,11 @@ dev = [
 ]
 
 [tool.uv]
+# Wheels or nothing. A missing wheel must fail in seconds with the package
+# named, not silently start a source build -- duckdb compiled for 50+ minutes
+# on Windows with no output before this was added. Editable installs of this
+# project are still allowed, so the normal dev workflow is unaffected.
+no-build = true
 default-groups = ["dev"]
 
 [tool.pytest.ini_options]
