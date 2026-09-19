@@ -1,10 +1,18 @@
-# Five specialized Mawkingbird entry pages
+# Five Mawkingbird interstitial guides
 
-These are proposed additions to mawkingbird.com, not implemented app routes. Keep the existing home entry intact: a live preview with an immediate sign-in or anonymous choice. The directory's current calls to action continue to use https://mawkingbird.com/ until specialized destinations exist.
+These are proposed standalone pages on the comparison guide, leading to https://mawkingbird.com/. They answer questions before a visitor enters the app. The app keeps its existing live preview and sign-in/anonymous choice. These guides are optional destinations for “Learn more” links, never a forced step before “Try Mawkingbird”. No interstitial routes have been implemented yet.
+
+## Recommended next step
+
+Build one reusable interstitial template and use it first for **What stays free?**, then **All my friends are scattered**. The first resolves a purchasing objection; the second communicates a distinctive reason to try Mawkingbird.
+
+Each page should have one clear question, a short answer, one real screenshot or concrete example, three supporting points, a few optional FAQs, and an **Open Mawkingbird** action linking to https://mawkingbird.com/. Keep a direct “Try Mawkingbird” action in house ads; add a quieter question link to the relevant guide.
+
+These are normal, shareable HTML pages with their own search titles and canonical URLs. “Interstitial” describes their place in the journey, not a popup, countdown, or blocking overlay.
 
 ## 1. Browse Mastodon without an account
 
-**Proposed path:** /browse-without-an-account
+**Proposed path:** /meet-mawkingbird/browse-without-an-account/
 
 **Search intent:** “browse Mastodon without an account”, “read Mastodon anonymously”.
 
@@ -14,7 +22,7 @@ These are proposed additions to mawkingbird.com, not implemented app routes. Kee
 
 **Supporting copy:** “Explore public conversations and find things worth reading before creating an account. Sign in when you want to post or reply.”
 
-**First screen:** A working public-feed preview. Two actions: **Start reading** and **I already have an account**. The first action should complete the anonymous choice and dismiss the entry overlay immediately. Explain anonymous browsing as signed-out use; do not imply network anonymity or promise access to private content.
+**First screen:** Explain what visitors can explore without an account, beside a real screenshot of anonymous reading. Action: **Open Mawkingbird**, where the visitor chooses anonymous browsing or sign-in. Explain anonymous browsing as signed-out use, not network anonymity or access to private content.
 
 **Proof below the first screen:** Three examples of useful anonymous activities, a starter-kit preview, and a short answer about what needs sign-in. Keep extra detail optional.
 
@@ -22,7 +30,7 @@ These are proposed additions to mawkingbird.com, not implemented app routes. Kee
 
 ## 2. Miss Twitter before it changed?
 
-**Proposed path:** /old-twitter-feel
+**Proposed path:** /meet-mawkingbird/old-twitter-feel/
 
 **Search intent:** “Mastodon client like old Twitter”, “Twitter 2018 interface alternative”.
 
@@ -32,7 +40,7 @@ These are proposed additions to mawkingbird.com, not implemented app routes. Kee
 
 **Supporting copy:** “A familiar, 2018-inspired design for finding people, reading conversations and joining in. Meet Mawkingbird.”
 
-**First screen:** The actual Mawkingbird timeline preview. A short caption points out familiar navigation, without obscuring it. Actions: **Take a look** and **Sign in**.
+**First screen:** A real Mawkingbird timeline screenshot with a short caption pointing out the familiar navigation. Action: **Open Mawkingbird**.
 
 **Proof below:** Real screenshots of the timeline and conversation view, followed by concise explanations of the differences users will notice. Show the interface instead of making nostalgic claims about a social network's culture.
 
@@ -40,7 +48,7 @@ These are proposed additions to mawkingbird.com, not implemented app routes. Kee
 
 ## 3. Build a feed worth opening on day one
 
-**Proposed path:** /find-your-feed
+**Proposed path:** /meet-mawkingbird/find-your-feed/
 
 **Search intent:** “who to follow on Mastodon”, “Mastodon starter kits”, “Mastodon feed empty”.
 
@@ -50,25 +58,25 @@ These are proposed additions to mawkingbird.com, not implemented app routes. Kee
 
 **Supporting copy:** “Start with a starter kit and discover people and sources around the things you care about.”
 
-**First screen:** A small set of real starter-kit topics, with a preview of what each contains. Actions: **Preview this kit** and **Browse all starter kits**. Let a visitor inspect a kit before applying it; distinguish local reading setup from account follows.
+**First screen:** Show a few real starter-kit topics and examples of what they contain. Explain what choosing a kit does. Action: **Open Mawkingbird**. Distinguish local reading setup from account follows; this explanatory page does not apply kits or modify accounts.
 
 **Proof below:** What a kit changes, what can be undone, and how to refine it later. Keep the benefit visible: a reading experience the visitor shaped themselves.
 
 **Success:** Kit preview → deliberate kit selection → reading the resulting feed. Account creation is optional where supported.
 
-## 4. Mastodon, Bluesky and RSS in one reading routine
+## 4. All my friends are scattered
 
-**Proposed path:** /mastodon-bluesky-rss
+**Proposed path:** /meet-mawkingbird/all-my-friends-are-scattered/
 
 **Search intent:** “Mastodon Bluesky RSS client”, “read social feeds and RSS together”.
 
-**Objection:** “My people and reading are spread across too many places.”
+**Objection:** “All my friends are scattered”
 
-**Headline:** “Keep up with more of your world.”
+**Headline:** “All my friends are scattered”
 
 **Supporting copy:** “Bring Mastodon, Bluesky and RSS into your reading routine with Mawkingbird.”
 
-**First screen:** A real preview demonstrating the supported source types, with clear source labels. Actions: **Explore the reader** and **Choose your sources**. The source picker must reflect the app's actual capabilities; avoid promising universal cross-posting or a merged feed unless that exact behavior is supported.
+**First screen:** A concrete example of keeping up with friends on Mastodon and Bluesky, plus the sites you read through RSS. Use real screenshots with clear source labels. Action: **Open Mawkingbird**. Explain the supported reading behavior without promising universal cross-posting or a merged feed unless that exact behavior is supported.
 
 **Proof below:** A concrete reading scenario, RSS starter-kit example, and a short explanation of which actions need a network account.
 
@@ -76,7 +84,7 @@ These are proposed additions to mawkingbird.com, not implemented app routes. Kee
 
 ## 5. What stays free?
 
-**Proposed path:** /free-with-optional-plus (keep /plans as the detailed reference)
+**Proposed path:** /meet-mawkingbird/what-stays-free/ (link to mawkingbird.com/plans for current details)
 
 **Search intent:** “is Mawkingbird free”, “Mawkingbird Plus”, “Mawkingbird free limits”.
 
@@ -86,7 +94,7 @@ These are proposed additions to mawkingbird.com, not implemented app routes. Kee
 
 **Supporting copy:** “Anonymous browsing and a free signed-in experience are ongoing ways to use Mawkingbird. Plus adds more convenience when you want it.”
 
-**First screen:** The live preview alongside two short promises: **Free: read and build your setup in this browser. Plus: take your setup across devices and read more articles here.** Actions: **Continue free** and **See what Plus adds**.
+**First screen:** Two short promises: **Free: read and build your setup in this browser. Plus: take your setup across devices and read more articles here.** Action: **Open Mawkingbird**. A secondary anchor, **See what Plus adds**, reveals the explanation on this guide.
 
 **Proof below:** Three direct answers: “Is this a 30-day trial?” “What does Plus add?” “What happens if I stop paying?” Pull current limits, price and cancellation behavior from the app's existing plan sources. Do not duplicate limits as new hard-coded marketing constants.
 
@@ -94,10 +102,10 @@ These are proposed additions to mawkingbird.com, not implemented app routes. Kee
 
 ## Shared implementation notes
 
-- Keep each page's substantive introduction, answers, title, canonical URL and links available in HTML before the preview starts. The public explanatory pages should be indexable independently of Angular's entry routing.
-- Preserve signed-in and returning-anonymous state. A campaign entry must not reset someone to anonymous or re-ask a settled choice.
-- The first action should do what its label says. Carry the intended destination through sign-in when necessary.
-- Use actual screenshots and live content, with graceful fallbacks for unavailable preview servers.
+- Render the complete guide as static HTML on the directory, with its own title, description, canonical URL and internal links. App JavaScript is not needed to read it.
+- Link to the existing app entry. Let the app preserve signed-in and returning-anonymous state; the guide never manipulates that state.
+- Label the outbound action “Open Mawkingbird” or “Try Mawkingbird”. Do not promise that a link has already chosen anonymous mode, installed a kit or signed someone in.
+- Use actual screenshots with useful captions and alt text. The guide should not depend on a live public feed to load.
 - Track page, CTA and completed action without recording feed content, account names or reading histories. No analytics integration is included in this directory pass.
 - Each page should answer a distinct situation with substantive content. Google recommends useful original content and a clear crawlable structure for search and AI features. [Google Search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)
 

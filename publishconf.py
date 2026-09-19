@@ -28,4 +28,5 @@ AUTHOR_FEED_RSS = None
 
 DELETE_OUTPUT_DIRECTORY = True
 
-# Analytics are not required for launch and none is configured (spec 42).
+# Production page views; local previews do not report traffic.
+GOATCOUNTER_URL = "https://mastodonclients.goatcounter.com/count"

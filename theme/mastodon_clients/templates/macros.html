@@ -32,7 +32,7 @@
   <h3><a href="{{ client.url }}">{{ client.name }}</a></h3>
   <p class="summary">{{ client.summary }}</p>
   {% if client.audiences %}<p class="card-fit">For {{ client.audiences | map(attribute='label') | join(' · ') }}</p>{% endif %}
-  <p class="meta">{{ health_badge(client) }} <span>{{ client.deployment_label }}</span></p>
+  <p class="meta">{{ health_badge(client) }}</p>
   <a class="card-link" href="{{ client.url }}">Explore {{ client.name }} →</a>
 </article>
 {% endmacro %}

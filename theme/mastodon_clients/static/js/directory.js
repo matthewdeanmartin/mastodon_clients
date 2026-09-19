@@ -71,7 +71,9 @@
     if (state.q && data.search.indexOf(state.q) === -1) return false;
     if (state.audience && data.audiences.split(" ").indexOf(state.audience) === -1) return false;
     if (state.source && data.source !== state.source) return false;
-    if (state.deployment && data.deployment !== state.deployment) return false;
+    if (state.deployment === "self-hostable") {
+      if (!["self-hostable", "hosted-and-self-hostable"].includes(data.deployment)) return false;
+    } else if (state.deployment && data.deployment !== state.deployment) return false;
     if (state.status && data.status !== state.status) return false;
     if (state.standalone && data.standalone !== "yes") return false;
 
@@ -252,7 +254,9 @@
           if (box) box.checked = true;
         });
       } else if (form.elements[key]) {
-        form.elements[key].value = value;
+        // Older shared filters used a separate value for publicly hosted clients
+        // that also publish a self-hostable build.
+        form.elements[key].value = key === "deployment" && value === "hosted-and-self-hostable" ? "self-hostable" : value;
       }
     });
   }

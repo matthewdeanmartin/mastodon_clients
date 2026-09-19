@@ -13,7 +13,7 @@
 <h1>{{ page.title }}</h1>
 
 <p class="lede">Find the right fit for how you read and post. Explore {{ d.clients | length }} client families, or narrow your shortlist by what matters to you.</p>
-<nav class="need-links" aria-label="Choose by need"><a href="/for/new-users/">New to Mastodon</a><a href="/for/twitter-refugees/">A familiar experience</a><a href="/for/power-users/">More control</a><a href="/for/news-junkies/">Reading and news</a></nav>
+<nav class="need-links" aria-label="Choose by need"><a href="/for/new-users/">New to Mastodon</a><a href="/for/twitter-refugees/">Big Tech Refugees</a><a href="/for/power-users/">More control</a><a href="/for/news-junkies/">Reading and news</a><a href="/features/rss-integration/">RSS Integration</a><a href="/features/bsky-integration/">Bsky Integration</a></nav>
 {# The controls are inert markup until directory.js binds them. Marked hidden so
    a visitor without JavaScript is not shown filters that cannot work; the table
    below is complete either way (spec 28, invariant 6). #}
@@ -50,13 +50,10 @@
     </p>
 
     <p class="field">
-      <label for="filter-deployment">Deployment</label>
+      <label for="filter-deployment">Self-hosting</label>
       <select id="filter-deployment" name="deployment">
         <option value="">Any</option>
-        <option value="hosted">Hosted</option>
-        <option value="self-hostable">Self-hostable</option>
-        <option value="hosted-and-self-hostable">Hosted or self-hostable</option>
-        <option value="bundled-with-server">Bundled with a server</option>
+        <option value="self-hostable">Can self-host the client</option>
       </select>
     </p>
 
@@ -82,7 +79,7 @@
     <fieldset class="feature-filters">
       <legend>Required features</legend>
       {% for feature in d.features %}
-      {% if feature.core %}
+      {% if feature.core or feature.id in ('rss_integration', 'bsky_integration') %}
       <span class="field-check">
         <input type="checkbox" id="filter-feature-{{ feature.id }}" name="feature" value="{{ feature.id }}">
         <label for="filter-feature-{{ feature.id }}">{{ feature.label }}</label>

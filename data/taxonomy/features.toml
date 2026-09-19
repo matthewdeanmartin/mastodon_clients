@@ -243,3 +243,18 @@ label = "Installable (PWA)"
 description = "Installable as a progressive web app, with an offline-tolerant shell."
 core = false
 page = true
+
+# Cross-network reading: discovery categories, independent of core Mastodon scoring.
+[[feature]]
+id = "rss_integration"
+label = "RSS Integration"
+description = "Follow RSS feeds and read their articles in the client, alongside your social reading. Useful when the sites you follow publish outside Mastodon."
+core = false
+page = true
+
+[[feature]]
+id = "bsky_integration"
+label = "Bsky Integration"
+description = "Access Bluesky content in the client. Keep up with people on Bluesky as well as Mastodon; integration details depend on the client."
+core = false
+page = true

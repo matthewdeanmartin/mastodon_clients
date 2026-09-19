@@ -25,14 +25,10 @@
 
 {% if d.without %}
 <section class="not-matching">
-  <h2>Clients that do not</h2>
-  <p class="note">
-    Listed for completeness. &ldquo;Unknown&rdquo; means the answer has not been established rather
-    than that the feature is absent, and those clients appear here only because this site does not
-    guess.
-  </p>
+  <h2>Other clients: support status</h2>
+  <p class="note">Check the recorded status below. “Unknown” means support has not yet been verified.</p>
   <table class="compact">
-    <caption>Clients without {{ d.feature.label | lower }}</caption>
+    <caption>{{ d.feature.label }}: other recorded support statuses</caption>
     <thead>
       <tr><th scope="col">Client</th><th scope="col">Status</th></tr>
     </thead>

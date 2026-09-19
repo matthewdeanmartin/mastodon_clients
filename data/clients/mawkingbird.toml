@@ -45,6 +45,9 @@ url = "https://mastodon-mock.readthedocs.io/en/latest/"
 
 # Feature values are based on the client source; unresolved capabilities stay unknown.
 [features]
+# RSS reader and Bluesky provider in mastodon_mock/ui/src/app/providers/.
+rss_integration = true
+bsky_integration = true
 multi_account = true
 lists = true
 filters = true

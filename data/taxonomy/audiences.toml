@@ -52,18 +52,20 @@ criteria = [
 ]
 
 [[audience]]
+# Keep the established URL and record ID when broadening this audience.
 id = "twitter-refugees"
-label = "People arriving from Twitter"
+label = "Big Tech Refugees"
 intro = """
-Arriving from another network, the friction is rarely the protocol. It is that
-familiar motions produce unfamiliar results: quote posts may or may not exist,
-search behaves differently by design, and the timeline is chronological unless a
-client chooses otherwise.
+Leaving Twitter or Facebook, or looking for the community you remember from Google+?
+Start with a client that makes it easy to find people, read conversations and feel at home.
 
-The clients below are grouped by how closely their interface resembles what you
-are likely used to. Resemblance is a genuine convenience and this directory does
-not treat it as a flaw -- but it is worth knowing where a familiar-looking
-control does something different underneath.
+Familiar layouts can make the move easier. If your friends now use different networks,
+look at Bluesky integration too; RSS can bring the sites you read into the same routine.
+Mawkingbird combines a Twitter-2018-inspired design with starter kits and anonymous
+browsing, so you can explore before creating an account.
+
+Compare the features below to find the experience that fits you. These clients provide
+a way into Mastodon; this category does not imply they import Facebook or Google+ accounts.
 """
 criteria = [
     "quote_posts",

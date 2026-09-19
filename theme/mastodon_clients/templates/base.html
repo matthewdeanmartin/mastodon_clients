@@ -49,7 +49,6 @@
         <ul>
           <li><a href="/clients/">All clients</a></li>
           <li><a href="/for/new-users/">For new users</a></li>
-          <li><a href="/hosted/">Hosted</a></li>
           <li><a href="/for/power-users/">For power users</a></li>
           <li><a href="/about/">About</a></li>
         </ul>
@@ -93,6 +92,9 @@
       </nav>
     </div>
   </footer>
+  {% if GOATCOUNTER_URL | default('') %}
+  <script data-goatcounter="{{ GOATCOUNTER_URL }}" async src="https://gc.zgo.at/count.js"></script>
+  {% endif %}
   {% block scripts %}{% endblock %}
 </body>
 </html>
