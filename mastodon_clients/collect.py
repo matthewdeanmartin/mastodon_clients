@@ -34,8 +34,7 @@ OBSERVATIONS_PATH = Path("data") / "generated" / "observations.json"
 # A descriptive agent string is a courtesy to the operators whose sites this
 # checks: it tells them who is asking and where to complain.
 USER_AGENT = (
-    "MastodonClientsDirectoryBot/0.1 "
-    "(+https://github.com/matthewdeanmartin/mastodon_clients; directory metadata check)"
+    "MastodonClientsDirectoryBot/0.1 (+https://github.com/matthewdeanmartin/mastodon_clients; directory metadata check)"
 )
 
 _GITHUB_RE = re.compile(r"^https?://(?:www\.)?github\.com/([^/]+)/([^/#?]+)")

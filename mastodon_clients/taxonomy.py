@@ -17,15 +17,13 @@ from mastodon_clients.errors import ValidationReport
 # Feature ids grouped as accessibility-related, for the accessibility scoring
 # component (spec 17). Named here rather than flagged per-feature because the
 # grouping is a scoring decision, not a property of the feature itself.
-ACCESSIBILITY_FEATURE_IDS: frozenset[str] = frozenset(
-    {
-        "keyboard_navigation",
-        "accessibility_features",
-        "content_warnings",
-        "reduced_motion",
-        "responsive_layout",
-    }
-)
+ACCESSIBILITY_FEATURE_IDS: frozenset[str] = frozenset({
+    "keyboard_navigation",
+    "accessibility_features",
+    "content_warnings",
+    "reduced_motion",
+    "responsive_layout",
+})
 
 
 @dataclass(frozen=True, slots=True)

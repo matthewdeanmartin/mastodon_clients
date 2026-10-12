@@ -58,7 +58,9 @@ def cmd_score(args: argparse.Namespace) -> int:
     for client in site.listed:
         score = site.scores[client.slug]
         note = f"  ({score.unknown_features} unknown features)" if score.unknown_features else ""
-        print(f"{client.name:<{width}}  {score.stars:>3} stars  {score.points:5.1f}/100  {site.status_of(client.slug)}{note}")
+        print(
+            f"{client.name:<{width}}  {score.stars:>3} stars  {score.points:5.1f}/100  {site.status_of(client.slug)}{note}"
+        )
     return 0
 
 
@@ -140,7 +142,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     sitemap = subparsers.add_parser("sitemap", help="write sitemap.xml and robots.txt into the built site")
     sitemap.add_argument("--output", default="output", help="the Pelican output directory")
-    sitemap.add_argument("--site-url", default="https://matthewdeanmartin.github.io/mastodon_clients", help="absolute site URL")
+    sitemap.add_argument(
+        "--site-url", default="https://matthewdeanmartin.github.io/mastodon_clients", help="absolute site URL"
+    )
     sitemap.set_defaults(func=cmd_sitemap)
 
     generate = subparsers.add_parser("generate-review", help="generate prose for exactly one client")

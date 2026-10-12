@@ -73,46 +73,40 @@ def client_payload(site: Site, client: Client) -> dict[str, Any]:
     features: list[dict[str, Any]] = []
     for feature in site.taxonomy.features:
         value = client.feature(feature.id)
-        features.append(
-            {
-                "id": feature.id,
-                "label": feature.label,
-                "description": feature.description,
-                "core": feature.core,
-                "url": feature.url if feature.page else None,
-                "value": value.value,
-                "value_label": value.label,
-            }
-        )
+        features.append({
+            "id": feature.id,
+            "label": feature.label,
+            "description": feature.description,
+            "core": feature.core,
+            "url": feature.url if feature.page else None,
+            "value": value.value,
+            "value_label": value.label,
+        })
 
     links: list[dict[str, Any]] = []
     for link in client.links:
         observation = observations.get(f"{link.type}_http") if observations else None
-        links.append(
-            {
-                "type": link.type,
-                "url": link.url,
-                "label": link.display_label,
-                # The editorially recorded URL is never replaced by an
-                # observation; the observed state sits beside it (spec 32).
-                "last_check": _describe_check(observation),
-                "checkable": link.check and link.type in CHECKABLE_LINK_TYPES,
-            }
-        )
+        links.append({
+            "type": link.type,
+            "url": link.url,
+            "label": link.display_label,
+            # The editorially recorded URL is never replaced by an
+            # observation; the observed state sits beside it (spec 32).
+            "last_check": _describe_check(observation),
+            "checkable": link.check and link.type in CHECKABLE_LINK_TYPES,
+        })
 
     prose_sections = []
     if prose is not None:
         for section_id in SECTIONS:
             text = prose.section(section_id)
             if text:
-                prose_sections.append(
-                    {
-                        "id": section_id,
-                        "label": SECTION_LABELS[section_id],
-                        "text": text,
-                        "overridden": prose.is_overridden(section_id),
-                    }
-                )
+                prose_sections.append({
+                    "id": section_id,
+                    "label": SECTION_LABELS[section_id],
+                    "text": text,
+                    "overridden": prose.is_overridden(section_id),
+                })
 
     return {
         "slug": client.slug,
@@ -243,17 +237,15 @@ def _observation_rows(site: Site, client: Client) -> list[dict[str, Any]]:
     rows = []
     for signal in sorted(observations.by_signal):
         obs = observations.by_signal[signal]
-        rows.append(
-            {
-                "signal": signal,
-                "label": signal.replace("_", " ").capitalize(),
-                "ok": obs.ok,
-                "observed_at": obs.observed_at,
-                "source": obs.source,
-                "value": obs.value,
-                "error": obs.error,
-            }
-        )
+        rows.append({
+            "signal": signal,
+            "label": signal.replace("_", " ").capitalize(),
+            "ok": obs.ok,
+            "observed_at": obs.observed_at,
+            "source": obs.source,
+            "value": obs.value,
+            "error": obs.error,
+        })
     return rows
 
 
@@ -412,7 +404,9 @@ def _write_features(site: Site, target: Path) -> int:
                 "URL": feature.url.strip("/") + "/",
                 "Save_as": feature.url.strip("/") + "/index.html",
                 "Template": "feature",
-                "Description": f"Mastodon web clients that support {feature.label.lower()}. {feature.description}"[:300],
+                "Description": f"Mastodon web clients that support {feature.label.lower()}. {feature.description}"[
+                    :300
+                ],
             },
             {
                 "feature": {"id": feature.id, "label": feature.label, "description": feature.description},
@@ -489,16 +483,14 @@ def _write_comparisons(site: Site, target: Path) -> int:
         rows = []
         for feature in site.taxonomy.features:
             left_value, right_value = left.feature(feature.id), right.feature(feature.id)
-            rows.append(
-                {
-                    "id": feature.id,
-                    "label": feature.label,
-                    "core": feature.core,
-                    "left": left_value.label,
-                    "right": right_value.label,
-                    "differs": left_value is not right_value,
-                }
-            )
+            rows.append({
+                "id": feature.id,
+                "label": feature.label,
+                "core": feature.core,
+                "left": left_value.label,
+                "right": right_value.label,
+                "differs": left_value is not right_value,
+            })
         _write(
             target / "compare" / f"{left.slug}-{right.slug}.md",
             {

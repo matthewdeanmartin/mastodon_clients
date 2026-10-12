@@ -141,7 +141,9 @@ def _load_client(path: Path, taxonomy: Taxonomy, report: ValidationReport) -> Cl
     ) or ServerDependency.UNKNOWN
 
     reviewed_at = _date(raw.get("reviewed_at"), "reviewed_at", where, report) or date(1970, 1, 1)
-    discontinued_at = _date(raw.get("discontinued_at"), "discontinued_at", where, report) if "discontinued_at" in raw else None
+    discontinued_at = (
+        _date(raw.get("discontinued_at"), "discontinued_at", where, report) if "discontinued_at" in raw else None
+    )
 
     licence = _str(raw.get("license"), "license", where, report) if "license" in raw else None
 
@@ -288,9 +290,7 @@ def _str_list(value: object, field: str, where: str, report: ValidationReport) -
     return tuple(items)
 
 
-def _parse_features(
-    value: object, taxonomy: Taxonomy, where: str, report: ValidationReport
-) -> dict[str, FeatureValue]:
+def _parse_features(value: object, taxonomy: Taxonomy, where: str, report: ValidationReport) -> dict[str, FeatureValue]:
     if not isinstance(value, dict):
         report.add(where, "[features] must be a table")
         return {}
@@ -340,7 +340,9 @@ def _parse_links(raw: dict[str, object], where: str, report: ValidationReport) -
             if not isinstance(row, dict):
                 report.add(where, f"{entry} must be a table")
                 continue
-            _check_keys(row, required={"type", "url"}, optional={"label", "check"}, where=f"{where} {entry}", report=report)
+            _check_keys(
+                row, required={"type", "url"}, optional={"label", "check"}, where=f"{where} {entry}", report=report
+            )
             link_type = _str(row.get("type"), f"{entry}.type", where, report)
             url = _str(row.get("url"), f"{entry}.url", where, report)
             if link_type is None or url is None:

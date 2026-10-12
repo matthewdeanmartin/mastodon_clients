@@ -123,9 +123,8 @@ def test_not_applicable_leaves_the_denominator(repo: Path) -> None:
     )
 
     # Both are "everything that applies is supported", so both score full marks.
-    assert (
-        _points(score_client(one_na, taxonomy, Health.UNKNOWN), "feature_breadth")
-        == _points(score_client(all_yes, taxonomy, Health.UNKNOWN), "feature_breadth")
+    assert _points(score_client(one_na, taxonomy, Health.UNKNOWN), "feature_breadth") == _points(
+        score_client(all_yes, taxonomy, Health.UNKNOWN), "feature_breadth"
     )
 
 
@@ -136,9 +135,8 @@ def test_non_core_features_do_not_reduce_breadth(repo: Path) -> None:
     without = _bare(features=dict.fromkeys(core, FeatureValue.YES))
     with_no_extra = _bare(features={**dict.fromkeys(core, FeatureValue.YES), "column_layout": FeatureValue.NO})
 
-    assert (
-        _points(score_client(with_no_extra, taxonomy, Health.UNKNOWN), "feature_breadth")
-        == _points(score_client(without, taxonomy, Health.UNKNOWN), "feature_breadth")
+    assert _points(score_client(with_no_extra, taxonomy, Health.UNKNOWN), "feature_breadth") == _points(
+        score_client(without, taxonomy, Health.UNKNOWN), "feature_breadth"
     )
 
 
@@ -178,13 +176,11 @@ def test_documentation_and_support_links_earn_points(repo: Path) -> None:
         ),
     )
 
-    assert (
-        _points(score_client(documented, taxonomy, Health.UNKNOWN), "deployment_docs")
-        > _points(score_client(bare, taxonomy, Health.UNKNOWN), "deployment_docs")
+    assert _points(score_client(documented, taxonomy, Health.UNKNOWN), "deployment_docs") > _points(
+        score_client(bare, taxonomy, Health.UNKNOWN), "deployment_docs"
     )
-    assert (
-        _points(score_client(documented, taxonomy, Health.UNKNOWN), "support")
-        > _points(score_client(bare, taxonomy, Health.UNKNOWN), "support")
+    assert _points(score_client(documented, taxonomy, Health.UNKNOWN), "support") > _points(
+        score_client(bare, taxonomy, Health.UNKNOWN), "support"
     )
 
 

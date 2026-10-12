@@ -186,7 +186,9 @@ class Site:
                 continue
             shared_audiences = len(set(client.audiences) & set(other.audiences))
             shared_features = sum(
-                1 for feature in self.taxonomy.core_features if client.has_feature(feature.id) and other.has_feature(feature.id)
+                1
+                for feature in self.taxonomy.core_features
+                if client.has_feature(feature.id) and other.has_feature(feature.id)
             )
             weight = shared_audiences * 3.0
             weight += shared_features * 0.5

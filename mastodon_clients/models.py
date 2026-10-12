@@ -180,9 +180,15 @@ LINK_TYPES: tuple[str, ...] = (
 )
 
 # Link types worth an automated reachability check by default (spec 32).
-CHECKABLE_LINK_TYPES: frozenset[str] = frozenset(
-    {"homepage", "hosted", "canary", "documentation", "source", "issues", "releases"}
-)
+CHECKABLE_LINK_TYPES: frozenset[str] = frozenset({
+    "homepage",
+    "hosted",
+    "canary",
+    "documentation",
+    "source",
+    "issues",
+    "releases",
+})
 
 
 @dataclass(frozen=True, slots=True)
